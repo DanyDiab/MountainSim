@@ -15,7 +15,7 @@ public class PerlinNoise : MonoBehaviour
 
     void Start()
     {
-        cellSize = 1;
+        cellSize = 2;
         gridSize = 100;
         gradientVectors = new Vector3[gridSize + 1, gridSize + 1];
         generatePerlinNoise();
@@ -80,11 +80,12 @@ public class PerlinNoise : MonoBehaviour
                 // Debug.Log(trI);
                 // Debug.Log(blI);
                 // Debug.Log(brI);
-
-                float localX = (float)(point.x - cell.x) / cellSize;
-                float localY = (float)(point.y - cell.y) / cellSize;
-                // Debug.Log("point" + point);
-                // Debug.Log("cell" + cell);
+                // Vector3 pointLocalized = point / cellSize; 
+                float localX = (point.x - cell.x) / cellSize;
+                float localY = (point.y - cell.y) / cellSize;
+                Debug.Log("sub value" + (point - cell));
+                Debug.Log("point" + point);
+                Debug.Log("cell" + cell);
                 // Debug.Log("localX" + localX);
                 // Debug.Log("localY" + localY);
                 float u = fade(localX);
@@ -94,7 +95,7 @@ public class PerlinNoise : MonoBehaviour
                 float lerpTop = lerp(tlI,trI, u);
 
                 float finalLerp = lerp(lerpBottom,lerpTop, v);
-                Debug.Log(finalLerp);
+                // Debug.Log(finalLerp);
                 pixels[j * gridSize + i] = new Color(finalLerp,finalLerp,finalLerp);
                 // draw noise call goes here
             }

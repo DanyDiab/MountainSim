@@ -6,27 +6,31 @@ public class PerlinNoise : MonoBehaviour
     int cellSize;
     // x by x grid of X cells
     int gridSize; 
+    
 
+    private Texture2D noiseTexture;
     Vector3[,] gradientVectors;
+    public Renderer targetRenderer;
 
 
     void Start()
     {
-        cellSize = 4;
+        cellSize = 1;
         gridSize = 100;
-        gradientVectors = new Vector3[gridSize, gridSize];
+        gradientVectors = new Vector3[gridSize + 1, gridSize + 1];
         generatePerlinNoise();
-
+        renderTexture();
     }
     void generatePerlinNoise(){
         generateGraidentVectors();
         getPerlinValues();
+        
     }
 
 
     void generateGraidentVectors(){
-        for(int i = 0; i < gridSize; i++){
-            for(int j = 0; j < gridSize; j++){
+        for(int i = 0; i < gridSize + 1; i++){
+            for(int j = 0; j < gridSize + 1; j++){
                 Vector3 origin = new Vector3(i * cellSize, j * cellSize, 0);
                 float randDirX = Random.Range(-1f,1f);
                 float randDirY = Random.Range(-1f,1f);
@@ -42,7 +46,9 @@ public class PerlinNoise : MonoBehaviour
         return cell;
     }
 
-    (Vector3,Vector3,Vector3,Vector3,Vector3,Vector3,Vector3,Vector3)calculateOffsetVectors(Vector3 point, Vector3 cell){
+// returning the first 4 vectors (off set vectors)
+// returning the last 4 vectors (the corresponding cells)
+    (Vector3,Vector3,Vector3,Vector3)calculateOffsetVectors(Vector3 point, Vector3 cell){
         int posX = (int) cell.x;
         int posY = (int) cell.y;
         Vector3 blCell = cell;
@@ -54,27 +60,33 @@ public class PerlinNoise : MonoBehaviour
         Vector3 br = point - brCell;
         Vector3 tl = point - tlCell;
         Vector3 tr = point - trCell;
-        return (tl,tr,bl,br, tlCell, trCell, blCell, brCell);
+        return (tl,tr,bl,br);
     }
 
     void getPerlinValues(){
+        Color[] pixels = new Color[gridSize * gridSize];
+        Texture2D noiseTexture = new Texture2D(gridSize,gridSize);
         for(int i = 0; i < gridSize; i++){
             for(int j = 0; j < gridSize; j++){
                 Vector3 point = new Vector3(i,j,0);
                 Vector3 cell = determineCell(point);
-                (
-                    Vector3 tl, Vector3 tr, Vector3 bl, Vector3 br, 
-                    Vector3 tlCell, Vector3 trCell, Vector3 blCell, Vector3 brCell
-                ) = calculateOffsetVectors(point, cell);
+                (Vector3 tl, Vector3 tr, Vector3 bl, Vector3 br) = calculateOffsetVectors(point, cell);
+                float tlI = Vector3Dot(tl , gradientVectors[(int)cell.x,(int)cell.y]);
+                float trI = Vector3Dot(tr, gradientVectors[(int)cell.x + 1,(int)cell.y]);
+                float blI = Vector3Dot(bl, gradientVectors[(int)cell.x,(int)cell.y + 1]);
+                float brI = Vector3Dot(br, gradientVectors[(int)cell.x + 1,(int)cell.y + 1]);
+                
+                // Debug.Log(tlI);
+                // Debug.Log(trI);
+                // Debug.Log(blI);
+                // Debug.Log(brI);
 
-                float tlI = Vector3Dot(tl ,tlCell);
-                float trI = Vector3Dot(tr, trCell);
-                float blI = Vector3Dot(bl, blCell);
-                float brI = Vector3Dot(br, brCell);
-
-                float localX = (point.x - cell.x) / cellSize;
-                float localY = (point.y - cell.y) / cellSize;
-
+                float localX = (float)(point.x - cell.x) / cellSize;
+                float localY = (float)(point.y - cell.y) / cellSize;
+                // Debug.Log("point" + point);
+                // Debug.Log("cell" + cell);
+                // Debug.Log("localX" + localX);
+                // Debug.Log("localY" + localY);
                 float u = fade(localX);
                 float v = fade(localY);
 
@@ -82,9 +94,21 @@ public class PerlinNoise : MonoBehaviour
                 float lerpTop = lerp(tlI,trI, u);
 
                 float finalLerp = lerp(lerpBottom,lerpTop, v);
-
+                Debug.Log(finalLerp);
+                pixels[j * gridSize + i] = new Color(finalLerp,finalLerp,finalLerp);
                 // draw noise call goes here
             }
+        }
+        noiseTexture.SetPixels(pixels);
+        noiseTexture.Apply();
+    }
+
+    void renderTexture(){
+        if (targetRenderer != null){
+            targetRenderer.sharedMaterial.mainTexture = noiseTexture;
+        }
+        else{
+            Debug.LogWarning("Target Renderer not assigned. Please assign a Plane or Quad to display the noise.");
         }
     }
 
@@ -96,14 +120,14 @@ public class PerlinNoise : MonoBehaviour
         return a + (b - a) * t;
     }
     
-
+    float valueToBrightness(float value){
+        float brightness = (value + 1) / 2;
+        return brightness;
+    }
 
     float Vector3Dot(Vector3 v1, Vector3 v2){
         return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
     }
-
-
-    
 
 }
 

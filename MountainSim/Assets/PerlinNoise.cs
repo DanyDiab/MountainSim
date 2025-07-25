@@ -5,24 +5,29 @@ public class PerlinNoise : MonoBehaviour
     int cellSize;
     // x by x grid of X cells
     int gridSize; 
-    
-
-    private Texture2D noiseTexture;
+    Texture2D noiseTexture;
     Vector3[,] gradientVectors;
     public Renderer targetRenderer;
 
 
     void Start()
     {
-        cellSize = 5;
-        gridSize = 20;
+        cellSize = 10;
+        gridSize = 200;
         gradientVectors = new Vector3[gridSize + 1, gridSize + 1];
+        noiseTexture = new Texture2D(gridSize,gridSize);
+
         generatePerlinNoise();
-        renderTexture();
     }
     void generatePerlinNoise(){
         generateGraidentVectors();
         getPerlinValues();
+        
+    }
+
+    void Update()
+    {
+        renderTexture();
         
     }
 
@@ -38,20 +43,14 @@ public class PerlinNoise : MonoBehaviour
             }   
         }
     }
-    Vector3 determineCell(Vector3 point){
-        int cellX = (int)Mathf.Floor(point.x / cellSize);
-        int cellY = (int)Mathf.Floor(point.y / cellSize);
-        Vector3 cell = new Vector3(cellX,cellY,0);
-        return cell;
-    }
 
 // returning the first 4 vectors (off set vectors)
 // returning the last 4 vectors (the corresponding cells)
 
     void getPerlinValues(){
         Color[] pixels = new Color[gridSize * gridSize];
-        Texture2D noiseTexture = new Texture2D(gridSize,gridSize);
-        float maxObserved = 0;
+        float maxObserved = float.MinValue;
+        float minObserved = float.MaxValue;
         for(int i = 0; i < gridSize; i++){
             for(int j = 0; j < gridSize; j++){
                 Vector2 point = new Vector2(i,j);
@@ -81,19 +80,25 @@ public class PerlinNoise : MonoBehaviour
                 float bot = lerp(blI,brI,u);
                 // lerp the top and bottom
                 float final = lerp(top,bot,v);
-                pixels[j * gridSize + i] = new Color(final,final,final);
-                Debug.Log(final);
-                // maxObserved
+                if(final > maxObserved){
+                    maxObserved = final;
+                }
+                if(final < minObserved){
+                    minObserved = final;
+                }
+                // noiseTexture.SetPixel
+                noiseTexture.SetPixel(i,j, new Color(final,final,final));
 
             }
         }
-        noiseTexture.SetPixels(pixels);
+        Debug.Log("max is" + maxObserved);
+        Debug.Log("min is " + minObserved);
         noiseTexture.Apply();
     }
 
     void renderTexture(){
         if (targetRenderer != null){
-            targetRenderer.sharedMaterial.mainTexture = noiseTexture;
+            targetRenderer.material.mainTexture = noiseTexture;
         }
         else{
             Debug.LogWarning("Target Renderer not assigned. Please assign a Plane or Quad to display the noise.");

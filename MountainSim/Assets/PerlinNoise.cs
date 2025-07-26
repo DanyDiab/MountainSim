@@ -3,33 +3,46 @@ using UnityEngine.SocialPlatforms;
 
 public class PerlinNoise : MonoBehaviour
 {
-    int cellSize;
+    [Header("Perlin Noise Parameters")] 
+    [SerializeField]int cellSize;
     // x by x grid of X cells
-    int gridSize; 
+    [SerializeField]int gridSize; 
     Texture2D noiseTexture;
     Vector2[,] gradientVectors;
     public Renderer targetRenderer;
+    [Header("Height Parameters")] 
+
+    [SerializeField]float minHeight;
+    [SerializeField]float maxHeight;
 
 
     void Start()
     {
-        cellSize = 10;
-        gridSize = 20;
+        minHeight = -5;
+        maxHeight = 5;
+        cellSize = 5;
+        gridSize = 40;
         gradientVectors = new Vector2[gridSize + 1, gridSize + 1];
         noiseTexture = new Texture2D(gridSize * cellSize,gridSize * cellSize);
-
         generatePerlinNoise();
     }
     void generatePerlinNoise(){
         generateGraidentVectors();
-        getPerlinValues();
-        
+        (Color[] pixels,float minFound,float maxFound) = getPerlinValues();
+        renderTexture();
+        float[] heights = brightnessToHeight(pixels,minFound,maxFound);
+        changeVerticeHeights(heights);
     }
 
     void Update()
     {
-        renderTexture();
-        
+        if(cellSize * gridSize != noiseTexture.width){
+            noiseTexture = new Texture2D(gridSize * cellSize, gridSize * cellSize);
+            generatePerlinNoise();
+        }
+        if(Input.anyKeyDown){
+            generatePerlinNoise();
+        }        
     }
 
 
@@ -48,8 +61,8 @@ public class PerlinNoise : MonoBehaviour
 // returning the first 4 vectors (off set vectors)
 // returning the last 4 vectors (the corresponding cells)
 
-    void getPerlinValues(){
-        Color[] pixels = new Color[gridSize * gridSize];
+    (Color[], float, float)  getPerlinValues(){
+        Color[] pixels = new Color[noiseTexture.width * noiseTexture.height];
         float maxObserved = float.MinValue;
         float minObserved = float.MaxValue;
         for(int i = 0; i < noiseTexture.height; i++){
@@ -60,12 +73,8 @@ public class PerlinNoise : MonoBehaviour
                 int gridX = Mathf.FloorToInt(sampleX);
                 int gridY = Mathf.FloorToInt(sampleY);
 
-
                 float LocalX = sampleX - gridX;
                 float LocalY = sampleY - gridY;
-
-                Debug.Log(LocalX);
-                Debug.Log(LocalY);
 
                 // calculate the apropraite grid intersections
                 Vector2 tl = new Vector2(LocalX, LocalY);
@@ -90,21 +99,21 @@ public class PerlinNoise : MonoBehaviour
                 float bot = lerp(blI,brI,u);
                 // lerp the top and bottom
                 float final = lerp(top,bot,v);
-                if(final > maxObserved){
-                    maxObserved = final;
-                }
-                if(final < minObserved){
-                    minObserved = final;
-                }
+
                 float brightness = valueToBrightness(final);
                 // noiseTexture.SetPixel
-                noiseTexture.SetPixel(j,i, new Color(brightness,brightness,brightness));
-
+                pixels[j * noiseTexture.width + i] = new Color(brightness,brightness,brightness);
+                if(brightness > maxObserved){
+                    maxObserved = brightness;
+                }
+                if(brightness < minObserved){
+                    minObserved = brightness;
+                }
             }
         }
-        Debug.Log("max is" + maxObserved);
-        Debug.Log("min is " + minObserved);
+        noiseTexture.SetPixels(pixels);
         noiseTexture.Apply();
+        return (pixels, minObserved,maxObserved);
     }
 
     void renderTexture(){
@@ -114,6 +123,32 @@ public class PerlinNoise : MonoBehaviour
         else{
             Debug.LogWarning("Target Renderer not assigned. Please assign a Plane or Quad to display the noise.");
         }
+    }
+
+
+    void changeVerticeHeights(float[] heights){
+        MeshFilter meshFilter = targetRenderer.GetComponent<MeshFilter>();
+        Mesh mesh = meshFilter.mesh;
+        Vector3[] currVertices = mesh.vertices;
+        for(int i = 0; i < currVertices.Length; i++){
+            Debug.Log(heights[i]);
+            currVertices[i].y = heights[i];
+        }
+        mesh.vertices = currVertices;
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+        mesh.Optimize();
+    }
+
+    float[] brightnessToHeight(Color[] pixels, float minFound, float maxFound){
+        float[] heights = new float[pixels.Length];
+        for(int i = 0; i < pixels.Length;i++){
+            float currBrightness = pixels[i].r;
+            float brightnessPercent = (currBrightness - minFound) / (maxFound - minFound);
+            float height = brightnessPercent * maxHeight + minHeight;
+            heights[i] = height;
+        }
+        return heights;
     }
     float valueToBrightness(float value){
         return (value + 1f) / 2f;

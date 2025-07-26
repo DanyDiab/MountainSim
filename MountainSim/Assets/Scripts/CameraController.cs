@@ -1,16 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
     Vector3 pos;
-    float speed;
     Vector3 prevMousePos;
     
     [Header("Camera Settings")]
     [SerializeField]float mouseSensitivity = 1f;
+    [SerializeField] float speed = 1;
     [SerializeField]float camSmoothing = 2f;
     float minPitch = -90f;
     float maxPitch = 90f;
@@ -18,19 +19,23 @@ public class CameraController : MonoBehaviour
     float targetPitch = 0f;
     float currYaw = 0f;
     float targetYaw = 0f;
+    bool locked;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        locked = false;
         prevMousePos = Input.mousePosition;
-        speed = .5f;
         pos = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
+        lockCam();
+        if(locked) return;
+
         moveCam();
         rotateCam();
         transform.position = pos;
@@ -76,5 +81,10 @@ public class CameraController : MonoBehaviour
     float lerp(float t, float a, float b){
         return a + (b - a) * t;
     }
-    
+
+    void lockCam(){
+        if(Input.GetKeyDown(KeyCode.L)){
+            locked = !locked;
+        }
+    }    
 }

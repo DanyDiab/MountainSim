@@ -1,3 +1,4 @@
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
@@ -5,33 +6,29 @@ using UnityEngine.SocialPlatforms;
 public class PerlinNoise : MonoBehaviour
 {
     [Header("Perlin Noise Parameters")] 
-    [SerializeField]int cellSize;
+    [SerializeField]int cellSize = 5;
     // x by x grid of X cells
-    [SerializeField]int gridSize; 
+    [SerializeField]int gridSize = 40; 
     Texture2D noiseTexture;
     Vector2[,] gradientVectors;
     public Renderer targetRenderer;
     [Header("Height Parameters")] 
 
-    [SerializeField]float minHeight;
-    [SerializeField]float maxHeight;
+    [SerializeField]float minHeight = -5f;
+    [SerializeField]float maxHeight = 5f;
 
 
     void Start()
     {
-        minHeight = -5;
-        maxHeight = 5;
-        cellSize = 5;
-        gridSize = 40;
         gradientVectors = new Vector2[gridSize + 1, gridSize + 1];
         noiseTexture = new Texture2D(gridSize * cellSize,gridSize * cellSize);
         generatePerlinNoise();
     }
     void generatePerlinNoise(){
         generateGraidentVectors();
-        getPerlinValues();
+        Color[] pixels = getPerlinValues();
         renderTexture();
-        changeVerticeHeights();
+        changeVerticeHeights(pixels);
     }
 
     void Update()
@@ -61,7 +58,7 @@ public class PerlinNoise : MonoBehaviour
 // returning the first 4 vectors (off set vectors)
 // returning the last 4 vectors (the corresponding cells)
 
-    (Color[], float, float)  getPerlinValues(){
+    Color[] getPerlinValues(){
         Color[] pixels = new Color[noiseTexture.width * noiseTexture.height];
         float maxObserved = float.MinValue;
         float minObserved = float.MaxValue;
@@ -113,7 +110,7 @@ public class PerlinNoise : MonoBehaviour
         }
         noiseTexture.SetPixels(pixels);
         noiseTexture.Apply();
-        return (pixels, minObserved,maxObserved);
+        return pixels;
     }
 
     void renderTexture(){
@@ -126,31 +123,71 @@ public class PerlinNoise : MonoBehaviour
     }
 
 
-    void changeVerticeHeights(){
-        MeshFilter meshFilter = targetRenderer.GetComponent<MeshFilter>();
-        Mesh mesh = meshFilter.mesh;
-        Bounds bounds = mesh.bounds;
-        float minX = bounds.min.x;
-        float maxX = bounds.max.x;
-        float minZ = bounds.min.z;
-        float maxZ = bounds.max.z;
-        Vector3[] vertices = mesh.vertices;
-        Debug.Log(vertices.Length);
-        for(int i = 0; i < vertices.Length; i++){
-            Vector3 currVertex = vertices[i];
-            float u = (currVertex.x - minX) / (maxX - minX);
-            float v = (currVertex.z - minZ) / (maxZ - minZ);
-            int texX = Mathf.Clamp(Mathf.FloorToInt(u * noiseTexture.width), 0, noiseTexture.width - 1);
-            int texY = Mathf.Clamp(Mathf.FloorToInt(v * noiseTexture.height), 0, noiseTexture.height - 1);
-            Color pixelColor = noiseTexture.GetPixel(texX, texY);
-            float height = pixelColor.r * (maxHeight - minHeight) + minHeight;
-            vertices[i].y = height;
+void changeVerticeHeights(Color[] pixels) {
+    MeshFilter meshFilter = targetRenderer.GetComponent<MeshFilter>();
+    
+    int width = noiseTexture.width;
+    int height = noiseTexture.height;
+    
+    Vector3[] vertices = new Vector3[pixels.Length];
+    Vector2[] uvs = new Vector2[pixels.Length];
+    
+    
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            int index = y * width + x;
+            
+            Vector3 pos = new Vector3(x, 0, y);
+            
+            Color pixelColor = pixels[index];
+            float pixelHeight = pixelColor.r * (maxHeight - minHeight) + minHeight;
+            pos.y = pixelHeight;
+            
+            vertices[index] = pos;
+            
+            uvs[index] = new Vector2((float)x / (width - 1), (float)y / (height - 1));
         }
-        mesh.vertices = vertices;
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
-        mesh.Optimize();
     }
+    
+    int numQuads = (width - 1) * (height - 1);
+    int[] triangles = new int[numQuads * 6]; 
+    int triangleIndex = 0;
+    
+    for (int y = 0; y < height - 1; y++) {
+        for (int x = 0; x < width - 1; x++) {
+            // Get the four vertices of current quad
+            int bottomLeft = y * width + x;
+            int bottomRight = y * width + (x + 1);
+            int topLeft = (y + 1) * width + x;
+            int topRight = (y + 1) * width + (x + 1);
+            
+            triangles[triangleIndex++] = bottomLeft;
+            triangles[triangleIndex++] = topLeft;
+            triangles[triangleIndex++] = bottomRight;
+
+            triangles[triangleIndex++] = bottomRight;
+            triangles[triangleIndex++] = topLeft;
+            triangles[triangleIndex++] = topRight;
+        }
+    }
+    
+
+    Mesh mesh = new Mesh();
+    
+    // Handle large vertex counts
+    if (vertices.Length > 65535) {
+        mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+    }
+    
+    mesh.vertices = vertices;
+    mesh.triangles = triangles;
+    mesh.uv = uvs;
+    mesh.RecalculateNormals();
+    mesh.RecalculateBounds();
+    
+    meshFilter.mesh = mesh;
+    
+}
     float valueToBrightness(float value){
         return (value + 1f) / 2f;
     }

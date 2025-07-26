@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
@@ -39,9 +40,9 @@ public class PerlinNoise : MonoBehaviour
             noiseTexture = new Texture2D(gridSize * cellSize, gridSize * cellSize);
             generatePerlinNoise();
         }
-        if(Input.anyKeyDown){
+        if(Input.GetMouseButtonDown(0)){
             generatePerlinNoise();
-        }        
+        }
     }
 
 
@@ -149,17 +150,6 @@ public class PerlinNoise : MonoBehaviour
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
         mesh.Optimize();
-    }
-
-    float[] brightnessToHeight(Color[] pixels, float minFound, float maxFound){
-        float[] heights = new float[pixels.Length];
-        for(int i = 0; i < pixels.Length;i++){
-            float currBrightness = pixels[i].r;
-            float brightnessPercent = (currBrightness - minFound) / (maxFound - minFound);
-            float height = brightnessPercent * maxHeight + minHeight;
-            heights[i] = height;
-        }
-        return heights;
     }
     float valueToBrightness(float value){
         return (value + 1f) / 2f;

@@ -28,10 +28,9 @@ public class PerlinNoise : MonoBehaviour
     }
     void generatePerlinNoise(){
         generateGraidentVectors();
-        (Color[] pixels,float minFound,float maxFound) = getPerlinValues();
+        getPerlinValues();
         renderTexture();
-        float[] heights = brightnessToHeight(pixels,minFound,maxFound);
-        changeVerticeHeights(heights);
+        changeVerticeHeights();
     }
 
     void Update()
@@ -126,15 +125,27 @@ public class PerlinNoise : MonoBehaviour
     }
 
 
-    void changeVerticeHeights(float[] heights){
+    void changeVerticeHeights(){
         MeshFilter meshFilter = targetRenderer.GetComponent<MeshFilter>();
         Mesh mesh = meshFilter.mesh;
-        Vector3[] currVertices = mesh.vertices;
-        for(int i = 0; i < currVertices.Length; i++){
-            Debug.Log(heights[i]);
-            currVertices[i].y = heights[i];
+        Bounds bounds = mesh.bounds;
+        float minX = bounds.min.x;
+        float maxX = bounds.max.x;
+        float minZ = bounds.min.z;
+        float maxZ = bounds.max.z;
+        Vector3[] vertices = mesh.vertices;
+        
+        for(int i = 0; i < vertices.Length; i++){
+            Vector3 currVertex = vertices[i];
+            float u = (currVertex.x - minX) / (maxX - minX);
+            float v = (currVertex.z - minZ) / (maxZ - minZ);
+            int texX = Mathf.Clamp(Mathf.FloorToInt(u * noiseTexture.width), 0, noiseTexture.width - 1);
+            int texY = Mathf.Clamp(Mathf.FloorToInt(v * noiseTexture.height), 0, noiseTexture.height - 1);
+            Color pixelColor = noiseTexture.GetPixel(texX, texY);
+            float height = pixelColor.r * (maxHeight - minHeight) + minHeight;
+            vertices[i].y = height;
         }
-        mesh.vertices = currVertices;
+        mesh.vertices = vertices;
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
         mesh.Optimize();

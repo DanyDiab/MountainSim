@@ -8,10 +8,18 @@ public class CameraController : MonoBehaviour
     Vector3 pos;
     float speed;
     Vector3 prevMousePos;
-    float mouseSensitivity = 1f;
-    float pitch = 0f;
+    
+    [Header("Camera Settings")]
+    [SerializeField]float mouseSensitivity = 1f;
+    [SerializeField]float camSmoothing = 2f;
     float minPitch = -90f;
     float maxPitch = 90f;
+    float currPitch = 0f;
+    float targetPitch = 0f;
+    float currYaw = 0f;
+    float targetYaw = 0f;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,14 +56,25 @@ public class CameraController : MonoBehaviour
     
     void rotateCam(){
         Vector3 currMousePos = Input.mousePosition;
+        // calculate vector to rotate towards
         Vector3 dx = currMousePos - prevMousePos;
         float rotationY = dx.x * mouseSensitivity;
         float rotationX = -dx.y * mouseSensitivity;
-        pitch += rotationX;
-        float pitchClamp = Mathf.Clamp(pitch,minPitch,maxPitch); 
-        transform.rotation = Quaternion.Euler(pitchClamp, transform.eulerAngles.y + rotationY, 0);
+
+        targetPitch = Mathf.Clamp(targetPitch + rotationX, minPitch, maxPitch);
+        targetYaw += rotationY;
+        // update currents using lerp to smooth
+        currPitch = lerp(camSmoothing * Time.deltaTime, currPitch, targetPitch);
+        currYaw = lerp(camSmoothing * Time.deltaTime, currYaw, targetYaw);
+        // create Quaternion based on current pitch and yaw
+        Quaternion targetRotation = Quaternion.Euler(currPitch, currYaw, 0);
+        transform.rotation = targetRotation;
+        // update previous mouse position
         prevMousePos = currMousePos;
     }
 
+    float lerp(float t, float a, float b){
+        return a + (b - a) * t;
+    }
     
 }

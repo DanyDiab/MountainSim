@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,9 @@ public class CameraController : MonoBehaviour
     float speed;
     Vector3 prevMousePos;
     float mouseSensitivity = 1f;
+    float pitch = 0f;
+    float minPitch = -90f;
+    float maxPitch = 90f;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,13 +51,9 @@ public class CameraController : MonoBehaviour
         Vector3 dx = currMousePos - prevMousePos;
         float rotationY = dx.x * mouseSensitivity;
         float rotationX = -dx.y * mouseSensitivity;
-        Vector3 currentEuler = transform.eulerAngles;
-        Vector3 newEuler = new Vector3(
-            currentEuler.x + rotationX,
-            currentEuler.y + rotationY,
-            currentEuler.z
-        );
-        transform.rotation = Quaternion.Euler(newEuler);
+        pitch += rotationX;
+        float pitchClamp = Mathf.Clamp(pitch,minPitch,maxPitch); 
+        transform.rotation = Quaternion.Euler(pitchClamp, transform.eulerAngles.y + rotationY, 0);
         prevMousePos = currMousePos;
     }
 

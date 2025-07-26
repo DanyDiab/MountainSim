@@ -135,7 +135,7 @@ public class PerlinNoise : MonoBehaviour
         float minZ = bounds.min.z;
         float maxZ = bounds.max.z;
         Vector3[] vertices = mesh.vertices;
-        
+        Debug.Log(vertices.Length);
         for(int i = 0; i < vertices.Length; i++){
             Vector3 currVertex = vertices[i];
             float u = (currVertex.x - minX) / (maxX - minX);

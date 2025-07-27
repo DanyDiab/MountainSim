@@ -35,7 +35,6 @@ public class CameraController : MonoBehaviour
     {
         lockCam();
         if(locked) return;
-
         moveCam();
         rotateCam();
         transform.position = pos;

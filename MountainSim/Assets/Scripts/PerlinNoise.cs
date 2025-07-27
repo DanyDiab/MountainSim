@@ -17,6 +17,9 @@ public class PerlinNoise : MonoBehaviour
     [SerializeField]float minHeight = -5f;
     [SerializeField]float maxHeight = 5f;
 
+    [Header("Terrain Coloring")]
+    public TerrainColoring terrainColoring;
+
 
     void Start()
     {
@@ -29,6 +32,7 @@ public class PerlinNoise : MonoBehaviour
         Color[] pixels = getPerlinValues();
         renderTexture();
         changeVerticeHeights(pixels);
+        terrainColoring.updatePixelColors();
     }
 
     void Update()

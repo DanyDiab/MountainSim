@@ -16,7 +16,7 @@ public class CursorController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.C)){
             showing = !showing;
-            Cursor.visible = showing;
+            Cursor.lockState = showing ? CursorLockMode.Locked : CursorLockMode.None;
         }
     }
 }

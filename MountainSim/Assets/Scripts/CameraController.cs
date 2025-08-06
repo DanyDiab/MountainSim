@@ -59,11 +59,9 @@ public class CameraController : MonoBehaviour
     }
     
     void rotateCam(){
-        Vector3 currMousePos = Input.mousePosition;
         // calculate vector to rotate towards
-        Vector3 dx = currMousePos - prevMousePos;
-        float rotationY = dx.x * mouseSensitivity;
-        float rotationX = -dx.y * mouseSensitivity;
+        float rotationY = Input.GetAxis("Mouse X") * mouseSensitivity;
+        float rotationX = -Input.GetAxis("Mouse Y") * mouseSensitivity;
 
         targetPitch = Mathf.Clamp(targetPitch + rotationX, minPitch, maxPitch);
         targetYaw += rotationY;
@@ -74,7 +72,6 @@ public class CameraController : MonoBehaviour
         Quaternion targetRotation = Quaternion.Euler(currPitch, currYaw, 0);
         transform.rotation = targetRotation;
         // update previous mouse position
-        prevMousePos = currMousePos;
     }
 
     float lerp(float t, float a, float b){

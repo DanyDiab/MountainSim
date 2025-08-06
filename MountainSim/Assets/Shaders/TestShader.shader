@@ -28,8 +28,6 @@ Shader "Custom/TestShader" {
                 float2 uv : TEXCOORD0;
             };
 
-        
-
             Interpolators MyVertexProgram(VertexData v) {
                 Interpolators i;
                 i.position = UnityObjectToClipPos(v.position);

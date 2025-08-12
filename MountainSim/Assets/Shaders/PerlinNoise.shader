@@ -17,6 +17,8 @@ Shader "Custom/PerlinNoise" {
                 float4 color : COLOR;
             };
 
+            // need to change from vertex color to individual pixel color
+
             struct VertexData {
                 float4 position : POSITION;
                 float2 uv : TEXCOORD0;

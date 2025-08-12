@@ -58,7 +58,6 @@ public class TerrainColoring : MonoBehaviour
                 pixelColor = new Color(rWeighted,gWeighted,bWeighted);
             }
             pixelColors[i] = pixelColor;
-            Debug.Log(pixelColor);
         }
         mesh.colors = pixelColors;
         mesh.RecalculateNormals();
@@ -69,12 +68,10 @@ public class TerrainColoring : MonoBehaviour
     (float[], Color[]) findCloseBounds(float y){
         if(y >= bounds[bounds.Length - 1]){
             int index = bounds.Length - 1;
-            Debug.Log("above");
             return (new float[] {bounds[index]}, new Color[] {colors[index]});
         }
         if(y <= bounds[0]){
             int index = 0;
-            Debug.Log("below");
             return (new float[] {bounds[index]}, new Color[] {colors[index]});
         }
         float[] boundsToReturn = new float[2];

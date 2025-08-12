@@ -23,14 +23,23 @@ public class PerlinNoise : MonoBehaviour
 
     void Start()
     {
+        displayNoise(generatePerlinNoise());
+    }
+
+    void updatePerlinParams(int cellSize){
+
+    }
+
+    public Color[] generatePerlinNoise(){
         gradientVectors = new Vector2[gridSize + 1, gridSize + 1];
         noiseTexture = new Texture2D(gridSize * cellSize,gridSize * cellSize);
-        generatePerlinNoise();
-    }
-    void generatePerlinNoise(){
         generateGraidentVectors();
         Color[] pixels = getPerlinValues();
-        renderTexture();
+        return pixels;
+    }
+
+
+    public void displayNoise(Color[] pixels){
         changeVerticeHeights(pixels);
         terrainColoring.updatePixelColors();
     }
@@ -38,7 +47,7 @@ public class PerlinNoise : MonoBehaviour
     void Update()
     {
         if(Input.GetMouseButtonDown(0)){
-            generatePerlinNoise();
+            displayNoise(generatePerlinNoise());
         }
     }
 
@@ -108,9 +117,7 @@ public class PerlinNoise : MonoBehaviour
                 }
             }
         }
-        noiseTexture.SetPixels(pixels);
-        noiseTexture.Apply();
-        return pixels;
+            return pixels;
     }
 
     void renderTexture(){

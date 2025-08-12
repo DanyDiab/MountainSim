@@ -37,10 +37,6 @@ public class PerlinNoise : MonoBehaviour
 
     void Update()
     {
-        if(cellSize * gridSize != noiseTexture.width){
-            noiseTexture = new Texture2D(gridSize * cellSize, gridSize * cellSize);
-            generatePerlinNoise();
-        }
         if(Input.GetMouseButtonDown(0)){
             generatePerlinNoise();
         }

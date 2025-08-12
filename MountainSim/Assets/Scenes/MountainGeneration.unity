@@ -156,7 +156,7 @@ MonoBehaviour:
   gridSize: 25
   targetRenderer: {fileID: 1849630966}
   minHeight: -5
-  maxHeight: 10
+  maxHeight: 5
   terrainColoring: {fileID: 318641819}
 --- !u!4 &318641817
 Transform:
@@ -167,7 +167,7 @@ Transform:
   m_GameObject: {fileID: 318641815}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.221056, y: 45.949234, z: -14.943413}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367f2ee30add9314b81d8ca1bf75ec63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 1
+  mouseSensitivity: 10
   speed: 5
   camSmoothing: 1
 --- !u!114 &963194230
@@ -444,7 +444,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4ed49e39c0c58d2419fa0539b5a628ce, type: 2}
+  - {fileID: 2100000, guid: 1d2ec3dec7f0c4248b234c8fd3ae04ff, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

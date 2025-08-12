@@ -16,23 +16,26 @@ public class TerrainColoring : MonoBehaviour
     [SerializeField] float[] bounds;
 
     // Start is called before the first frame update
-    void Start(){
+    void Awake(){
         if(bounds.Length != colors.Length){
             Debug.LogError("influence length is not the same as colors length");
             reachedError = true;
             return;
         }
+
     }
 
     // Update is called once per frame
     
     public void updatePixelColors(){
-        mesh = FindAnyObjectByType<MeshFilter>().mesh;
+        mesh = meshFilter.mesh;
         verticies = mesh.vertices;
+        bounds[2] = mesh.bounds.max.y;
+        bounds[0] = mesh.bounds.min.y;
+        bounds[1] = (bounds[0] + bounds[2]) / 2;
         pixelColors = new Color[verticies.Length];
         for(int i = 0; i < verticies.Length; i++){
             Vector3 currVertex = verticies[i];
-            // to do find the 2 closet bounds
             float currY = currVertex.y;
 
             (float[] vertBound, Color[] vertColor) = findCloseBounds(currY);
@@ -47,11 +50,11 @@ public class TerrainColoring : MonoBehaviour
                 float botBound = vertBound[0];
                 float topBound = vertBound[1];
                 // calculate the percent from the bottom
-                float percent = currY / (botBound + topBound);
+                float percent = (currY - botBound) / (topBound - botBound);
                 // blend the color chanels using the weighted average
-                float rWeighted = (vertColor[0].r * percent) + (vertColor[1].r * (1 - percent));
-                float gWeighted = (vertColor[0].g * percent) + (vertColor[1].g * (1 - percent));
-                float bWeighted = (vertColor[0].b * percent) + (vertColor[1].b * (1 - percent));
+                float rWeighted = (vertColor[0].r * (1 - percent)) + (vertColor[1].r * percent);
+                float gWeighted = (vertColor[0].g * (1 - percent)) + (vertColor[1].g * percent);
+                float bWeighted = (vertColor[0].b * (1 - percent)) + (vertColor[1].b * percent);
                 pixelColor = new Color(rWeighted,gWeighted,bWeighted);
             }
             pixelColors[i] = pixelColor;
@@ -64,13 +67,14 @@ public class TerrainColoring : MonoBehaviour
 
 
     (float[], Color[]) findCloseBounds(float y){
-        Debug.Log(bounds.Length);
         if(y >= bounds[bounds.Length - 1]){
             int index = bounds.Length - 1;
+            Debug.Log("above");
             return (new float[] {bounds[index]}, new Color[] {colors[index]});
         }
         if(y <= bounds[0]){
             int index = 0;
+            Debug.Log("below");
             return (new float[] {bounds[index]}, new Color[] {colors[index]});
         }
         float[] boundsToReturn = new float[2];

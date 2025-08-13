@@ -27,6 +27,8 @@ public class PerlinNoise : MonoBehaviour
     }
 
     void updatePerlinParams(int cellSize){
+        float newGridSize = gridSize / cellSize;
+        this.cellSize = cellSize;
 
     }
 
@@ -69,55 +71,53 @@ public class PerlinNoise : MonoBehaviour
 
     Color[] getPerlinValues(){
         Color[] pixels = new Color[noiseTexture.width * noiseTexture.height];
-        float maxObserved = float.MinValue;
-        float minObserved = float.MaxValue;
         for(int i = 0; i < noiseTexture.height; i++){
             for(int j = 0; j < noiseTexture.width; j++){
-                // calculate percent of cell which contains the point
-                float sampleX = (float)j / cellSize;
-                float sampleY = (float)i / cellSize;
-                int gridX = Mathf.FloorToInt(sampleX);
-                int gridY = Mathf.FloorToInt(sampleY);
-
-                float LocalX = sampleX - gridX;
-                float LocalY = sampleY - gridY;
-
-                // calculate the apropraite grid intersections
-                Vector2 tl = new Vector2(LocalX, LocalY);
-                Vector2 tr = new Vector2(LocalX - 1 ,LocalY);
-                Vector2 bl = new Vector2(LocalX ,LocalY - 1);
-                Vector2 br = new Vector2(LocalX - 1 ,LocalY - 1);
-                // find the apropriate gradientVectors
-                Vector2 tlGrad = gradientVectors[gridX,gridY];
-                Vector2 trGrad = gradientVectors[gridX + 1,gridY];
-                Vector2 blGrad = gradientVectors[gridX,gridY + 1];
-                Vector2 brGrad = gradientVectors[gridX + 1, gridY + 1];
-                // calculate the influences of gradient vectors on the point
-                float tlI = Vector2Dot(tl,tlGrad);
-                float trI = Vector2Dot(tr,trGrad);
-                float blI = Vector2Dot(bl,blGrad);
-                float brI = Vector2Dot(br,brGrad);
-                // fade to smooth the values
-                float u = fade(LocalX);
-                float v = fade(LocalY);
-                // lerp across the top and bottom
-                float top = lerp(tlI,trI,u);
-                float bot = lerp(blI,brI,u);
-                // lerp the top and bottom
-                float final = lerp(top,bot,v);
-
-                float brightness = valueToBrightness(final);
-                // noiseTexture.SetPixel
-                pixels[j * noiseTexture.width + i] = new Color(brightness,brightness,brightness);
-                if(brightness > maxObserved){
-                    maxObserved = brightness;
-                }
-                if(brightness < minObserved){
-                    minObserved = brightness;
-                }
+                float brightness = getPerlinValue(i,j);
+                 pixels[j * noiseTexture.width + i] = new Color(brightness,brightness,brightness);
             }
         }
             return pixels;
+    }
+
+
+    public float getPerlinValue(int i, int j){
+        // calculate percent of cell which contains the point
+        float sampleX = (float)j / cellSize;
+        float sampleY = (float)i / cellSize;
+        int gridX = Mathf.FloorToInt(sampleX);
+        int gridY = Mathf.FloorToInt(sampleY);
+
+        float LocalX = sampleX - gridX;
+        float LocalY = sampleY - gridY;
+
+        // calculate the apropraite grid intersections
+        Vector2 tl = new Vector2(LocalX, LocalY);
+        Vector2 tr = new Vector2(LocalX - 1 ,LocalY);
+        Vector2 bl = new Vector2(LocalX ,LocalY - 1);
+        Vector2 br = new Vector2(LocalX - 1 ,LocalY - 1);
+        // find the apropriate gradientVectors
+        Vector2 tlGrad = gradientVectors[gridX,gridY];
+        Vector2 trGrad = gradientVectors[gridX + 1,gridY];
+        Vector2 blGrad = gradientVectors[gridX,gridY + 1];
+        Vector2 brGrad = gradientVectors[gridX + 1, gridY + 1];
+        // calculate the influences of gradient vectors on the point
+        float tlI = Vector2Dot(tl,tlGrad);
+        float trI = Vector2Dot(tr,trGrad);
+        float blI = Vector2Dot(bl,blGrad);
+        float brI = Vector2Dot(br,brGrad);
+        // fade to smooth the values
+        float u = fade(LocalX);
+        float v = fade(LocalY);
+        // lerp across the top and bottom
+        float top = lerp(tlI,trI,u);
+        float bot = lerp(blI,brI,u);
+        // lerp the top and bottom
+        float final = lerp(top,bot,v);
+
+        float brightness = valueToBrightness(final);
+        // noiseTexture.SetPixel
+        return brightness;
     }
 
     void renderTexture(){

@@ -1,7 +1,4 @@
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 
 public class PerlinNoise : MonoBehaviour
 {
@@ -21,72 +18,65 @@ public class PerlinNoise : MonoBehaviour
     public TerrainColoring terrainColoring;
 
 
-    void Start()
-    {
-        displayNoise(generatePerlinNoise());
-    }
 
     void updatePerlinParams(int cellSize){
         float newGridSize = gridSize / cellSize;
         this.cellSize = cellSize;
-
     }
 
     public Color[] generatePerlinNoise(){
         gradientVectors = new Vector2[gridSize + 1, gridSize + 1];
         noiseTexture = new Texture2D(gridSize * cellSize,gridSize * cellSize);
-        generateGraidentVectors();
+        gradientVectors = generateGraidentVectors(gridSize);
         Color[] pixels = getPerlinValues();
         return pixels;
     }
 
 
-    public void displayNoise(Color[] pixels){
-        changeVerticeHeights(pixels);
-        terrainColoring.updatePixelColors();
+    public void displayNoise(Color[] pixels, Texture2D tex){
+        // changeVerticeHeights(pixels, tex);
+        // terrainColoring.updatePixelColors();
+        renderTexture(tex);
     }
 
     void Update()
     {
-        if(Input.GetMouseButtonDown(0)){
-            displayNoise(generatePerlinNoise());
-        }
+
     }
 
 
-    void generateGraidentVectors(){
-        for(int i = 0; i < gridSize + 1; i++){
-            for(int j = 0; j < gridSize + 1; j++){
+    public Vector2[,] generateGraidentVectors(int size){
+        Vector2[,] grads = new Vector2[size + 1, size + 1];
+        for(int i = 0; i < size + 1; i++){
+            for(int j = 0; j < size + 1; j++){
                 Vector2 origin = new Vector2(i * cellSize, j * cellSize);
                 float randDirX = Random.Range(-1f,1f);
                 float randDirY = Random.Range(-1f,1f);
                 Vector2 gradientVector = new Vector2(randDirX,randDirY).normalized;
-                gradientVectors[i,j] = gradientVector;
+                grads[i,j] = gradientVector;
             }   
         }
+        return grads;
     }
-
-// returning the first 4 vectors (off set vectors)
-// returning the last 4 vectors (the corresponding cells)
 
     Color[] getPerlinValues(){
         Color[] pixels = new Color[noiseTexture.width * noiseTexture.height];
         for(int i = 0; i < noiseTexture.height; i++){
             for(int j = 0; j < noiseTexture.width; j++){
-                float brightness = getPerlinValue(i,j);
-                 pixels[j * noiseTexture.width + i] = new Color(brightness,brightness,brightness);
+                float brightness = getPerlinValue(i,j, gradientVectors, cellSize, gridSize);
+                 pixels[i * noiseTexture.width + j] = new Color(brightness,brightness,brightness);
             }
         }
-            return pixels;
+        return pixels;
     }
 
 
-    public float getPerlinValue(int i, int j){
+    public float getPerlinValue(float i, float j, Vector2[,] grads, int sizeOfCell, int sizeOfGrid){
         // calculate percent of cell which contains the point
-        float sampleX = (float)j / cellSize;
-        float sampleY = (float)i / cellSize;
-        int gridX = Mathf.FloorToInt(sampleX);
-        int gridY = Mathf.FloorToInt(sampleY);
+        float sampleX = (float)j / sizeOfCell;
+        float sampleY = (float)i / sizeOfCell;
+        int gridX = Mathf.FloorToInt(sampleX) % sizeOfGrid;
+        int gridY = Mathf.FloorToInt(sampleY) % sizeOfGrid;
 
         float LocalX = sampleX - gridX;
         float LocalY = sampleY - gridY;
@@ -97,10 +87,10 @@ public class PerlinNoise : MonoBehaviour
         Vector2 bl = new Vector2(LocalX ,LocalY - 1);
         Vector2 br = new Vector2(LocalX - 1 ,LocalY - 1);
         // find the apropriate gradientVectors
-        Vector2 tlGrad = gradientVectors[gridX,gridY];
-        Vector2 trGrad = gradientVectors[gridX + 1,gridY];
-        Vector2 blGrad = gradientVectors[gridX,gridY + 1];
-        Vector2 brGrad = gradientVectors[gridX + 1, gridY + 1];
+        Vector2 tlGrad = grads[gridX,gridY];
+        Vector2 trGrad = grads[gridX + 1,gridY];
+        Vector2 blGrad = grads[gridX,gridY + 1];
+        Vector2 brGrad = grads[gridX + 1, gridY + 1];
         // calculate the influences of gradient vectors on the point
         float tlI = Vector2Dot(tl,tlGrad);
         float trI = Vector2Dot(tr,trGrad);
@@ -116,29 +106,24 @@ public class PerlinNoise : MonoBehaviour
         float final = lerp(top,bot,v);
 
         float brightness = valueToBrightness(final);
-        // noiseTexture.SetPixel
         return brightness;
     }
 
-    void renderTexture(){
+    void renderTexture(Texture2D tex){
         if (targetRenderer != null){
-            targetRenderer.material.mainTexture = noiseTexture;
-        }
-        else{
-            Debug.LogWarning("Target Renderer not assigned. Please assign a Plane or Quad to display the noise.");
+            targetRenderer.material.mainTexture = tex;
         }
     }
 
 
-void changeVerticeHeights(Color[] pixels) {
+void changeVerticeHeights(Color[] pixels, Texture2D tex) {
     MeshFilter meshFilter = targetRenderer.GetComponent<MeshFilter>();
     
-    int width = noiseTexture.width;
-    int height = noiseTexture.height;
+    int width = tex.width;
+    int height = tex.height;
     
     Vector3[] vertices = new Vector3[pixels.Length];
     Vector2[] uvs = new Vector2[pixels.Length];
-    
     
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
@@ -177,7 +162,6 @@ void changeVerticeHeights(Color[] pixels) {
             triangles[triangleIndex++] = topRight;
         }
     }
-    
 
     Mesh mesh = new Mesh();
     
@@ -212,14 +196,8 @@ void changeVerticeHeights(Color[] pixels) {
         return (v1.x * v2.x) + (v1.y * v2.y);
     }
 
+    public Texture2D getTex(){
+        return noiseTexture;
+    }
+
 }
-
-
-// steps
-// generate X vectors, point them in random directions
-// for each point in the grid:
-    // determine which cell it belongs in
-    // calculate influence of each of the 4 corners to the point
-    // compute dot product of offset and gradient vectors
-    // fade the fractinals 
-    // interpolate the dot products using the faded vault

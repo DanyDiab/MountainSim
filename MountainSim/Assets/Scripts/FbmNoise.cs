@@ -10,7 +10,7 @@ public class FbmNoise : MonoBehaviour
     [SerializeField] float lacunarity;
 
     // amplitude change between octaves (decreasing)
-    [SerializeField] float peristence ;
+    [SerializeField] float peristence;
 
     float freqeuncy = 1;
     float amplitude = 1;
@@ -49,12 +49,11 @@ public class FbmNoise : MonoBehaviour
         Color[] pixelColors = new Color[tex.width * tex.height];
         for (int octave = 0; octave < numOctaves; octave++){
             totalAmplitude += amplitude;
-
             for(int i = 0; i < tex.height; i++){
                 for(int j = 0; j < tex.width; j++){
-                    float adjustedI = i * freqeuncy;
-                    float adjustedJ = j * freqeuncy;
-                    float brightness = perlinNoise.getPerlinValue(adjustedI, adjustedJ, gradientVectors, cellSize, gridSize) * amplitude;
+                    float x = (float)j / tex.width * freqeuncy;
+                    float y = (float)i / tex.height * freqeuncy;
+                    float brightness = perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize) * amplitude;
                     pixelBrightness[i * tex.width + j] += brightness;
                 }
             }
@@ -63,9 +62,9 @@ public class FbmNoise : MonoBehaviour
         }
 
         for(int k = 0; k < pixelBrightness.Length; k++){
-            float currBrightness = pixelBrightness[k] / totalAmplitude;
-            float normalBrightness = (currBrightness + 1) / 2;
-            pixelColors[k] = new Color(normalBrightness, normalBrightness, normalBrightness);
+            float currBrightness = pixelBrightness[k];
+            // float normalBrightness = (currBrightness + 1) / 2;
+            pixelColors[k] = new Color(currBrightness, currBrightness, currBrightness);
         }
         return pixelColors;
     }

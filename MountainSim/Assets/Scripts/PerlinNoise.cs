@@ -34,9 +34,9 @@ public class PerlinNoise : MonoBehaviour
 
 
     public void displayNoise(Color[] pixels, Texture2D tex){
-        // changeVerticeHeights(pixels, tex);
-        // terrainColoring.updatePixelColors();
-        renderTexture(tex);
+        changeVerticeHeights(pixels, tex);
+        terrainColoring.updatePixelColors();
+        // renderTexture(tex);
     }
 
     void Update()

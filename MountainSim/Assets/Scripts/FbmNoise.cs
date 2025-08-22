@@ -12,49 +12,42 @@ public class FbmNoise : MonoBehaviour
     // amplitude change between octaves (decreasing)
     [SerializeField] float peristence;
 
+    NoiseRenderer noiseRenderer;
+
     float freqeuncy = 1;
     float amplitude = 1;
     float totalAmplitude;
 
-    Texture2D tex;
     PerlinNoise perlinNoise;
+    
 
-    int gridSize = 20;
-    int cellSize = 5;
+
     Vector2[,] gradientVectors;
     void Start(){
+        noiseRenderer = GetComponent<NoiseRenderer>();
         perlinNoise = GetComponent<PerlinNoise>();
         if(perlinNoise == null){
             Debug.LogWarning("couldnt find the perlin noise instance");
         }
     }
-
-    // Update is called once per frame
-    void Update(){
-        if(Input.GetMouseButtonDown(0)){
-            perlinNoise.displayNoise(generateNoise(), tex);
-        }
-    }
-
-
-    Color[] generateNoise(){
+    
+    public Color[] generateFBMNoise(int gridSize, int cellSize){
         freqeuncy = 1;
         amplitude = 1;
         totalAmplitude = 0;
-
-        tex = new Texture2D(gridSize * cellSize,gridSize * cellSize);
+        int width = gridSize * cellSize;
         gradientVectors = new Vector2[gridSize + 1, gridSize + 1];
         gradientVectors = perlinNoise.generateGraidentVectors(gridSize);
-        float[] pixelBrightness = new float[tex.width * tex.height];
-        Color[] pixelColors = new Color[tex.width * tex.height];
+        float[] pixelBrightness = new float[width * width];
+        Color[] pixelColors = new Color[width * width];
         for (int octave = 0; octave < numOctaves; octave++){
             totalAmplitude += amplitude;
-            for(int i = 0; i < tex.height; i++){
-                for(int j = 0; j < tex.width; j++){
-                    float x = (float)j / tex.width * freqeuncy;
-                    float y = (float)i / tex.height * freqeuncy;
+            for(int i = 0; i < width; i++){
+                for(int j = 0; j < width; j++){
+                    float x = (float)j / width * freqeuncy;
+                    float y = (float)i / width * freqeuncy;
                     float brightness = perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize) * amplitude;
-                    pixelBrightness[i * tex.width + j] += brightness;
+                    pixelBrightness[i * width + j] += brightness;
                 }
             }
             freqeuncy *= lacunarity;
@@ -66,6 +59,7 @@ public class FbmNoise : MonoBehaviour
             // float normalBrightness = (currBrightness + 1) / 2;
             pixelColors[k] = new Color(currBrightness, currBrightness, currBrightness);
         }
+        Debug.Log("size" + pixelBrightness.Length);
         return pixelColors;
     }
 

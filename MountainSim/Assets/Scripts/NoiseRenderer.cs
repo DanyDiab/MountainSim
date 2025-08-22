@@ -1,0 +1,143 @@
+using TreeEditor;
+using UnityEngine;
+using UnityEngine.UI;
+
+
+public enum NoiseAlgorithms{
+    Perlin,
+    fBm
+}
+
+public class NoiseRenderer : MonoBehaviour{
+    public Renderer targetRenderer;
+    
+    PerlinNoise perlin;
+    FbmNoise fBm;
+        
+    [Header("Size Parameters")]
+    [SerializeField] int gridSize = 20;
+    [SerializeField] int cellSize = 5;
+
+    [Header("Height Parameters")] 
+    [SerializeField]float minHeight = -5f;
+    [SerializeField]float maxHeight = 5f;
+
+    [Header("Terrain Coloring")]
+    TerrainColoring terrainColoring;
+    
+    [Header("Current Noise Algorithm")]
+    [SerializeField] NoiseAlgorithms currentNoiseAlgorithm;
+
+
+    void Start(){
+        terrainColoring = GetComponent<TerrainColoring>();
+        perlin = GetComponent<PerlinNoise>();
+        fBm = GetComponent<FbmNoise>();
+        currentNoiseAlgorithm = NoiseAlgorithms.fBm;
+    }
+    void Update(){
+        bool updateNoise = false;
+        if(Input.GetMouseButtonDown(0)){
+            updateNoise = true;
+        }
+        if(!updateNoise){
+            return;
+        }
+        switch(currentNoiseAlgorithm){
+          case NoiseAlgorithms.Perlin:
+                displayNoise(perlin.generatePerlinNoise(gridSize,cellSize));
+                break;
+            case NoiseAlgorithms.fBm:
+                displayNoise(fBm.generateFBMNoise(gridSize,cellSize));
+                break;
+        }
+    }
+    public void displayNoise(Color[] pixels){
+        colorsToMesh(pixels);
+        terrainColoring.updatePixelColors();
+    }
+
+    void renderTexture(Texture2D tex){
+        if (targetRenderer != null){
+            targetRenderer.material.mainTexture = tex;
+        }
+    }
+
+    void colorsToMesh(Color[] pixels) {
+        Debug.Log("pixels: " + pixels.Length);
+        Debug.Log("tex: "+  gridSize * cellSize);
+        Texture2D tex = new Texture2D(gridSize * cellSize, gridSize * cellSize);
+        (Vector3[] vertices, Vector2[] uvs) = changeVerticeHeights(tex, pixels);
+        generateMesh(tex,uvs,vertices);
+    }
+
+    (Vector3[], Vector2[]) changeVerticeHeights(Texture2D tex, Color[] pixels){
+        Vector3[] vertices = new Vector3[pixels.Length];
+        Vector2[] uvs = new Vector2[pixels.Length];
+        int width = tex.width;
+        int height = tex.height;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int index = y * height + x;
+                
+                Vector3 pos = new Vector3(x, 0, y);
+                Color vertColor = pixels[index];
+                float vertHeight = vertColor.r * (maxHeight - minHeight) + minHeight;
+                pos.y = vertHeight;
+                
+                vertices[index] = pos;
+                
+                uvs[index] = new Vector2((float)x / (width - 1), (float)y / (height - 1));
+            }
+        }
+        return (vertices, uvs);
+    }
+
+    void generateMesh(Texture2D tex, Vector2[] uvs, Vector3[] vertices){
+        MeshFilter meshFilter = targetRenderer.GetComponent<MeshFilter>();
+
+        int[] triangles = generateQuads(tex);
+        Mesh mesh = new Mesh();
+        
+        // Handle large vertex counts
+        if (vertices.Length > 65535) {
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+        }
+        
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.uv = uvs;
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+        
+        meshFilter.mesh = mesh;
+    }
+
+
+    int[] generateQuads(Texture2D tex){
+        int height = tex.height;
+        int width = tex.width;
+        int numQuads = (width - 1) * (height - 1);
+        int[] triangles = new int[numQuads * 6]; 
+        int triangleIndex = 0;
+        for (int y = 0; y < height - 1; y++) {
+            for (int x = 0; x < width - 1; x++) {
+                // Get the four vertices of current quad
+                int bottomLeft = y * width + x;
+                int bottomRight = y * width + (x + 1);
+                int topLeft = (y + 1) * width + x;
+                int topRight = (y + 1) * width + (x + 1);
+                
+                triangles[triangleIndex++] = bottomLeft;
+                triangles[triangleIndex++] = topLeft;
+                triangles[triangleIndex++] = bottomRight;
+
+                triangles[triangleIndex++] = bottomRight;
+                triangles[triangleIndex++] = topLeft;
+                triangles[triangleIndex++] = topRight;
+            }
+        } 
+        return triangles;
+    }
+}
+

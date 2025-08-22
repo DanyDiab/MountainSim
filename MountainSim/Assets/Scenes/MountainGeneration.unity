@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 318641816}
   - component: {fileID: 318641819}
   - component: {fileID: 318641820}
+  - component: {fileID: 318641821}
   m_Layer: 0
   m_Name: Noise Generator
   m_TagString: Untagged
@@ -153,12 +154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d5b80b2aa059ab4bbdd8bfde6c2d20e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellSize: 2
-  gridSize: 25
-  targetRenderer: {fileID: 1849630966}
-  minHeight: -5
-  maxHeight: 5
-  terrainColoring: {fileID: 318641819}
 --- !u!4 &318641817
 Transform:
   m_ObjectHideFlags: 0
@@ -207,9 +202,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 574c90f62da556c448a7bd962c989016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numOctaves: 4
-  lacunarity: 2
+  numOctaves: 3
+  lacunarity: 5
   peristence: 0.5
+--- !u!114 &318641821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 318641815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d997a634bf2b6e469b5fe9eadb71340, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 1849630966}
+  gridSize: 20
+  cellSize: 5
+  minHeight: -5
+  maxHeight: 5
+  currentNoiseAlgorithm: 1
 --- !u!1 &357081027
 GameObject:
   m_ObjectHideFlags: 0

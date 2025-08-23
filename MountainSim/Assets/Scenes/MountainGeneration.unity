@@ -183,8 +183,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshFilter: {fileID: 1849630967}
   colors:
-  - {r: 0.12232054, g: 0.3132075, b: 0.03486647, a: 0}
-  - {r: 0.2830189, g: 0.16179441, b: 0.022961887, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0.5245282, g: 0.5245282, b: 0.5245282, a: 0}
   - {r: 1, g: 1, b: 1, a: 0}
   bounds:
   - -5
@@ -203,8 +203,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numOctaves: 3
-  lacunarity: 5
-  peristence: 0.5
+  lacunarity: 3
+  peristence: 5
+  freqeuncy: 1
+  amplitude: 1
 --- !u!114 &318641821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,7 +381,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 10, z: -10}
+  m_LocalPosition: {x: 0, y: 100, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -397,9 +399,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367f2ee30add9314b81d8ca1bf75ec63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 10
-  speed: 5
-  camSmoothing: 1
+  mouseSensitivity: 1
+  speed: 50
+  camSmoothing: 10
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -14,8 +14,8 @@ public class FbmNoise : MonoBehaviour
 
     NoiseRenderer noiseRenderer;
 
-    float freqeuncy = 1;
-    float amplitude = 1;
+    [SerializeField] float freqeuncy = 1;
+    [SerializeField] float amplitude = 1;
     float totalAmplitude;
 
     PerlinNoise perlinNoise;
@@ -55,7 +55,7 @@ public class FbmNoise : MonoBehaviour
         }
 
         for(int k = 0; k < pixelBrightness.Length; k++){
-            float currBrightness = pixelBrightness[k];
+            float currBrightness = pixelBrightness[k] / numOctaves;
             // float normalBrightness = (currBrightness + 1) / 2;
             pixelColors[k] = new Color(currBrightness, currBrightness, currBrightness);
         }

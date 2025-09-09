@@ -42,6 +42,14 @@ public class CameraController : MonoBehaviour
 
     void moveCam(){
         Vector3 dir = Vector3.zero;
+        Vector3 upDown = Vector3.zero;
+
+        if(Input.GetKey(KeyCode.LeftShift)){
+            upDown += Vector3.down;
+        }
+        if(Input.GetKey(KeyCode.Space)){
+            upDown += Vector3.up;
+        }
         if(Input.GetKey(KeyCode.W)){
             dir += transform.forward;
         }
@@ -53,8 +61,8 @@ public class CameraController : MonoBehaviour
         }
         if(Input.GetKey(KeyCode.D)){
             dir += transform.right;
-        }
-        Vector3 dx = dir * speed * Time.deltaTime;
+        }        
+        Vector3 dx = (dir + upDown) * speed * Time.deltaTime;
         pos += dx;
     }
     

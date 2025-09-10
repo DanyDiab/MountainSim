@@ -13,6 +13,9 @@ public class NoiseRenderer : MonoBehaviour{
     
     PerlinNoise perlin;
     FbmNoise fBm;
+
+    [Header("Seed")]
+    [SerializeField] float seed;
         
     [Header("Size Parameters")]
     [SerializeField] int gridSize = 20;
@@ -27,6 +30,7 @@ public class NoiseRenderer : MonoBehaviour{
     
     [Header("Current Noise Algorithm")]
     [SerializeField] NoiseAlgorithms currentNoiseAlgorithm;
+
 
 
     void Start(){
@@ -52,6 +56,10 @@ public class NoiseRenderer : MonoBehaviour{
                 break;
         }
     }
+
+    public void generateSeed(){
+        seed = Random.Range(-2147483648f, 2147483647f);
+    }
     public void displayNoise(Color[] pixels){
         colorsToMesh(pixels);
         terrainColoring.updatePixelColors();
@@ -61,6 +69,18 @@ public class NoiseRenderer : MonoBehaviour{
         if (targetRenderer != null){
             targetRenderer.material.mainTexture = tex;
         }
+    }
+    public Vector2[,] generateGraidentVectors(int gridSize){
+        Vector2[,] grads = new Vector2[gridSize + 1, gridSize + 1];
+        for(int i = 0; i < gridSize + 1; i++){
+            for(int j = 0; j < gridSize + 1; j++){
+                float randDirX = Random.Range(-1f,1f);
+                float randDirY = Random.Range(-1f,1f);
+                Vector2 gradientVector = new Vector2(randDirX,randDirY).normalized;
+                grads[i,j] = gradientVector;
+            }   
+        }
+        return grads;
     }
 
     void colorsToMesh(Color[] pixels) {

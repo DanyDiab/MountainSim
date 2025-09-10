@@ -37,7 +37,7 @@ public class FbmNoise : MonoBehaviour
         totalAmplitude = 0;
         int width = gridSize * cellSize;
         gradientVectors = new Vector2[gridSize + 1, gridSize + 1];
-        gradientVectors = perlinNoise.generateGraidentVectors(gridSize);
+        gradientVectors = noiseRenderer.generateGraidentVectors(gridSize);
         float[] pixelBrightness = new float[width * width];
         Color[] pixelColors = new Color[width * width];
         for (int octave = 0; octave < numOctaves; octave++){

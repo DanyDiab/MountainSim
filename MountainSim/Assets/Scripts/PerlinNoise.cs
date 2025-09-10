@@ -3,27 +3,22 @@ using UnityEngine;
 public class PerlinNoise : MonoBehaviour
 {
     Vector2[,] gradientVectors;
+    NoiseRenderer noiseRenderer;
+
+    public void Start()
+    {
+        noiseRenderer = GetComponent<NoiseRenderer>();
+    }
 
     public Color[] generatePerlinNoise(int gridSize, int cellSize){
         gradientVectors = new Vector2[gridSize + 1, gridSize + 1];
-        gradientVectors = generateGraidentVectors(gridSize);
+        gradientVectors = noiseRenderer.generateGraidentVectors(gridSize);
         Color[] pixels = getPerlinValues(gridSize,cellSize, gradientVectors);
         return pixels;
     }
 
 
-    public Vector2[,] generateGraidentVectors(int gridSize){
-        Vector2[,] grads = new Vector2[gridSize + 1, gridSize + 1];
-        for(int i = 0; i < gridSize + 1; i++){
-            for(int j = 0; j < gridSize + 1; j++){
-                float randDirX = Random.Range(-1f,1f);
-                float randDirY = Random.Range(-1f,1f);
-                Vector2 gradientVector = new Vector2(randDirX,randDirY).normalized;
-                grads[i,j] = gradientVector;
-            }   
-        }
-        return grads;
-    }
+
 
     Color[] getPerlinValues(int gridSize, int cellSize, Vector2[,] grads){
         int width = gridSize * cellSize;

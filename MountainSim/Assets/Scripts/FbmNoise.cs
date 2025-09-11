@@ -59,7 +59,6 @@ public class FbmNoise : MonoBehaviour
             // float normalBrightness = (currBrightness + 1) / 2;
             pixelColors[k] = new Color(currBrightness, currBrightness, currBrightness);
         }
-        Debug.Log("size" + pixelBrightness.Length);
         return pixelColors;
     }
 

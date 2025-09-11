@@ -44,6 +44,10 @@ public class NoiseRenderer : MonoBehaviour{
         if(Input.GetMouseButtonDown(0)){
             updateNoise = true;
         }
+        if(Input.GetMouseButtonDown(1)){
+            Debug.Log("seed");
+            generateSeed();
+        }
         if(!updateNoise){
             return;
         }
@@ -58,7 +62,7 @@ public class NoiseRenderer : MonoBehaviour{
     }
 
     public void generateSeed(){
-        seed = Random.Range(-2147483648f, 2147483647f);
+        seed = Random.Range(-2147483648, 2147483647);
     }
     public void displayNoise(Color[] pixels){
         colorsToMesh(pixels);
@@ -71,6 +75,8 @@ public class NoiseRenderer : MonoBehaviour{
         }
     }
     public Vector2[,] generateGraidentVectors(int gridSize){
+        // update the random with the current seed
+        Random.InitState((int)seed);
         Vector2[,] grads = new Vector2[gridSize + 1, gridSize + 1];
         for(int i = 0; i < gridSize + 1; i++){
             for(int j = 0; j < gridSize + 1; j++){
@@ -84,8 +90,6 @@ public class NoiseRenderer : MonoBehaviour{
     }
 
     void colorsToMesh(Color[] pixels) {
-        Debug.Log("pixels: " + pixels.Length);
-        Debug.Log("tex: "+  gridSize * cellSize);
         Texture2D tex = new Texture2D(gridSize * cellSize, gridSize * cellSize);
         (Vector3[] vertices, Vector2[] uvs) = changeVerticeHeights(tex, pixels);
         generateMesh(tex,uvs,vertices);

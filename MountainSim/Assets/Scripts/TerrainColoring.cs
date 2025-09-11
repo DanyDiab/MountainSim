@@ -60,8 +60,6 @@ public class TerrainColoring : MonoBehaviour
             pixelColors[i] = pixelColor;
         }
         mesh.colors = pixelColors;
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
         }
 
 

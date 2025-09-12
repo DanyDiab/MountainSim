@@ -183,11 +183,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshFilter: {fileID: 1849630967}
   colors:
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0.14150941, g: 0.0705911, b: 0.012682444, a: 0}
-  - {r: 0.31132078, g: 0.23589464, b: 0.027901383, a: 0}
   - {r: 0.044546008, g: 0.16981131, b: 0.028034883, a: 0}
-  - {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 0}
+  - {r: 1, g: 1, b: 1, a: 0}
 --- !u!114 &318641820
 MonoBehaviour:
   m_ObjectHideFlags: 0

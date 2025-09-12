@@ -20,16 +20,13 @@ public class NoiseRenderer : MonoBehaviour{
     [Header("Size Parameters")]
     [SerializeField] int gridSize = 20;
     [SerializeField] int cellSize = 5;
-
-    [Header("Height Parameters")] 
-    [SerializeField]float minHeight = -5f;
-    [SerializeField]float maxHeight = 5f;
-
-    [Header("Terrain Coloring")]
-    TerrainColoring terrainColoring;
+    [SerializeField]float heightExageration = 5f;
     
     [Header("Current Noise Algorithm")]
     [SerializeField] NoiseAlgorithms currentNoiseAlgorithm;
+
+    TerrainColoring terrainColoring;
+
 
 
 
@@ -106,7 +103,7 @@ public class NoiseRenderer : MonoBehaviour{
                 
                 Vector3 pos = new Vector3(x, 0, y);
                 Color vertColor = pixels[index];
-                float vertHeight = vertColor.r * (maxHeight - minHeight) + minHeight;
+                float vertHeight = vertColor.r * (heightExageration - 0);
                 pos.y = vertHeight;
                 
                 vertices[index] = pos;

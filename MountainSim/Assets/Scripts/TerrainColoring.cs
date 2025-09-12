@@ -13,15 +13,10 @@ public class TerrainColoring : MonoBehaviour
 
     [Header("Colors")]
     [SerializeField] Color[] colors;
-    [SerializeField] float[] bounds;
+    float[] bounds;
 
     // Start is called before the first frame update
     void Awake(){
-        if(bounds.Length != colors.Length){
-            Debug.LogError("influence length is not the same as colors length");
-            reachedError = true;
-            return;
-        }
 
     }
 
@@ -29,10 +24,8 @@ public class TerrainColoring : MonoBehaviour
     
     public void updatePixelColors(){
         mesh = meshFilter.mesh;
+        determineBounds(mesh);
         verticies = mesh.vertices;
-        bounds[2] = mesh.bounds.max.y;
-        bounds[0] = mesh.bounds.min.y;
-        bounds[1] = (bounds[0] + bounds[2]) / 2;
         pixelColors = new Color[verticies.Length];
         for(int i = 0; i < verticies.Length; i++){
             Vector3 currVertex = verticies[i];
@@ -80,12 +73,28 @@ public class TerrainColoring : MonoBehaviour
             if(currBound < y){
                 continue;
             }
-            boundsToReturn = new float[] {bounds[i - 1], bounds[i]};
+            boundsToReturn = new float[] {bounds[i-1], bounds[i]};
             colorsToReturn = new Color[] {colors[i-1], colors[i]};
             break;
         }
         return (boundsToReturn, colorsToReturn);
 
+    }
+
+    void determineBounds(Mesh mesh){
+        bounds = new float[colors.Length];
+        float max = mesh.bounds.max.y;
+        float min = mesh.bounds.min.y;
+        Debug.Log(max);
+        Debug.Log(min);
+
+        float heightDiff = max - min;
+        float stepSize = heightDiff / colors.Length;
+        float currPos = min;
+        for(int i = 0; i < colors.Length; i++){
+            bounds[i] = currPos;
+            currPos += stepSize;
+        }
     }
 
 

@@ -1,7 +1,8 @@
 Shader "Custom/TextureBlend"{
     Properties{
-        _Tex1 ("Texture", 2D) = "white"
-        _Tex2 ("Texture", 2D) = "white"
+        _Tex1 ("Texture 1", 2D) = "white"
+        _Tex2 ("Texture 2", 2D) = "white"
+        _TVal ("TVal", Float) = .5
     }
 
     SubShader{
@@ -15,6 +16,7 @@ Shader "Custom/TextureBlend"{
 
             sampler2D _Tex1;
             sampler2D _Tex2;
+            float _TVal;
 
             struct Interpolators {
                 float4 position : POSITION;
@@ -34,7 +36,7 @@ Shader "Custom/TextureBlend"{
             }
 
             float4 FragProgram(Interpolators i) : SV_TARGET{
-                return lerp(tex2D(_Tex1, i.uv), tex2D(_Tex2, i.uv), .4);
+                return lerp(tex2D(_Tex1, i.uv), tex2D(_Tex2, i.uv), _TVal);
             }
 
             ENDCG

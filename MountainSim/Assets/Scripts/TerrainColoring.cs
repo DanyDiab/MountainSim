@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TerrainColoring : MonoBehaviour
@@ -60,8 +61,8 @@ public class TerrainColoring : MonoBehaviour
 
     public void updatePixelTex(){
         mesh = meshFilter.mesh;
-        determineBounds(mesh, textures.Length);
-        shaderMat.SetFloatArray("_Heights", bounds);
+        bounds = determineBounds(mesh, textures.Length);
+        shaderMat.SetFloatArray("_Bounds", bounds);
         shaderMat.SetInt("_numBounds", bounds.Length);
         Texture2DArray texArray = new Texture2DArray(
             1024, 1024, bounds.Length, TextureFormat.DXT1, true
@@ -96,10 +97,10 @@ public class TerrainColoring : MonoBehaviour
 
     }
 
-    void determineBounds(Mesh mesh, int len){
+    float[] determineBounds(Mesh mesh, int len){
         bounds = new float[len];
-        float max = mesh.bounds.max.y;
         float min = mesh.bounds.min.y;
+        float max =  mesh.bounds.max.y;
         float heightDiff = max - min;
         float stepSize = heightDiff / (len - 1);
         float currPos = min;
@@ -107,9 +108,6 @@ public class TerrainColoring : MonoBehaviour
             bounds[i] = currPos;
             currPos += stepSize;
         }
-    }
-
-
-
-    
+        return bounds;
+    }    
 }

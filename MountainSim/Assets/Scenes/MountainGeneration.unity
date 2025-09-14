@@ -182,12 +182,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshFilter: {fileID: 1849630967}
-  colors:
-  - {r: 0.044546008, g: 0.16981131, b: 0.028034883, a: 0}
-  - {r: 1, g: 1, b: 1, a: 0}
+  colors: []
   textures:
-  - {fileID: 2800000, guid: b900361e13e6eaa44963cb851faf3ed3, type: 3}
+  - {fileID: 2800000, guid: aa701e5be2dbcd24aad4fb9c3ca284da, type: 3}
+  - {fileID: 2800000, guid: bfa802f39c73ba3408c9a8e99b6f170a, type: 3}
   - {fileID: 2800000, guid: 250bf0bf9fccc19459a2eaf38bd54cf9, type: 3}
+  - {fileID: 2800000, guid: 9b9564cd828b001479f30f7b519ef809, type: 3}
   shaderMat: {fileID: 2100000, guid: a5555b58ce74add4ba4264d73b888e79, type: 2}
 --- !u!114 &318641820
 MonoBehaviour:

@@ -52,21 +52,27 @@ Shader "Custom/TextureBlend"{
                     // if below
                     return float4(1,0,0,1);
                 }
+
                 for (int idx = 0; idx < _numBounds - 1; idx++){
                     float boundY = _Bounds[idx];
                     float nextBound = _Bounds[idx + 1];
+                    // found the correct bound
                     if(yPos >= boundY && yPos < nextBound){
                         topIndex = idx + 1;
                         botIndex = idx;
+                        // calculates the percent or T value for lerping between the 2 textures. This is the percent from the bottom of this bound to the next bound
+                        // saturate bounds between 0 and 1
                         percent = saturate((yPos - boundY) / (nextBound - boundY));
                         break;
                     }
                 }
+                // deteremine tedxture layer, including tiling of the texture
                 float3 uvLayerTop = float3(i.uv * _TilingFactor, topIndex);
                 float3 uvLayerLow = float3(i.uv * _TilingFactor, botIndex);
+                // grab the textures
                 float4 texTop = UNITY_SAMPLE_TEX2DARRAY_LOD(_Textures, uvLayerTop, 0);
                 float4 texLow = UNITY_SAMPLE_TEX2DARRAY_LOD(_Textures, uvLayerLow, 0);
-
+                // lerp beyween the 2 textures using the calculated percent
                 return lerp(texLow,texTop, percent);
             }
             ENDCG

@@ -1,8 +1,7 @@
 Shader "Custom/TextureBlend"{
     Properties{
-        _Tex1 ("Texture 1", 2D) = "white"
-        _Tex2 ("Texture 2", 2D) = "white"
-        _TVal ("TVal", Float) = .5
+        _TilingFactor("Tiling Factor", Float) = 10
+        _TVal("T Val", Float) = .1
     }
 
     SubShader{
@@ -14,9 +13,11 @@ Shader "Custom/TextureBlend"{
 
             #include "UnityCG.cginc"
 
-            sampler2D _Tex1;
-            sampler2D _Tex2;
-            float _TVal;
+            uniform float _TilingFactor;
+            uniform float _Heights[10];
+            uniform int _numBounds;
+            uniform float _TVal;
+            UNITY_DECLARE_TEX2DARRAY(_Textures);
 
             struct Interpolators {
                 float4 position : POSITION;
@@ -36,7 +37,15 @@ Shader "Custom/TextureBlend"{
             }
 
             float4 FragProgram(Interpolators i) : SV_TARGET{
-                return lerp(tex2D(_Tex1, i.uv), tex2D(_Tex2, i.uv), _TVal);
+
+                float3 uvLayer1 = float3(i.uv * _TilingFactor, 0);
+                float3 uvLayer2 = float3(i.uv * _TilingFactor, 1);
+
+
+                float4 tex1 = UNITY_SAMPLE_TEX2DARRAY_LOD(_Textures, uvLayer1, 0);
+                float4 tex2 = UNITY_SAMPLE_TEX2DARRAY_LOD(_Textures, uvLayer2, 0);
+
+                return lerp(tex1,tex2,_TVal);
             }
 
             ENDCG

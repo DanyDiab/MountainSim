@@ -63,7 +63,8 @@ public class NoiseRenderer : MonoBehaviour{
     }
     public void displayNoise(Color[] pixels){
         colorsToMesh(pixels);
-        terrainColoring.updatePixelColors();
+        // terrainColoring.updatePixelColors();
+        terrainColoring.updatePixelTex();
     }
 
     void renderTexture(Texture2D tex){

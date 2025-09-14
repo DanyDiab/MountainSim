@@ -13,6 +13,8 @@ public class TerrainColoring : MonoBehaviour
 
     [Header("Colors")]
     [SerializeField] Color[] colors;
+    [SerializeField] Texture2D[] textures;
+    [SerializeField] Material shaderMat;
     float[] bounds;
 
     // Start is called before the first frame update
@@ -56,6 +58,20 @@ public class TerrainColoring : MonoBehaviour
         }
 
 
+    public void updatePixelTex(){
+        mesh = meshFilter.mesh;
+        determineBounds(mesh);
+        shaderMat.SetFloatArray("_Heights", bounds);
+        shaderMat.SetInt("_numBounds", bounds.Length);
+        Texture2DArray texArray = new Texture2DArray(
+            1024, 1024, bounds.Length, TextureFormat.DXT1, true
+        );
+        for (int i = 0; i < textures.Length; i++) {
+            Debug.Log(textures[i].format);
+            Graphics.CopyTexture(textures[i], 0, 0, texArray, i, 0);
+        }
+        shaderMat.SetTexture("_Textures", texArray);   
+    }
     (float[], Color[]) findCloseBounds(float y){
         if(y >= bounds[bounds.Length - 1]){
             int index = bounds.Length - 1;

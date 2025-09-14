@@ -1,7 +1,6 @@
 Shader "Custom/TextureBlend"{
     Properties{
         _TilingFactor("Tiling Factor", Float) = 100
-        _TVal("T Val", Float) = .1
     }
 
     SubShader{

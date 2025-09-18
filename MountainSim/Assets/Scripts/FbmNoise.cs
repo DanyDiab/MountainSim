@@ -1,3 +1,4 @@
+using System;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -46,7 +47,7 @@ public class FbmNoise : MonoBehaviour
                 for(int j = 0; j < width; j++){
                     float x = (float)j / width * freqeuncy;
                     float y = (float)i / width * freqeuncy;
-                    float brightness = perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize) * amplitude;
+                    float brightness = Math.Abs(perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize)) * amplitude;
                     pixelBrightness[i * width + j] += brightness;
                 }
             }

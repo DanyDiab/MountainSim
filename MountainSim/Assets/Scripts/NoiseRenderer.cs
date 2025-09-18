@@ -8,6 +8,11 @@ public enum NoiseAlgorithms{
     fBm
 }
 
+public enum TerrainColoringParams{
+    Texture,
+    Color
+}
+
 public class NoiseRenderer : MonoBehaviour{
     public Renderer targetRenderer;
     
@@ -26,6 +31,9 @@ public class NoiseRenderer : MonoBehaviour{
     [SerializeField] NoiseAlgorithms currentNoiseAlgorithm;
 
     TerrainColoring terrainColoring;
+    [Header("TerrainColoring Params")]
+    [SerializeField] TerrainColoringParams currTerrainParams;
+
 
 
 
@@ -62,8 +70,15 @@ public class NoiseRenderer : MonoBehaviour{
         seed = Random.Range(-2147483648, 2147483647);
     }
     public void displayNoise(Color[] pixels){
-        colorsToMesh(pixels);
-        terrainColoring.updatePixelColors();
+        BrightnessToMesh(pixels);
+        switch(currTerrainParams){
+            case TerrainColoringParams.Texture:
+                terrainColoring.updatePixelTex();
+                break;
+            case TerrainColoringParams.Color:
+                terrainColoring.updatePixelColors();
+                break;
+        }
     }
 
     void renderTexture(Texture2D tex){
@@ -86,7 +101,7 @@ public class NoiseRenderer : MonoBehaviour{
         return grads;
     }
 
-    void colorsToMesh(Color[] pixels) {
+    void BrightnessToMesh(Color[] pixels) {
         Texture2D tex = new Texture2D(gridSize * cellSize, gridSize * cellSize);
         (Vector3[] vertices, Vector2[] uvs) = changeVerticeHeights(tex, pixels);
         generateMesh(tex,uvs,vertices);

@@ -8,27 +8,28 @@ public class TextureNormalizer : MonoBehaviour
 
     int resolution;
     TextureFormat formatting;
-    bool generateMipMaps;
 
 
+    // work in progress
+    public Texture2D normalizeTexture(Texture2D oldTex){
+        Debug.Log(resolution);
+        Texture2D newTex = new Texture2D(resolution,resolution);
+        RenderTextureFormat tf = RenderTextureFormat.ARGB32;
+        RenderTexture rt = new RenderTexture(resolution,resolution,0,tf,-1);
+        // store the previous active texture
+        RenderTexture previous = RenderTexture.active;
+        RenderTexture.active = rt;
+        rt.filterMode = FilterMode.Trilinear;
+        // copy data from the old texture to the render texture
+        Graphics.Blit(oldTex,rt);
+        // read from render texture to the new texture
+        newTex.ReadPixels(new Rect(0,0,rt.width,rt.height),0,0);
+        newTex.Apply();
+        // release the hardware used by the rt
+        rt.Release();
+        RenderTexture.active = previous;
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-// work in progress
-    public Texture2D normalizeTexture(Texture2D texture){
-        RenderTexture renderTexture = new RenderTexture(resolution,resolution,0,RenderTextureFormat.ARGB32);
-        renderTexture.filterMode = FilterMode.Trilinear;
-        Graphics.Blit(texture,renderTexture);
-        return texture;
+        return newTex;
     }
 
     public void setResolution(int resolution){
@@ -37,9 +38,5 @@ public class TextureNormalizer : MonoBehaviour
 
     public void setFormatting(TextureFormat textureFormat){
         formatting = textureFormat;
-    }
-
-    public void setMipMaps(bool generateMipMaps){
-        this.generateMipMaps = generateMipMaps;
     }
 }

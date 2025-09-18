@@ -16,15 +16,16 @@ public class TerrainColoring : MonoBehaviour
     [SerializeField] Color[] colors;
     [SerializeField] Texture2D[] textures;
     [SerializeField] Material shaderMat;
+
+    TextureNormalizer tn;
     float[] bounds;
 
-    // Start is called before the first frame update
-    void Awake(){
 
-    }
-
-    // Update is called once per frame
-    
+    void Start(){
+        tn = new TextureNormalizer();
+        tn.setResolution(1024);
+        tn.setFormatting(TextureFormat.DXT1);
+    }    
     public void updatePixelColors(){
         mesh = meshFilter.mesh;
         determineBounds(mesh, colors.Length);
@@ -65,10 +66,11 @@ public class TerrainColoring : MonoBehaviour
         shaderMat.SetFloatArray("_Bounds", bounds);
         shaderMat.SetInt("_numBounds", bounds.Length);
         Texture2DArray texArray = new Texture2DArray(
-            1024, 1024, bounds.Length, TextureFormat.DXT1, true
+            1024, 1024, bounds.Length, TextureFormat.ARGB32, true
         );
         for (int i = 0; i < textures.Length; i++) {
-            Graphics.CopyTexture(textures[i], 0, 0, texArray, i, 0);
+            Texture2D normalTexture = tn.normalizeTexture(textures[i]);
+            Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
         }
         shaderMat.SetTexture("_Textures", texArray);   
     }

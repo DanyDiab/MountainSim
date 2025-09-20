@@ -201,11 +201,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 574c90f62da556c448a7bd962c989016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numOctaves: 7
-  lacunarity: 2.5
-  peristence: 40.6
-  freqeuncy: 610.35156
-  amplitude: 1.8183694e+11
+  numOctaves: 3
+  lacunarity: 6
+  peristence: 0.2
+  rFactor: 3
+  freqeuncy: 610.3516
+  amplitude: 1.818369e+11
 --- !u!114 &318641821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,10 +221,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetRenderer: {fileID: 1849630966}
   seed: 0
-  gridSize: 50
-  cellSize: 8
+  gridSize: 100
+  cellSize: 4
   heightExageration: 72
-  currentNoiseAlgorithm: 1
+  currentNoiseAlgorithm: 2
+  currTerrainParams: 0
 --- !u!1 &357081027
 GameObject:
   m_ObjectHideFlags: 0

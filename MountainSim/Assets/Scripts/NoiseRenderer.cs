@@ -5,7 +5,10 @@ using UnityEngine.UI;
 
 public enum NoiseAlgorithms{
     Perlin,
-    fBm
+    fBm,
+
+    Ridge
+
 }
 
 public enum TerrainColoringParams{
@@ -50,18 +53,20 @@ public class NoiseRenderer : MonoBehaviour{
             updateNoise = true;
         }
         if(Input.GetMouseButtonDown(1)){
-            Debug.Log("seed");
             generateSeed();
         }
         if(!updateNoise){
             return;
         }
         switch(currentNoiseAlgorithm){
-          case NoiseAlgorithms.Perlin:
+            case NoiseAlgorithms.Perlin:
                 displayNoise(perlin.generatePerlinNoise(gridSize,cellSize));
                 break;
             case NoiseAlgorithms.fBm:
-                displayNoise(fBm.generateFBMNoise(gridSize,cellSize));
+                displayNoise(fBm.generateFBMNoise(gridSize,cellSize, false));
+                break;
+            case NoiseAlgorithms.Ridge:
+                displayNoise(fBm.generateFBMNoise(gridSize,cellSize, true));
                 break;
         }
     }

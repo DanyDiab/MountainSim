@@ -12,7 +12,6 @@ public class TextureNormalizer : MonoBehaviour
 
     // work in progress
     public Texture2D normalizeTexture(Texture2D oldTex){
-        Debug.Log(resolution);
         Texture2D newTex = new Texture2D(resolution,resolution);
         RenderTextureFormat tf = RenderTextureFormat.ARGB32;
         RenderTexture rt = new RenderTexture(resolution,resolution,0,tf,-1);

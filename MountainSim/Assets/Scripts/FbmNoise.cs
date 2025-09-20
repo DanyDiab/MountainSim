@@ -12,6 +12,8 @@ public class FbmNoise : MonoBehaviour
 
     // amplitude change between octaves (decreasing)
     [SerializeField] float peristence;
+    [SerializeField] float rFactor;
+
 
     NoiseRenderer noiseRenderer;
 
@@ -32,7 +34,7 @@ public class FbmNoise : MonoBehaviour
         }
     }
     
-    public Color[] generateFBMNoise(int gridSize, int cellSize){
+    public Color[] generateFBMNoise(int gridSize, int cellSize, bool ridge){
         freqeuncy = 1;
         amplitude = 1;
         totalAmplitude = 0;
@@ -43,29 +45,30 @@ public class FbmNoise : MonoBehaviour
         Color[] pixelColors = new Color[width * width];
         for (int octave = 0; octave < numOctaves; octave++){
             totalAmplitude += amplitude;
+            Debug.Log(amplitude);
             for(int i = 0; i < width; i++){
                 for(int j = 0; j < width; j++){
-                    float x = (float)j / width * freqeuncy;
-                    float y = (float)i / width * freqeuncy;
-                    float brightness = Math.Abs(perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize)) * amplitude;
+                    float x = (float)j / width * freqeuncy + (10 * octave);
+                    float y = (float)i / width * freqeuncy + (10 * octave);
+                    float brightness;
+                    if(ridge){
+                        brightness = 1- math.abs(perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize)) * amplitude;
+                    }
+                    else{
+                        brightness = perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize) * amplitude;
+                    }
                     pixelBrightness[i * width + j] += brightness;
                 }
             }
             freqeuncy *= lacunarity;
             amplitude *= peristence;
         }
-
         for(int k = 0; k < pixelBrightness.Length; k++){
             float currBrightness = pixelBrightness[k] / totalAmplitude;
-            // float normalBrightness = (currBrightness + 1) / 2;
-            pixelColors[k] = new Color(currBrightness, currBrightness, currBrightness);
+            float finalBrightness  = (float) Math.Pow(currBrightness, rFactor);
+            pixelColors[k] = new Color(finalBrightness, finalBrightness, finalBrightness);
         }
         return pixelColors;
     }
-
-
-    
-
-
 
 }

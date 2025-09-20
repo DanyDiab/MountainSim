@@ -40,6 +40,7 @@ public class CameraController : MonoBehaviour
         transform.position = pos;
     }
 
+
     void moveCam(){
         Vector3 dir = Vector3.zero;
         Vector3 upDown = Vector3.zero;

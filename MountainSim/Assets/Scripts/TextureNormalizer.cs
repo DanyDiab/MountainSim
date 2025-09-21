@@ -7,14 +7,13 @@ public class TextureNormalizer : MonoBehaviour
 {
 
     int resolution;
-    TextureFormat formatting;
+    RenderTextureFormat formatting;
 
 
     // work in progress
     public Texture2D normalizeTexture(Texture2D oldTex){
         Texture2D newTex = new Texture2D(resolution,resolution);
-        RenderTextureFormat tf = RenderTextureFormat.ARGB32;
-        RenderTexture rt = new RenderTexture(resolution,resolution,0,tf,-1);
+        RenderTexture rt = new RenderTexture(resolution,resolution,0,formatting,-1);
         // store the previous active texture
         RenderTexture previous = RenderTexture.active;
         RenderTexture.active = rt;
@@ -31,11 +30,13 @@ public class TextureNormalizer : MonoBehaviour
         return newTex;
     }
 
+
+
     public void setResolution(int resolution){
         this.resolution = resolution;
     }
 
-    public void setFormatting(TextureFormat textureFormat){
+    public void setFormatting(RenderTextureFormat textureFormat){
         formatting = textureFormat;
     }
 }

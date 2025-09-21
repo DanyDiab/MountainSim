@@ -67,7 +67,6 @@ public class PerlinNoise : MonoBehaviour
         // lerp the top and bottom
         float final = lerp(top,bot,v);
 
-        // float brightness = valueToBrightness(final);
         return final;
     }
 

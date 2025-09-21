@@ -14,7 +14,6 @@ Shader "Custom/TextureBlend"{
             uniform float _TilingFactor;
             uniform float _Bounds[10];
             uniform int _numBounds;
-            uniform float _TVal;
             UNITY_DECLARE_TEX2DARRAY(_Textures);
 
             struct Interpolators {

@@ -24,7 +24,7 @@ public class TerrainColoring : MonoBehaviour
     void Start(){
         tn = new TextureNormalizer();
         tn.setResolution(1024);
-        tn.setFormatting(TextureFormat.DXT1);
+        tn.setFormatting(RenderTextureFormat.ARGB32);
     }    
     public void updatePixelColors(){
         mesh = meshFilter.mesh;

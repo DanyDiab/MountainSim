@@ -52,7 +52,7 @@ public class FbmNoise : MonoBehaviour
                     float y = (float)i / width * freqeuncy + (10 * octave);
                     float brightness;
                     if(ridge){
-                        brightness = 1- math.abs(perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize)) * amplitude;
+                        brightness = 1 - math.abs(perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize)) * amplitude;
                     }
                     else{
                         brightness = perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize) * amplitude;

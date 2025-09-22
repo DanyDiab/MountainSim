@@ -225,7 +225,7 @@ MonoBehaviour:
   cellSize: 4
   heightExageration: 500
   currentNoiseAlgorithm: 2
-  currTerrainParams: 2
+  currTerrainParams: 0
 --- !u!1 &357081027
 GameObject:
   m_ObjectHideFlags: 0

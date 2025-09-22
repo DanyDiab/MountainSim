@@ -32,6 +32,8 @@ public class TextureNormalizer : MonoBehaviour
 
 
 
+
+
     public void setResolution(int resolution){
         this.resolution = resolution;
     }

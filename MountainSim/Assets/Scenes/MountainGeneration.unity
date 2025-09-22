@@ -204,7 +204,7 @@ MonoBehaviour:
   numOctaves: 3
   lacunarity: 6
   peristence: 0.2
-  rFactor: 3
+  rFactor: 20
   freqeuncy: 610.3516
   amplitude: 1.818369e+11
 --- !u!114 &318641821
@@ -223,8 +223,8 @@ MonoBehaviour:
   seed: 0
   gridSize: 100
   cellSize: 4
-  heightExageration: 72
-  currentNoiseAlgorithm: 1
+  heightExageration: 500
+  currentNoiseAlgorithm: 2
   currTerrainParams: 2
 --- !u!1 &357081027
 GameObject:
@@ -476,7 +476,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1d2ec3dec7f0c4248b234c8fd3ae04ff, type: 2}
+  - {fileID: 2100000, guid: a5555b58ce74add4ba4264d73b888e79, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

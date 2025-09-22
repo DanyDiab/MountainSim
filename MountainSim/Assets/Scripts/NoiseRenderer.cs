@@ -47,7 +47,6 @@ public class NoiseRenderer : MonoBehaviour{
         terrainColoring = GetComponent<TerrainColoring>();
         perlin = GetComponent<PerlinNoise>();
         fBm = GetComponent<FbmNoise>();
-        currentNoiseAlgorithm = NoiseAlgorithms.fBm;
     }
     void Update(){
         bool updateNoise = false;
@@ -86,7 +85,7 @@ public class NoiseRenderer : MonoBehaviour{
                 terrainColoring.updatePixelColors();
                 break;
             case TerrainColoringParams.TextureGrad:
-                renderTexture(brightnessToTex(pixels, gridSize * cellSize));
+                terrainColoring.updateGradTex();
                 break;
 
 
@@ -105,7 +104,6 @@ public class NoiseRenderer : MonoBehaviour{
             targetRenderer.material.mainTexture = tex;
         }
     }
-
 
     public Vector2[,] generateGraidentVectors(int gridSize){
         // update the random with the current seed

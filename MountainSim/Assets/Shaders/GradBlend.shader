@@ -40,10 +40,7 @@ Shader "Custom/GradBlend"{
             float4 FragProgram(Interpolators i) : SV_TARGET{
 
             }
-
-            float3 grabNeighborPos(float3 start, float3 offset){
-                float3 result = start + offset;
-            }
+            
             ENDCG
         }
     }

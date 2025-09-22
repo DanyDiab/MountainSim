@@ -74,6 +74,12 @@ public class TerrainColoring : MonoBehaviour
         }
         shaderMat.SetTexture("_Textures", texArray);   
     }
+
+    public void updateGradTex(){
+        mesh = meshFilter.mesh;
+        calculateGradients(mesh);
+        
+    }
     (float[], Color[]) findCloseBounds(float y){
         if(y >= bounds[bounds.Length - 1]){
             int index = bounds.Length - 1;
@@ -111,5 +117,27 @@ public class TerrainColoring : MonoBehaviour
             currPos += stepSize;
         }
         return bounds;
-    }    
+    }
+
+    public float[] calculateGradients(Mesh mesh){
+        Vector3[] verticies = mesh.vertices;
+        float[] grads = new float[verticies.Length];
+
+        int halfSize = verticies.Length / 2;
+        for(int i = 0; i < verticies.Length; i++){
+            Vector3 curr = verticies[i];
+            // grab neighbor to the right
+            Vector3 x = verticies[i + 1];
+            // grab neighbor under
+            Vector3 z = verticies[i * halfSize + 1];
+            Vector3 dx = curr - x;
+            Vector3 dz = curr - z;
+            Vector3 final = dx + dz;
+
+            float grad = (final.x + final.y + final.z) / (curr.x + curr.y + curr.z);
+            grads[i] = grad;
+        }
+        return grads;
+        
+    } 
 }

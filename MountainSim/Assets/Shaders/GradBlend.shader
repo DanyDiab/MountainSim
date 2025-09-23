@@ -38,7 +38,7 @@ Shader "Custom/GradBlend"{
             }
 
             float4 FragProgram(Interpolators i) : SV_TARGET{
-
+                return float4(1,0,0,1);
             }
             
             ENDCG

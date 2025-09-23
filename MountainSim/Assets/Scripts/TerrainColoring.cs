@@ -77,14 +77,19 @@ public class TerrainColoring : MonoBehaviour
 
     public void updateGradTex(int width){
         mesh = meshFilter.mesh;
-        (float[] grads, float min, float max) = calculateGradients(mesh, width);
+        (float min, float max) = calculateGradients(mesh);
+        Debug.Log("min grad: " + min + "    max Grad: " + max);
         float[] bounds = determineBounds(textures.Length,min,max);
+        shaderMat.SetFloatArray("_Bounds", bounds);
+        shaderMat.SetInt("_numBounds", bounds.Length);
         Texture2DArray texArray = new Texture2DArray(
             1024, 1024, bounds.Length, TextureFormat.ARGB32, true
         );
-
-
-        
+        for (int i = 0; i < textures.Length; i++) {
+            Texture2D normalTexture = tn.normalizeTexture(textures[i]);
+            Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
+        }
+        shaderMat.SetTexture("_Textures", texArray);  
     }
     (float[], Color[]) findCloseBounds(float y){
         if(y >= bounds[bounds.Length - 1]){
@@ -123,32 +128,20 @@ public class TerrainColoring : MonoBehaviour
         return bounds;
     }
 
-    public (float[], float, float) calculateGradients(Mesh mesh, int width) {
+    public (float, float) calculateGradients(Mesh mesh) {
         float min = float.MaxValue;
         float max = float.MinValue;
-        Vector3[] vertices = mesh.vertices;
-        float[] grads = new float[vertices.Length];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < width; j++) {
-                int index = i * width + j;
-                Vector3 curr = vertices[index];
-                // Neighbor to the right
-                Vector3 right = (j < width - 1) ? vertices[index + 1] : curr;
-                // Neighbor below
-                Vector3 down = (i < width - 1) ? vertices[index + width] : curr;
-
-                float dx = right.y - curr.y;
-                float dz = down.y - curr.y;
-                float currGrad = Mathf.Sqrt(dx * dx + dz * dz);
-                if(currGrad < min){
-                    min = currGrad;
-                }
-                else if(currGrad > max){
-                    max = currGrad;
-                }
-                grads[index] = currGrad;
+        Vector3[] normals = mesh.normals;
+        foreach(Vector3 normal in normals){
+            float normalY = normal.y;
+            if(normalY < min){
+                min = normalY;
+            }
+            else if(normalY > max){
+                max = normalY;
             }
         }
-        return (grads,min,max);
+        return (min,max);
+ 
     }
 }

@@ -10,44 +10,34 @@ Shader "Custom/GradBlend"{
             #pragma fragment FragProgram
 
             #include "UnityCG.cginc"
-
-            uniform float _TilingFactor;
-            uniform float _Bounds[10];
-            uniform int _numBounds;
-            UNITY_DECLARE_TEX2DARRAY(_Textures);
-
-            struct Interpolators {
-                float4 position : POSITION;
-                float2 uv : TEXCOORD0;
-                float3 worldPos : TEXCOORD1;
-                float3 localPos : TEXCOORD2;
-            };
-
-            struct VertexData {
-                float4 position : POSITION;
-                float2 uv : TEXCOORD0;
-            };
-
-            Interpolators VertexProgram(VertexData v) {
-                Interpolators i;
-                i.position = UnityObjectToClipPos(v.position);
-                i.worldPos = mul(unity_ObjectToWorld, v.position).xyz;
-                i.localPos = v.position.xyz;
-                i.uv = v.uv;
-                return i;
-            }
+            #include "TextureBlend.cginc"
+        
 
             float4 FragProgram(Interpolators i) : SV_TARGET{
-                return float4(1,0,0,1);
+                float currGrad = 1- saturate(i.normal.y);
+                int topIndex = 0;
+                int botIndex = 0;
+                float percent = 0;
+                if(currGrad > _Bounds[_numBounds - 1]){
+                    return blendTextures(1,_numBounds - 1,_numBounds - 1, i.uv);
+                }
+                else if(currGrad < _Bounds[0]){
+                    return blendTextures(1,0,0, i.uv);
+                }
+                for(int idx = 0; idx < _numBounds - 1; idx++){
+                    float currBound = _Bounds[idx];
+                    float nextBound = _Bounds[idx + 1];
+                    if(currGrad >= currBound && currGrad < nextBound){
+                        topIndex = idx + 1;
+                        botIndex = idx;
+                        percent = saturate((currGrad - currBound) / (nextBound - currBound));
+                        break;
+                    }
+                }
+                return blendTextures(percent, topIndex,botIndex, i.uv);
             }
             
             ENDCG
         }
     }
 }
-
-// logic to calculate gradients
-// grab each vertex. Move in each x and z directions to create dx and dz. Record the positions.
-// create a vector from x to dx and x to dz
-// add the 2 vectors to create the vector in the plane.
-// calculate graident of the vector? 

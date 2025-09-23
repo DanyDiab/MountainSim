@@ -85,7 +85,7 @@ public class NoiseRenderer : MonoBehaviour{
                 terrainColoring.updatePixelColors();
                 break;
             case TerrainColoringParams.TextureGrad:
-                terrainColoring.updateGradTex();
+                terrainColoring.updateGradTex(gridSize * cellSize);
                 break;
 
 

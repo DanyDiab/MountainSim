@@ -28,7 +28,7 @@ public class TerrainColoring : MonoBehaviour
     }    
     public void updatePixelColors(){
         mesh = meshFilter.mesh;
-        determineBounds(mesh, colors.Length);
+        determineBounds(colors.Length, mesh.bounds.min.y, mesh.bounds.max.y);
         verticies = mesh.vertices;
         pixelColors = new Color[verticies.Length];
         for(int i = 0; i < verticies.Length; i++){
@@ -62,7 +62,7 @@ public class TerrainColoring : MonoBehaviour
 
     public void updatePixelTex(){
         mesh = meshFilter.mesh;
-        bounds = determineBounds(mesh, textures.Length);
+        bounds = determineBounds(textures.Length, mesh.bounds.min.y, mesh.bounds.max.y);
         shaderMat.SetFloatArray("_Bounds", bounds);
         shaderMat.SetInt("_numBounds", bounds.Length);
         Texture2DArray texArray = new Texture2DArray(
@@ -75,9 +75,15 @@ public class TerrainColoring : MonoBehaviour
         shaderMat.SetTexture("_Textures", texArray);   
     }
 
-    public void updateGradTex(){
+    public void updateGradTex(int width){
         mesh = meshFilter.mesh;
-        calculateGradients(mesh);
+        (float[] grads, float min, float max) = calculateGradients(mesh, width);
+        float[] bounds = determineBounds(textures.Length,min,max);
+        Texture2DArray texArray = new Texture2DArray(
+            1024, 1024, bounds.Length, TextureFormat.ARGB32, true
+        );
+
+
         
     }
     (float[], Color[]) findCloseBounds(float y){
@@ -105,10 +111,8 @@ public class TerrainColoring : MonoBehaviour
 
     }
 
-    float[] determineBounds(Mesh mesh, int len){
+    float[] determineBounds(int len, float min, float max){
         bounds = new float[len];
-        float min = mesh.bounds.min.y;
-        float max =  mesh.bounds.max.y;
         float heightDiff = max - min;
         float stepSize = heightDiff / (len - 1);
         float currPos = min;
@@ -119,25 +123,32 @@ public class TerrainColoring : MonoBehaviour
         return bounds;
     }
 
-    public float[] calculateGradients(Mesh mesh){
-        Vector3[] verticies = mesh.vertices;
-        float[] grads = new float[verticies.Length];
+    public (float[], float, float) calculateGradients(Mesh mesh, int width) {
+        float min = float.MaxValue;
+        float max = float.MinValue;
+        Vector3[] vertices = mesh.vertices;
+        float[] grads = new float[vertices.Length];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < width; j++) {
+                int index = i * width + j;
+                Vector3 curr = vertices[index];
+                // Neighbor to the right
+                Vector3 right = (j < width - 1) ? vertices[index + 1] : curr;
+                // Neighbor below
+                Vector3 down = (i < width - 1) ? vertices[index + width] : curr;
 
-        int halfSize = verticies.Length / 2;
-        for(int i = 0; i < verticies.Length; i++){
-            Vector3 curr = verticies[i];
-            // grab neighbor to the right
-            Vector3 x = verticies[i + 1];
-            // grab neighbor under
-            Vector3 z = verticies[i * halfSize + 1];
-            Vector3 dx = curr - x;
-            Vector3 dz = curr - z;
-            Vector3 final = dx + dz;
-
-            float grad = (final.x + final.y + final.z) / (curr.x + curr.y + curr.z);
-            grads[i] = grad;
+                float dx = right.y - curr.y;
+                float dz = down.y - curr.y;
+                float currGrad = Mathf.Sqrt(dx * dx + dz * dz);
+                if(currGrad < min){
+                    min = currGrad;
+                }
+                else if(currGrad > max){
+                    max = currGrad;
+                }
+                grads[index] = currGrad;
+            }
         }
-        return grads;
-        
-    } 
+        return (grads,min,max);
+    }
 }

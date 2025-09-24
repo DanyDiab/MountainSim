@@ -78,7 +78,6 @@ public class TerrainColoring : MonoBehaviour
     public void updateGradTex(int width){
         mesh = meshFilter.mesh;
         (float min, float max) = calculateGradients(mesh);
-        Debug.Log("min grad: " + min + "    max Grad: " + max);
         float[] bounds = determineBounds(textures.Length,min,max);
         shaderMat.SetFloatArray("_Bounds", bounds);
         shaderMat.SetInt("_numBounds", bounds.Length);

@@ -184,11 +184,11 @@ MonoBehaviour:
   meshFilter: {fileID: 1849630967}
   colors: []
   textures:
-  - {fileID: 2800000, guid: aa701e5be2dbcd24aad4fb9c3ca284da, type: 3}
   - {fileID: 2800000, guid: bfa802f39c73ba3408c9a8e99b6f170a, type: 3}
+  - {fileID: 2800000, guid: bd7d0d213a99c4b45ab6bc5789ca5f6e, type: 3}
   - {fileID: 2800000, guid: 250bf0bf9fccc19459a2eaf38bd54cf9, type: 3}
   - {fileID: 2800000, guid: 9b9564cd828b001479f30f7b519ef809, type: 3}
-  shaderMat: {fileID: 2100000, guid: a5555b58ce74add4ba4264d73b888e79, type: 2}
+  shaderMat: {fileID: 2100000, guid: 0ab47590cc3ea844e8cd6c20bfc39690, type: 2}
 --- !u!114 &318641820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,9 +202,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numOctaves: 3
-  lacunarity: 6
-  peristence: 0.2
-  rFactor: 3
+  lacunarity: 4
+  peristence: 0.3
+  rFactor: 10
   freqeuncy: 610.3516
   amplitude: 1.818369e+11
 --- !u!114 &318641821
@@ -223,9 +223,9 @@ MonoBehaviour:
   seed: 0
   gridSize: 100
   cellSize: 4
-  heightExageration: 72
+  heightExageration: 500
   currentNoiseAlgorithm: 2
-  currTerrainParams: 0
+  currTerrainParams: 2
 --- !u!1 &357081027
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,8 +331,8 @@ Camera:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -476,7 +476,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a5555b58ce74add4ba4264d73b888e79, type: 2}
+  - {fileID: 2100000, guid: 0ab47590cc3ea844e8cd6c20bfc39690, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

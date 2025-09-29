@@ -12,9 +12,8 @@ Shader "Custom/GradBlend"{
             #include "UnityCG.cginc"
             #include "TextureBlend.cginc"
         
-
             float4 FragProgram(Interpolators i) : SV_TARGET{
-                float currGrad = 1- saturate(i.normal.y);
+                float currGrad = 1 - saturate(i.normal.y);
                 int topIndex = 0;
                 int botIndex = 0;
                 float percent = 0;

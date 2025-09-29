@@ -75,7 +75,7 @@ public class TerrainColoring : MonoBehaviour
         shaderMat.SetTexture("_Textures", texArray);   
     }
 
-    public void updateGradTex(int width){
+    public void updateGradTex(){
         mesh = meshFilter.mesh;
         (float min, float max) = calculateGradients(mesh);
         Debug.Log("min grad: " + min + "    max Grad: " + max);

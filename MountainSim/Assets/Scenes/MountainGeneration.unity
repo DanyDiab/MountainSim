@@ -201,10 +201,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 574c90f62da556c448a7bd962c989016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numOctaves: 3
-  lacunarity: 6
-  peristence: 0.2
-  rFactor: 20
+  numOctaves: 5
+  lacunarity: 5
+  peristence: 0.3
+  rFactor: 10
   freqeuncy: 610.3516
   amplitude: 1.818369e+11
 --- !u!114 &318641821
@@ -221,9 +221,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetRenderer: {fileID: 1849630966}
   seed: 0
-  gridSize: 100
+  gridSize: 200
   cellSize: 4
-  heightExageration: 500
+  heightExageration: 100
   currentNoiseAlgorithm: 2
   currTerrainParams: 0
 --- !u!1 &357081027

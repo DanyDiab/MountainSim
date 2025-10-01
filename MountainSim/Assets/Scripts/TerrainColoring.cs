@@ -15,9 +15,12 @@ public class TerrainColoring : MonoBehaviour
     [Header("Colors")]
     [SerializeField] Color[] colors;
     [SerializeField] Texture2D[] textures;
-    [SerializeField] Material shaderMat;
-
+    Material currMat;
+    [SerializeField]Material colorMat;
+    [SerializeField]Material textureMat;
+    [SerializeField] Material gradMat;
     TextureNormalizer tn;
+    MeshRenderer mr;
     float[] bounds;
 
 
@@ -25,9 +28,13 @@ public class TerrainColoring : MonoBehaviour
         tn = new TextureNormalizer();
         tn.setResolution(1024);
         tn.setFormatting(RenderTextureFormat.ARGB32);
+        mr = meshFilter.GetComponent<MeshRenderer>();
+
     }    
     public void updatePixelColors(){
+        currMat = colorMat;
         mesh = meshFilter.mesh;
+        mr.material = currMat;
         determineBounds(colors.Length, mesh.bounds.min.y, mesh.bounds.max.y);
         verticies = mesh.vertices;
         pixelColors = new Color[verticies.Length];
@@ -61,10 +68,12 @@ public class TerrainColoring : MonoBehaviour
 
 
     public void updatePixelTex(){
+        currMat = textureMat;
+        mr.material = currMat;
         mesh = meshFilter.mesh;
         bounds = determineBounds(textures.Length, mesh.bounds.min.y, mesh.bounds.max.y);
-        shaderMat.SetFloatArray("_Bounds", bounds);
-        shaderMat.SetInt("_numBounds", bounds.Length);
+        currMat.SetFloatArray("_Bounds", bounds);
+        currMat.SetInt("_numBounds", bounds.Length);
         Texture2DArray texArray = new Texture2DArray(
             1024, 1024, bounds.Length, TextureFormat.ARGB32, true
         );
@@ -72,16 +81,18 @@ public class TerrainColoring : MonoBehaviour
             Texture2D normalTexture = tn.normalizeTexture(textures[i]);
             Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
         }
-        shaderMat.SetTexture("_Textures", texArray);   
+        currMat.SetTexture("_Textures", texArray);   
     }
 
     public void updateGradTex(){
+        currMat = gradMat;
+        mr.material = currMat;
         mesh = meshFilter.mesh;
         (float min, float max) = calculateGradients(mesh);
         Debug.Log("min grad: " + min + "    max Grad: " + max);
         float[] bounds = determineBounds(textures.Length,min,max);
-        shaderMat.SetFloatArray("_Bounds", bounds);
-        shaderMat.SetInt("_numBounds", bounds.Length);
+        currMat.SetFloatArray("_Bounds", bounds);
+        currMat.SetInt("_numBounds", bounds.Length);
         Texture2DArray texArray = new Texture2DArray(
             1024, 1024, bounds.Length, TextureFormat.ARGB32, true
         );
@@ -89,7 +100,7 @@ public class TerrainColoring : MonoBehaviour
             Texture2D normalTexture = tn.normalizeTexture(textures[i]);
             Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
         }
-        shaderMat.SetTexture("_Textures", texArray);  
+        currMat.SetTexture("_Textures", texArray);  
     }
     (float[], Color[]) findCloseBounds(float y){
         if(y >= bounds[bounds.Length - 1]){

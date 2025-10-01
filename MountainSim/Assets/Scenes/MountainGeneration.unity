@@ -225,7 +225,10 @@ MonoBehaviour:
   cellSize: 4
   heightExageration: 100
   currentNoiseAlgorithm: 2
-  currTerrainParams: 0
+  currTerrainParams: 2
+  colorMat: {fileID: 2100000, guid: 1d2ec3dec7f0c4248b234c8fd3ae04ff, type: 2}
+  textureMat: {fileID: 2100000, guid: a5555b58ce74add4ba4264d73b888e79, type: 2}
+  gradMat: {fileID: 2100000, guid: a5555b58ce74add4ba4264d73b888e79, type: 2}
 --- !u!1 &357081027
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,6 +430,7 @@ GameObject:
   - component: {fileID: 1849630967}
   - component: {fileID: 1849630966}
   - component: {fileID: 1849630965}
+  - component: {fileID: 1849630969}
   m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
@@ -521,6 +525,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1849630969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1849630964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda6152cc592e7141986d401cdf76ff4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotateSpeed: 0.0003
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

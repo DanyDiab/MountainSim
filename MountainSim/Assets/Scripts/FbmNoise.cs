@@ -1,4 +1,3 @@
-using System;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -13,12 +12,14 @@ public class FbmNoise : MonoBehaviour
     // amplitude change between octaves (decreasing)
     [SerializeField] float peristence;
     [SerializeField] float rFactor;
+    [SerializeField] Vector2 offset;
 
 
     NoiseRenderer noiseRenderer;
 
     [SerializeField] float freqeuncy = 1;
     [SerializeField] float amplitude = 1;
+
     float totalAmplitude;
 
     PerlinNoise perlinNoise;
@@ -35,6 +36,9 @@ public class FbmNoise : MonoBehaviour
     }
     
     public Color[] generateFBMNoise(int gridSize, int cellSize, bool ridge){
+        float randX = UnityEngine.Random.value;
+        float randY = UnityEngine.Random.value;
+        offset = new Vector2(randX,randY);
         freqeuncy = 1;
         amplitude = 1;
         totalAmplitude = 0;
@@ -47,8 +51,8 @@ public class FbmNoise : MonoBehaviour
             totalAmplitude += amplitude;
             for(int i = 0; i < width; i++){
                 for(int j = 0; j < width; j++){
-                    float x = (float)j / width * freqeuncy;
-                    float y = (float)i / width * freqeuncy;
+                    float x = ((float)j / width * freqeuncy) + (offset.x * freqeuncy);
+                    float y = ((float)i / width * freqeuncy) + (offset.y * freqeuncy);
                     float val;
                     if(ridge){
                         val = 1 - math.abs(perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize));
@@ -66,7 +70,7 @@ public class FbmNoise : MonoBehaviour
         }
         for(int k = 0; k < pixelBrightness.Length; k++){
             float currBrightness = pixelBrightness[k] / totalAmplitude;
-            float finalBrightness  = (float) Math.Pow(currBrightness, rFactor);
+            float finalBrightness  = (float) math.pow(currBrightness, rFactor);
             pixelColors[k] = new Color(finalBrightness, finalBrightness, finalBrightness);
         }
         return pixelColors;

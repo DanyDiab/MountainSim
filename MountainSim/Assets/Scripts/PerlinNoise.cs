@@ -40,8 +40,13 @@ public class PerlinNoise : MonoBehaviour
         int maxIndex = sizeOfGrid - 1;
         sampleX = Mathf.Min(sampleX, maxIndex);
         sampleY = Mathf.Min(sampleY, maxIndex);
-        int gridX = Mathf.FloorToInt(sampleX);
-        int gridY = Mathf.FloorToInt(sampleY);
+        int gridX = Mathf.FloorToInt(sampleX) % sizeOfGrid;
+        int gridY = Mathf.FloorToInt(sampleY) % sizeOfGrid;
+        if (gridX < 0) gridX += sizeOfGrid;
+        if (gridY < 0) gridY += sizeOfGrid;
+
+        int nextX = (gridX + 1) % sizeOfGrid;
+        int nextY = (gridY + 1) % sizeOfGrid;
 
         float LocalX = sampleX - gridX;
         float LocalY = sampleY - gridY;
@@ -53,9 +58,9 @@ public class PerlinNoise : MonoBehaviour
         Vector2 br = new Vector2(LocalX - 1 ,LocalY - 1);
         // find the apropriate gradientVectors
         Vector2 tlGrad = grads[gridX,gridY];
-        Vector2 trGrad = grads[gridX + 1,gridY];
-        Vector2 blGrad = grads[gridX,gridY + 1];
-        Vector2 brGrad = grads[gridX + 1, gridY + 1];
+        Vector2 trGrad = grads[nextX,gridY];
+        Vector2 blGrad = grads[gridX,nextY];
+        Vector2 brGrad = grads[nextX, nextY];
         // calculate the influences of gradient vectors on the point
         float tlI = Vector2Dot(tl,tlGrad);
         float trI = Vector2Dot(tr,trGrad);

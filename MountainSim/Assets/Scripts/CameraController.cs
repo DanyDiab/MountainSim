@@ -21,6 +21,8 @@ public class CameraController : MonoBehaviour
     float targetYaw = 0f;
     bool locked;
 
+    CameraTP cameraTP;
+
 
     // Start is called before the first frame update
     void Start()
@@ -28,23 +30,28 @@ public class CameraController : MonoBehaviour
         locked = false;
         prevMousePos = Input.mousePosition;
         pos = transform.position;
+        cameraTP = GetComponent<CameraTP>();
     }
 
     // Update is called once per frame
     void Update()
     {
+
         lockCam();
         if(locked) return;
         moveCam();
         rotateCam();
+        if(Input.GetKeyDown(KeyCode.T)){
+            pos = cameraTP.tpToMesh();
+        }
         transform.position = pos;
+
     }
 
 
     void moveCam(){
         Vector3 dir = Vector3.zero;
         Vector3 upDown = Vector3.zero;
-
         if(Input.GetKey(KeyCode.LeftShift)){
             upDown += Vector3.down;
         }

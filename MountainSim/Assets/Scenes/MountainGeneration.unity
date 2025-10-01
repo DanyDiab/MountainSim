@@ -182,13 +182,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshFilter: {fileID: 1849630967}
-  colors: []
+  colors:
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 1, g: 1, b: 1, a: 0}
   textures:
-  - {fileID: 2800000, guid: aa701e5be2dbcd24aad4fb9c3ca284da, type: 3}
   - {fileID: 2800000, guid: bfa802f39c73ba3408c9a8e99b6f170a, type: 3}
   - {fileID: 2800000, guid: 250bf0bf9fccc19459a2eaf38bd54cf9, type: 3}
   - {fileID: 2800000, guid: 9b9564cd828b001479f30f7b519ef809, type: 3}
-  shaderMat: {fileID: 2100000, guid: a5555b58ce74add4ba4264d73b888e79, type: 2}
+  colorMat: {fileID: 2100000, guid: 1d2ec3dec7f0c4248b234c8fd3ae04ff, type: 2}
+  textureMat: {fileID: 2100000, guid: a5555b58ce74add4ba4264d73b888e79, type: 2}
+  gradMat: {fileID: 2100000, guid: 0ab47590cc3ea844e8cd6c20bfc39690, type: 2}
 --- !u!114 &318641820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,6 +208,7 @@ MonoBehaviour:
   lacunarity: 5
   peristence: 0.3
   rFactor: 10
+  offset: {x: 0, y: 0}
   freqeuncy: 610.3516
   amplitude: 1.818369e+11
 --- !u!114 &318641821
@@ -225,10 +229,7 @@ MonoBehaviour:
   cellSize: 4
   heightExageration: 100
   currentNoiseAlgorithm: 2
-  currTerrainParams: 2
-  colorMat: {fileID: 2100000, guid: 1d2ec3dec7f0c4248b234c8fd3ae04ff, type: 2}
-  textureMat: {fileID: 2100000, guid: a5555b58ce74add4ba4264d73b888e79, type: 2}
-  gradMat: {fileID: 2100000, guid: a5555b58ce74add4ba4264d73b888e79, type: 2}
+  currTerrainParams: 0
 --- !u!1 &357081027
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,6 +311,7 @@ GameObject:
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
   - component: {fileID: 963194230}
+  - component: {fileID: 963194231}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -407,6 +409,19 @@ MonoBehaviour:
   speed: 50
   camSmoothing: 10
 --- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd9925be7638ffd45a83781d0759e874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mf: {fileID: 1849630967}
+--- !u!114 &963194231
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

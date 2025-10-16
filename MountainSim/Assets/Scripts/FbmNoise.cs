@@ -45,18 +45,19 @@ public class FbmNoise : MonoBehaviour
         Color[] pixelColors = new Color[width * width];
         for (int octave = 0; octave < numOctaves; octave++){
             totalAmplitude += amplitude;
-            Debug.Log(amplitude);
             for(int i = 0; i < width; i++){
                 for(int j = 0; j < width; j++){
-                    float x = (float)j / width * freqeuncy + (10 * octave);
-                    float y = (float)i / width * freqeuncy + (10 * octave);
-                    float brightness;
+                    float x = (float)j / width * freqeuncy;
+                    float y = (float)i / width * freqeuncy;
+                    float val;
                     if(ridge){
-                        brightness = 1- math.abs(perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize)) * amplitude;
+                        val = 1 - math.abs(perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize));
                     }
                     else{
-                        brightness = perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize) * amplitude;
+                        val = perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize);
                     }
+                    float normalized = (val + 1f) / 2f;
+                    float brightness = normalized * amplitude;
                     pixelBrightness[i * width + j] += brightness;
                 }
             }

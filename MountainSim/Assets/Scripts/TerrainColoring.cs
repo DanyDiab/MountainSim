@@ -24,11 +24,11 @@ public class TerrainColoring : MonoBehaviour
     void Start(){
         tn = new TextureNormalizer();
         tn.setResolution(1024);
-        tn.setFormatting(TextureFormat.DXT1);
+        tn.setFormatting(RenderTextureFormat.ARGB32);
     }    
     public void updatePixelColors(){
         mesh = meshFilter.mesh;
-        determineBounds(mesh, colors.Length);
+        determineBounds(colors.Length, mesh.bounds.min.y, mesh.bounds.max.y);
         verticies = mesh.vertices;
         pixelColors = new Color[verticies.Length];
         for(int i = 0; i < verticies.Length; i++){
@@ -62,7 +62,7 @@ public class TerrainColoring : MonoBehaviour
 
     public void updatePixelTex(){
         mesh = meshFilter.mesh;
-        bounds = determineBounds(mesh, textures.Length);
+        bounds = determineBounds(textures.Length, mesh.bounds.min.y, mesh.bounds.max.y);
         shaderMat.SetFloatArray("_Bounds", bounds);
         shaderMat.SetInt("_numBounds", bounds.Length);
         Texture2DArray texArray = new Texture2DArray(
@@ -73,6 +73,22 @@ public class TerrainColoring : MonoBehaviour
             Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
         }
         shaderMat.SetTexture("_Textures", texArray);   
+    }
+
+    public void updateGradTex(){
+        mesh = meshFilter.mesh;
+        (float min, float max) = calculateGradients(mesh);
+        float[] bounds = determineBounds(textures.Length,min,max);
+        shaderMat.SetFloatArray("_Bounds", bounds);
+        shaderMat.SetInt("_numBounds", bounds.Length);
+        Texture2DArray texArray = new Texture2DArray(
+            1024, 1024, bounds.Length, TextureFormat.ARGB32, true
+        );
+        for (int i = 0; i < textures.Length; i++) {
+            Texture2D normalTexture = tn.normalizeTexture(textures[i]);
+            Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
+        }
+        shaderMat.SetTexture("_Textures", texArray);  
     }
     (float[], Color[]) findCloseBounds(float y){
         if(y >= bounds[bounds.Length - 1]){
@@ -99,10 +115,8 @@ public class TerrainColoring : MonoBehaviour
 
     }
 
-    float[] determineBounds(Mesh mesh, int len){
+    float[] determineBounds(int len, float min, float max){
         bounds = new float[len];
-        float min = mesh.bounds.min.y;
-        float max =  mesh.bounds.max.y;
         float heightDiff = max - min;
         float stepSize = heightDiff / (len - 1);
         float currPos = min;
@@ -111,5 +125,22 @@ public class TerrainColoring : MonoBehaviour
             currPos += stepSize;
         }
         return bounds;
-    }    
+    }
+
+    public (float, float) calculateGradients(Mesh mesh) {
+        float min = float.MaxValue;
+        float max = float.MinValue;
+        Vector3[] normals = mesh.normals;
+        foreach(Vector3 normal in normals){
+            float normalY = normal.y;
+            if(normalY < min){
+                min = normalY;
+            }
+            else if(normalY > max){
+                max = normalY;
+            }
+        }
+        return (min,max);
+ 
+    }
 }

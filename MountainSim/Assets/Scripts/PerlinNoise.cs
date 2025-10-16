@@ -37,8 +37,11 @@ public class PerlinNoise : MonoBehaviour
         // calculate percent of cell which contains the point
         float sampleX = (float)j / sizeOfCell;
         float sampleY = (float)i / sizeOfCell;
-        int gridX = Mathf.FloorToInt(sampleX) % sizeOfGrid;
-        int gridY = Mathf.FloorToInt(sampleY) % sizeOfGrid;
+        int maxIndex = sizeOfGrid - 1;
+        sampleX = Mathf.Min(sampleX, maxIndex);
+        sampleY = Mathf.Min(sampleY, maxIndex);
+        int gridX = Mathf.FloorToInt(sampleX);
+        int gridY = Mathf.FloorToInt(sampleY);
 
         float LocalX = sampleX - gridX;
         float LocalY = sampleY - gridY;
@@ -67,7 +70,6 @@ public class PerlinNoise : MonoBehaviour
         // lerp the top and bottom
         float final = lerp(top,bot,v);
 
-        // float brightness = valueToBrightness(final);
         return final;
     }
 

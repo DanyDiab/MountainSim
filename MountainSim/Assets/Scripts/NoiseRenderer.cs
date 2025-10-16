@@ -1,4 +1,6 @@
 using TreeEditor;
+using Unity.VisualScripting;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +15,8 @@ public enum NoiseAlgorithms{
 
 public enum TerrainColoringParams{
     Texture,
-    Color
+    Color,
+    TextureGrad
 }
 
 public class NoiseRenderer : MonoBehaviour{
@@ -37,15 +40,10 @@ public class NoiseRenderer : MonoBehaviour{
     [Header("TerrainColoring Params")]
     [SerializeField] TerrainColoringParams currTerrainParams;
 
-
-
-
-
     void Start(){
         terrainColoring = GetComponent<TerrainColoring>();
         perlin = GetComponent<PerlinNoise>();
         fBm = GetComponent<FbmNoise>();
-        currentNoiseAlgorithm = NoiseAlgorithms.fBm;
     }
     void Update(){
         bool updateNoise = false;
@@ -83,14 +81,27 @@ public class NoiseRenderer : MonoBehaviour{
             case TerrainColoringParams.Color:
                 terrainColoring.updatePixelColors();
                 break;
+            case TerrainColoringParams.TextureGrad:
+                terrainColoring.updateGradTex();
+                break;
+
+
         }
     }
 
+
+    public Texture2D brightnessToTex(Color[] colors, int size){
+        Texture2D newTex = new Texture2D(size,size);
+        newTex.SetPixels(colors);
+        newTex.Apply();
+        return newTex;
+    }
     void renderTexture(Texture2D tex){
         if (targetRenderer != null){
             targetRenderer.material.mainTexture = tex;
         }
     }
+
     public Vector2[,] generateGraidentVectors(int gridSize){
         // update the random with the current seed
         Random.InitState((int)seed);
@@ -107,25 +118,24 @@ public class NoiseRenderer : MonoBehaviour{
     }
 
     void BrightnessToMesh(Color[] pixels) {
-        Texture2D tex = new Texture2D(gridSize * cellSize, gridSize * cellSize);
-        (Vector3[] vertices, Vector2[] uvs) = changeVerticeHeights(tex, pixels);
-        generateMesh(tex,uvs,vertices);
+        int size = gridSize * cellSize;
+        (Vector3[] vertices, Vector2[] uvs) = changeVerticeHeights(size, pixels);
+        generateMesh(uvs,vertices, size);
     }
 
-    (Vector3[], Vector2[]) changeVerticeHeights(Texture2D tex, Color[] pixels){
+    (Vector3[], Vector2[]) changeVerticeHeights(int size, Color[] pixels){
         Vector3[] vertices = new Vector3[pixels.Length];
         Vector2[] uvs = new Vector2[pixels.Length];
-        int width = tex.width;
-        int height = tex.height;
+        int width = size;
+        int height = size;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int index = y * height + x;
                 
                 Vector3 pos = new Vector3(x, 0, y);
                 Color vertColor = pixels[index];
-                float vertHeight = vertColor.r * (heightExageration - 0);
+                float vertHeight = Mathf.Clamp(vertColor.r * heightExageration, -100000, 100000);
                 pos.y = vertHeight;
-                
                 vertices[index] = pos;
                 
                 uvs[index] = new Vector2((float)x / (width - 1), (float)y / (height - 1));
@@ -134,10 +144,11 @@ public class NoiseRenderer : MonoBehaviour{
         return (vertices, uvs);
     }
 
-    void generateMesh(Texture2D tex, Vector2[] uvs, Vector3[] vertices){
+
+    void generateMesh(Vector2[] uvs, Vector3[] vertices, int size){
         MeshFilter meshFilter = targetRenderer.GetComponent<MeshFilter>();
 
-        int[] triangles = generateQuads(tex);
+        int[] triangles = generateQuads(size);
         Mesh mesh = new Mesh();
         
         // Handle large vertex counts
@@ -152,12 +163,14 @@ public class NoiseRenderer : MonoBehaviour{
         mesh.RecalculateBounds();
         
         meshFilter.mesh = mesh;
+
     }
 
 
-    int[] generateQuads(Texture2D tex){
-        int height = tex.height;
-        int width = tex.width;
+// size is the size of the entire mesh
+    int[] generateQuads(int size){
+        int height = size;
+        int width = size;
         int numQuads = (width - 1) * (height - 1);
         int[] triangles = new int[numQuads * 6]; 
         int triangleIndex = 0;

@@ -22,6 +22,11 @@ public class CameraController : MonoBehaviour
     bool locked;
 
     CameraTP cameraTP;
+    Event lockEvent;
+    public delegate void LockEvent(bool locked);
+    public static event LockEvent OnLock;
+
+    
 
 
     // Start is called before the first frame update
@@ -97,6 +102,7 @@ public class CameraController : MonoBehaviour
     void lockCam(){
         if(Input.GetKeyDown(KeyCode.L)){
             locked = !locked;
+            OnLock?.Invoke(locked);
         }
     }    
 }

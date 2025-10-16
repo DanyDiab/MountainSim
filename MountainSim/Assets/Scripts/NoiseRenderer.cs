@@ -40,6 +40,11 @@ public class NoiseRenderer : MonoBehaviour{
     [Header("TerrainColoring Params")]
     [SerializeField] TerrainColoringParams currTerrainParams;
 
+
+
+    
+
+
     void Start(){
         terrainColoring = GetComponent<TerrainColoring>();
         perlin = GetComponent<PerlinNoise>();
@@ -84,8 +89,6 @@ public class NoiseRenderer : MonoBehaviour{
             case TerrainColoringParams.TextureGrad:
                 terrainColoring.updateGradTex();
                 break;
-
-
         }
     }
 
@@ -95,11 +98,6 @@ public class NoiseRenderer : MonoBehaviour{
         newTex.SetPixels(colors);
         newTex.Apply();
         return newTex;
-    }
-    void renderTexture(Texture2D tex){
-        if (targetRenderer != null){
-            targetRenderer.material.mainTexture = tex;
-        }
     }
 
     public Vector2[,] generateGraidentVectors(int gridSize){

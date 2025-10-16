@@ -17,7 +17,6 @@ Shader "Custom/GradBlend"{
                 int topIndex = 0;
                 int botIndex = 0;
                 float percent = 0;
-                
                 if(currGrad > _Bounds[_numBounds - 1]){
                     return blendTextures(1,_numBounds - 1,_numBounds - 1, i.uv);
                 }
@@ -34,7 +33,6 @@ Shader "Custom/GradBlend"{
                         break;
                     }
                 }
-                percent = smoothstep(0.0, 1.0, percent);
                 return blendTextures(percent, topIndex,botIndex, i.uv);
             }
             

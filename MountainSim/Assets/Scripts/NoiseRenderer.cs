@@ -1,4 +1,5 @@
 using TreeEditor;
+using Unity.VisualScripting;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,10 +39,6 @@ public class NoiseRenderer : MonoBehaviour{
     TerrainColoring terrainColoring;
     [Header("TerrainColoring Params")]
     [SerializeField] TerrainColoringParams currTerrainParams;
-
-
-
-
 
     void Start(){
         terrainColoring = GetComponent<TerrainColoring>();
@@ -137,9 +134,8 @@ public class NoiseRenderer : MonoBehaviour{
                 
                 Vector3 pos = new Vector3(x, 0, y);
                 Color vertColor = pixels[index];
-                float vertHeight = vertColor.r * (heightExageration - 0);
+                float vertHeight = Mathf.Clamp(vertColor.r * heightExageration, -100000, 100000);
                 pos.y = vertHeight;
-                
                 vertices[index] = pos;
                 
                 uvs[index] = new Vector2((float)x / (width - 1), (float)y / (height - 1));
@@ -167,6 +163,7 @@ public class NoiseRenderer : MonoBehaviour{
         mesh.RecalculateBounds();
         
         meshFilter.mesh = mesh;
+
     }
 
 

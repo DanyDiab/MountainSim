@@ -97,6 +97,11 @@ public class UIElemMove : MonoBehaviour
         aT = 0;
     }
 
+    public void setAlpha(Image image, float a)
+    {
+        image.color = new Color(image.color.r,image.color.g,image.color.b,a);
+    }
+
     void fade(float t)
     {
         float newAlpha = Mathf.Lerp(startingFade,fadeTarget,t);

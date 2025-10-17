@@ -15,6 +15,10 @@ public class UIController : MonoBehaviour
     [SerializeField]RectTransform lockTransform;
     [SerializeField] Image lockImage;
 
+    public delegate void PauseEvent(bool paused);
+
+    public static event PauseEvent OnPause;
+
     
     // Start is called before the first frame update
     void Start()
@@ -35,13 +39,14 @@ public class UIController : MonoBehaviour
         {
             case UIState.Playing:
                 {
+                    Time.timeScale = 1.0f;
                     menu.SetActive(false);
                     break;
                 }
             case UIState.Menu:
                 {
+                    Time.timeScale = 0.0f;
                     menu.SetActive(true);
-
                     break;
                 }
         }
@@ -67,6 +72,7 @@ public class UIController : MonoBehaviour
         {
             if(currState == UIState.Playing) currState = UIState.Menu;
             else currState = UIState.Playing;
+            OnPause?.Invoke(currState != UIState.Playing);
         }
     }
 

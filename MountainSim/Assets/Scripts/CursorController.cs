@@ -8,15 +8,28 @@ public class CursorController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        showing = false;
+        showing = true;
     }
 
     // Update is called once per frame
+    
+    void OnApplicationFocus(bool hasFocus)
+    {
+        updateCursor(hasFocus);
+    }
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.C)){
             showing = !showing;
-            Cursor.lockState = showing ? CursorLockMode.Locked : CursorLockMode.None;
+
+            updateCursor(showing);
         }
+    }
+
+
+    void updateCursor(bool setTo)
+    {
+        Cursor.lockState = setTo ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = setTo;
     }
 }

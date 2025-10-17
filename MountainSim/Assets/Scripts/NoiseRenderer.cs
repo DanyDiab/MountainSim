@@ -39,6 +39,9 @@ public class NoiseRenderer : MonoBehaviour{
     TerrainColoring terrainColoring;
     [Header("TerrainColoring Params")]
     [SerializeField] TerrainColoringParams currTerrainParams;
+    
+
+    bool inMenu;
 
 
 
@@ -49,10 +52,14 @@ public class NoiseRenderer : MonoBehaviour{
         terrainColoring = GetComponent<TerrainColoring>();
         perlin = GetComponent<PerlinNoise>();
         fBm = GetComponent<FbmNoise>();
+        inMenu = false;
+        UIController.OnPause += updateInMenu;
+
+
     }
     void Update(){
         bool updateNoise = false;
-        if(Input.GetMouseButtonDown(0)){
+        if(Input.GetMouseButtonDown(0) && !inMenu){
             updateNoise = true;
         }
         if(Input.GetMouseButtonDown(1)){
@@ -190,6 +197,12 @@ public class NoiseRenderer : MonoBehaviour{
             }
         } 
         return triangles;
+    }
+
+
+    void updateInMenu(bool inMenu)
+    {
+        this.inMenu = inMenu;
     }
 }
 

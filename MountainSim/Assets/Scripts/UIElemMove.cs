@@ -45,6 +45,9 @@ public class UIElemMove : MonoBehaviour
 
     }
 
+
+
+    // continously update the position until we reach the destinaiton
     void updateMoving()
     {
         if(!(currState == MoveState.Moving)) return;
@@ -53,6 +56,8 @@ public class UIElemMove : MonoBehaviour
         (currTransform.position, arrived) = translate(transform.position,dest);
         if(arrived) currState = MoveState.Idle;
     }
+
+    // update fading until we reach target
     void updateFading(){
         if(!(currFadeState == FadingState.Fading)) return;
         aT += Time.deltaTime * fadingSpeed;
@@ -61,6 +66,7 @@ public class UIElemMove : MonoBehaviour
         if(eased >= 1) currFadeState = FadingState.Idle;
     }
 
+    // start moving a UI element towards a target
     public void moveTowards(RectTransform transform, string destination){
         blCorner = mainCamera.ViewportToScreenPoint(new Vector3(.1f,.15f,0));
         center = mainCamera.ViewportToScreenPoint(new Vector3(.5f,.5f,0));
@@ -70,7 +76,7 @@ public class UIElemMove : MonoBehaviour
         currState = MoveState.Moving;
         t = 0;
     }
-
+// translate a vector towards another using a t value
     (Vector3, bool) translate(Vector3 curr, Vector3 dest){
         float eased = ease(t);
         float x = Mathf.Lerp(curr.x,dest.x,eased);
@@ -79,6 +85,7 @@ public class UIElemMove : MonoBehaviour
         return (final, (curr - dest).magnitude <= arriveTresh);
     }
 
+// set the position of a UI element
     public void setPosition(RectTransform transform, string destination){
         if(destination == "center") dest = center;
         else if(destination == "bl") dest = blCorner; 
@@ -86,6 +93,7 @@ public class UIElemMove : MonoBehaviour
         transform.position = dest;
     }
 
+// fade a UI element to a target alpha
     public void fadeAlpha(Image image, string dir)
     {
         if(dir == "in") fadeTarget = 1; 
@@ -97,16 +105,20 @@ public class UIElemMove : MonoBehaviour
         aT = 0;
     }
 
+// set the alpha channel of a UI image
     public void setAlpha(Image image, float a)
     {
         image.color = new Color(image.color.r,image.color.g,image.color.b,a);
     }
 
+// fade image towards target using t value
     void fade(float t)
     {
         float newAlpha = Mathf.Lerp(startingFade,fadeTarget,t);
         fadingImage.color = new Color(fadingImage.color.r,fadingImage.color.g,fadingImage.color.b,newAlpha);
     }
+
+    // ease the interpolation factor
 
     float ease(float t)
     {

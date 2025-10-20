@@ -11,8 +11,6 @@ public class CursorController : MonoBehaviour
         showing = true;
     }
 
-    // Update is called once per frame
-    
     void OnApplicationFocus(bool hasFocus)
     {
         updateCursor(hasFocus);

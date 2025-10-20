@@ -15,6 +15,7 @@ public class UIElemMove : MonoBehaviour
 {
 
     Vector3 blCorner;
+    Vector3 tlCorner;
     Vector3 center;
     Camera mainCamera;
     Vector3 dest;
@@ -69,10 +70,12 @@ public class UIElemMove : MonoBehaviour
     // start moving a UI element towards a target
     public void moveTowards(RectTransform transform, string destination){
         blCorner = mainCamera.ViewportToScreenPoint(new Vector3(.1f,.15f,0));
+        tlCorner = mainCamera.ViewportToScreenPoint(new Vector3(.1f,.85f, 0));
         center = mainCamera.ViewportToScreenPoint(new Vector3(.5f,.5f,0));
         currTransform = transform;
         if(destination == "center") dest = center;
         else if(destination == "bl") dest = blCorner;
+        else if(destination == "tl") dest = tlCorner;
         currState = MoveState.Moving;
         t = 0;
     }

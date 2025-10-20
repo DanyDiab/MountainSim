@@ -242,6 +242,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lockTransform: {fileID: 805412336}
   lockImage: {fileID: 805412337}
+  arrowTransform: {fileID: 1689942056}
+  arrowImage: {fileID: 1689942057}
 --- !u!114 &26757867
 MonoBehaviour:
   m_ObjectHideFlags: 0

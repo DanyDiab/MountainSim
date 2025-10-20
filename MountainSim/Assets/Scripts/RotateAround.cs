@@ -8,6 +8,9 @@ public class RotateAround : MonoBehaviour
     Mesh mesh;
     Vector3 center;
     [SerializeField] float rotateSpeed;
+
+    public delegate void RotateEvent(bool rotating);
+    public static event RotateEvent OnRotate;
     void Start(){
         rotating = false;
     }
@@ -23,6 +26,7 @@ public class RotateAround : MonoBehaviour
 
     void toggleRotate(){
         rotating = !rotating;
+        OnRotate?.Invoke(rotating);
         if(rotating){
             MeshFilter mf = GetComponent<MeshFilter>();
             mesh = mf.mesh;

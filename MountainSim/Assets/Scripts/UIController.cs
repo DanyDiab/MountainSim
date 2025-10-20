@@ -12,8 +12,14 @@ public class UIController : MonoBehaviour
     GameObject menu;
     UIState currState;
     UIElemMove elemMove;
+
+    [Header("Lock")]
     [SerializeField]RectTransform lockTransform;
     [SerializeField] Image lockImage;
+
+    [Header("RotateArrow")]
+    [SerializeField] RectTransform arrowTransform;
+    [SerializeField] Image arrowImage;
 
     public delegate void PauseEvent(bool paused);
 
@@ -26,9 +32,11 @@ public class UIController : MonoBehaviour
         menu = GameObject.FindGameObjectWithTag("Menu");
         currState = UIState.Playing;
         CameraController.OnLock += checkLock;
+        RotateAround.OnRotate += checkRotate;
 
         elemMove = GetComponent<UIElemMove>();
         elemMove.setAlpha(lockImage, 0);
+        elemMove.setAlpha(arrowImage,0);
     }
 
     // Update is called once per frame
@@ -54,15 +62,26 @@ public class UIController : MonoBehaviour
 
     void checkLock(bool locked){
         if(currState != UIState.Playing) return; 
-        if (locked)
-        {
-            elemMove.fadeAlpha(lockImage, "in");
-            elemMove.moveTowards(lockTransform,"bl");
-        }
-        else
+        if (!locked)
         {
             elemMove.fadeAlpha(lockImage,"out");
+            return;
         }
+        elemMove.fadeAlpha(lockImage, "in");
+        elemMove.moveTowards(lockTransform,"bl");
+    }
+
+    void checkRotate(bool rotating)
+    {
+        if(currState != UIState.Playing) return;
+        if (!rotating)
+        {
+            elemMove.fadeAlpha(arrowImage, "out");
+            return;
+        }
+        elemMove.fadeAlpha(arrowImage, "in");
+        elemMove.moveTowards(arrowTransform,"tl");
+
     }
 
 

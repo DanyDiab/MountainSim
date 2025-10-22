@@ -8,9 +8,7 @@ using UnityEngine.UI;
 public enum NoiseAlgorithms{
     Perlin,
     fBm,
-
     Ridge
-
 }
 
 public enum TerrainColoringParams{
@@ -21,7 +19,6 @@ public enum TerrainColoringParams{
 
 public class NoiseRenderer : MonoBehaviour{
     public Renderer targetRenderer;
-    
     PerlinNoise perlin;
     FbmNoise fBm;
 
@@ -39,14 +36,7 @@ public class NoiseRenderer : MonoBehaviour{
     TerrainColoring terrainColoring;
     [Header("TerrainColoring Params")]
     [SerializeField] TerrainColoringParams currTerrainParams;
-    
-
     bool inMenu;
-
-
-
-    
-
 
     void Start(){
         terrainColoring = GetComponent<TerrainColoring>();

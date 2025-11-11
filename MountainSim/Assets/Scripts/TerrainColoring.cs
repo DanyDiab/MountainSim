@@ -11,10 +11,7 @@ public class TerrainColoring : MonoBehaviour
 
     Vector3[] verticies;
     Color[] pixelColors;
-
-    [Header("Colors")]
-    [SerializeField] Color[] colors;
-    [SerializeField] Texture2D[] textures;
+    [SerializeField] Parameters parameters;
     Material currMat;
     [SerializeField]Material colorMat;
     [SerializeField]Material textureMat;
@@ -25,6 +22,7 @@ public class TerrainColoring : MonoBehaviour
 
 
     void Start(){
+    
         tn = new TextureNormalizer();
         tn.setResolution(1024);
         tn.setFormatting(RenderTextureFormat.ARGB32);
@@ -35,7 +33,7 @@ public class TerrainColoring : MonoBehaviour
         currMat = colorMat;
         mesh = meshFilter.mesh;
         mr.material = currMat;
-        determineBounds(colors.Length, mesh.bounds.min.y, mesh.bounds.max.y);
+        determineBounds(parameters.Colors.Length, mesh.bounds.min.y, mesh.bounds.max.y);
         verticies = mesh.vertices;
         pixelColors = new Color[verticies.Length];
         for(int i = 0; i < verticies.Length; i++){
@@ -71,14 +69,14 @@ public class TerrainColoring : MonoBehaviour
         currMat = textureMat;
         mr.material = currMat;
         mesh = meshFilter.mesh;
-        bounds = determineBounds(textures.Length, mesh.bounds.min.y, mesh.bounds.max.y);
+        bounds = determineBounds(parameters.Textures.Length, mesh.bounds.min.y, mesh.bounds.max.y);
         currMat.SetFloatArray("_Bounds", bounds);
         currMat.SetInt("_numBounds", bounds.Length);
         Texture2DArray texArray = new Texture2DArray(
             1024, 1024, bounds.Length, TextureFormat.ARGB32, true
         );
-        for (int i = 0; i < textures.Length; i++) {
-            Texture2D normalTexture = tn.normalizeTexture(textures[i]);
+        for (int i = 0; i < parameters.Textures.Length; i++) {
+            Texture2D normalTexture = tn.normalizeTexture(parameters.Textures[i]);
             Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
         }
         currMat.SetTexture("_Textures", texArray);   
@@ -90,14 +88,14 @@ public class TerrainColoring : MonoBehaviour
         mesh = meshFilter.mesh;
         (float min, float max) = calculateGradients(mesh);
         Debug.Log("min grad: " + min + "    max Grad: " + max);
-        float[] bounds = determineBounds(textures.Length,min,max);
+        float[] bounds = determineBounds(parameters.Textures.Length,min,max);
         currMat.SetFloatArray("_Bounds", bounds);
         currMat.SetInt("_numBounds", bounds.Length);
         Texture2DArray texArray = new Texture2DArray(
             1024, 1024, bounds.Length, TextureFormat.ARGB32, true
         );
-        for (int i = 0; i < textures.Length; i++) {
-            Texture2D normalTexture = tn.normalizeTexture(textures[i]);
+        for (int i = 0; i < parameters.Textures.Length; i++) {
+            Texture2D normalTexture = tn.normalizeTexture(parameters.Textures[i]);
             Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
         }
         currMat.SetTexture("_Textures", texArray);  
@@ -105,11 +103,11 @@ public class TerrainColoring : MonoBehaviour
     (float[], Color[]) findCloseBounds(float y){
         if(y >= bounds[bounds.Length - 1]){
             int index = bounds.Length - 1;
-            return (new float[] {bounds[index]}, new Color[] {colors[index]});
+            return (new float[] {bounds[index]}, new Color[] {parameters.Colors[index]});
         }
         if(y <= bounds[0]){
             int index = 0;
-            return (new float[] {bounds[index]}, new Color[] {colors[index]});
+            return (new float[] {bounds[index]}, new Color[] {parameters.Colors[index]});
         }
         float[] boundsToReturn = new float[2];
         Color[] colorsToReturn = new Color[2];
@@ -120,7 +118,7 @@ public class TerrainColoring : MonoBehaviour
                 continue;
             }
             boundsToReturn = new float[] {bounds[i-1], bounds[i]};
-            colorsToReturn = new Color[] {colors[i-1], colors[i]};
+            colorsToReturn = new Color[] {parameters.Colors[i-1], parameters.Colors[i]};
             break;
         }
         return (boundsToReturn, colorsToReturn);

@@ -23,57 +23,55 @@ public class PerlinNoise : MonoBehaviour
     Color[] getPerlinValues(int gridSize, int cellSize, Vector2[,] grads){
         int width = gridSize * cellSize;
         Color[] pixels = new Color[width * width];
-        for(int i = 0; i < gridSize; i++){
-            for(int j = 0; j < cellSize; j++){
-                float brightness = getPerlinValue(i,j, grads, cellSize, gridSize);
-                 pixels[i * cellSize + j] = new Color(brightness,brightness,brightness);
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < width; j++){
+                float sampleX = (float)j / cellSize;
+                float sampleY = (float)i / cellSize;
+                float brightness = getPerlinValue(sampleX,sampleY, grads, cellSize, gridSize);
+                pixels[i * cellSize + j] = new Color(brightness,brightness,brightness);
             }
         }
         return pixels;
     }
 
 
-    public float getPerlinValue(float i, float j, Vector2[,] grads, int sizeOfCell, int sizeOfGrid){
-        // calculate percent of cell which contains the point
-        float sampleX = (float)j / sizeOfCell;
-        float sampleY = (float)i / sizeOfCell;
-        int maxIndex = sizeOfGrid - 1;
-        sampleX = Mathf.Min(sampleX, maxIndex);
-        sampleY = Mathf.Min(sampleY, maxIndex);
-        int gridX = Mathf.FloorToInt(sampleX) % sizeOfGrid;
-        int gridY = Mathf.FloorToInt(sampleY) % sizeOfGrid;
-        if (gridX < 0) gridX += sizeOfGrid;
-        if (gridY < 0) gridY += sizeOfGrid;
+public float getPerlinValue(float sampleX, float sampleY, Vector2[,] grads, int sizeOfCell, int sizeOfGrid)
+    {
+        int gridX = Mathf.FloorToInt(sampleX);
+        int gridY = Mathf.FloorToInt(sampleY);
 
-        int nextX = (gridX + 1) % sizeOfGrid;
-        int nextY = (gridY + 1) % sizeOfGrid;
+        float localX = sampleX - gridX;
+        float localY = sampleY - gridY;
 
-        float LocalX = sampleX - gridX;
-        float LocalY = sampleY - gridY;
+        int gridX_0 = gridX % sizeOfGrid;
+        int gridY_0 = gridY % sizeOfGrid;
+        if (gridX_0 < 0) gridX_0 += sizeOfGrid;
+        if (gridY_0 < 0) gridY_0 += sizeOfGrid;
 
-        // calculate the apropraite grid intersections
-        Vector2 tl = new Vector2(LocalX, LocalY);
-        Vector2 tr = new Vector2(LocalX - 1 ,LocalY);
-        Vector2 bl = new Vector2(LocalX ,LocalY - 1);
-        Vector2 br = new Vector2(LocalX - 1 ,LocalY - 1);
-        // find the apropriate gradientVectors
-        Vector2 tlGrad = grads[gridX,gridY];
-        Vector2 trGrad = grads[nextX,gridY];
-        Vector2 blGrad = grads[gridX,nextY];
-        Vector2 brGrad = grads[nextX, nextY];
-        // calculate the influences of gradient vectors on the point
-        float tlI = Vector2Dot(tl,tlGrad);
-        float trI = Vector2Dot(tr,trGrad);
-        float blI = Vector2Dot(bl,blGrad);
-        float brI = Vector2Dot(br,brGrad);
-        // fade to smooth the values
-        float u = fade(LocalX);
-        float v = fade(LocalY);
-        // lerp across the top and bottom
-        float top = lerp(tlI,trI,u);
-        float bot = lerp(blI,brI,u);
-        // lerp the top and bottom
-        float final = lerp(top,bot,v);
+        int gridX_1 = (gridX_0 + 1) % sizeOfGrid;
+        int gridY_1 = (gridY_0 + 1) % sizeOfGrid;
+
+        Vector2 tlGrad = grads[gridX_0, gridY_0];
+        Vector2 trGrad = grads[gridX_1, gridY_0];
+        Vector2 blGrad = grads[gridX_0, gridY_1];
+        Vector2 brGrad = grads[gridX_1, gridY_1];
+
+        Vector2 tl = new Vector2(localX, localY);
+        Vector2 tr = new Vector2(localX - 1, localY);
+        Vector2 bl = new Vector2(localX, localY - 1);
+        Vector2 br = new Vector2(localX - 1, localY - 1);
+
+        float tlI = Vector2Dot(tl, tlGrad);
+        float trI = Vector2Dot(tr, trGrad);
+        float blI = Vector2Dot(bl, blGrad);
+        float brI = Vector2Dot(br, brGrad);
+
+        float u = fade(localX);
+        float v = fade(localY);
+
+        float top = lerp(tlI, trI, u);
+        float bot = lerp(blI, brI, u);
+        float final = lerp(top, bot, v);
 
         return final;
     }

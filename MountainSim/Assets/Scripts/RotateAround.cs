@@ -21,7 +21,7 @@ public class RotateAround : MonoBehaviour
         }
         if(!rotating) return;
 
-        transform.RotateAround(center, Vector3.up,Time.time * rotateSpeed);
+        transform.RotateAround(center, Vector3.up, Time.deltaTime * rotateSpeed);
     }
 
     void toggleRotate(){

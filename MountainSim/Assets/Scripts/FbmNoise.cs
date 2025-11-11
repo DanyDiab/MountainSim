@@ -5,13 +5,7 @@ public class FbmNoise : MonoBehaviour
 {
     // number of octaves to generate
     [Header("fBm parameters")]
-    [SerializeField] int numOctaves;
-    // noise freqeuncy change per octave (increasing) 
-    [SerializeField] float lacunarity;
 
-    // amplitude change between octaves (decreasing)
-    [SerializeField] float peristence;
-    [SerializeField] float rFactor;
     [SerializeField] Vector2 offset;
 
 
@@ -19,6 +13,7 @@ public class FbmNoise : MonoBehaviour
 
     [SerializeField] float freqeuncy = 1;
     [SerializeField] float amplitude = 1;
+    [SerializeField] Parameters parameters;
 
     float totalAmplitude;
 
@@ -47,7 +42,7 @@ public class FbmNoise : MonoBehaviour
         gradientVectors = noiseRenderer.generateGraidentVectors(gridSize);
         float[] pixelBrightness = new float[width * width];
         Color[] pixelColors = new Color[width * width];
-        for (int octave = 0; octave < numOctaves; octave++){
+        for (int octave = 0; octave < parameters.OctaveCount; octave++){
             totalAmplitude += amplitude;
             for(int i = 0; i < width; i++){
                 for(int j = 0; j < width; j++){
@@ -65,12 +60,13 @@ public class FbmNoise : MonoBehaviour
                     pixelBrightness[i * width + j] += brightness;
                 }
             }
-            freqeuncy *= lacunarity;
-            amplitude *= peristence;
+            freqeuncy *= parameters.Lacunarity;
+            amplitude *= parameters.Persistence;
         }
         for(int k = 0; k < pixelBrightness.Length; k++){
             float currBrightness = pixelBrightness[k] / totalAmplitude;
-            float finalBrightness  = (float) math.pow(currBrightness, rFactor);
+            float finalBrightness = currBrightness;
+            if(ridge) finalBrightness = (float) math.pow(currBrightness, parameters.RFactor);
             pixelColors[k] = new Color(finalBrightness, finalBrightness, finalBrightness);
         }
         return pixelColors;

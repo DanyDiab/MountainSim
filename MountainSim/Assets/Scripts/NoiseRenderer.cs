@@ -6,36 +6,26 @@ using UnityEngine.UI;
 
 
 public enum NoiseAlgorithms{
-    Perlin,
+    Ridge,
     fBm,
-    Ridge
+    Perlin
 }
 
 public enum TerrainColoringParams{
+    TextureGrad,
     Texture,
     Color,
-    TextureGrad
+    
 }
 
 public class NoiseRenderer : MonoBehaviour{
+    [SerializeField] Parameters parameters;
     public Renderer targetRenderer;
     PerlinNoise perlin;
     FbmNoise fBm;
 
-    [Header("Seed")]
-    [SerializeField] float seed;
-        
-    [Header("Size Parameters")]
-    [SerializeField] int gridSize = 20;
-    [SerializeField] int cellSize = 5;
-    [SerializeField]float heightExageration = 5f;
-    
-    [Header("Current Noise Algorithm")]
-    [SerializeField] NoiseAlgorithms currentNoiseAlgorithm;
 
     TerrainColoring terrainColoring;
-    [Header("TerrainColoring Params")]
-    [SerializeField] TerrainColoringParams currTerrainParams;
     bool inMenu;
 
     void Start(){
@@ -44,8 +34,6 @@ public class NoiseRenderer : MonoBehaviour{
         fBm = GetComponent<FbmNoise>();
         inMenu = false;
         UIController.OnPause += updateInMenu;
-
-
     }
     void Update(){
         bool updateNoise = false;
@@ -58,25 +46,25 @@ public class NoiseRenderer : MonoBehaviour{
         if(!updateNoise){
             return;
         }
-        switch(currentNoiseAlgorithm){
+        switch(parameters.CurrAlgorithm){
             case NoiseAlgorithms.Perlin:
-                displayNoise(perlin.generatePerlinNoise(gridSize,cellSize));
+                displayNoise(perlin.generatePerlinNoise(parameters.GridSize,parameters.CellSize));
                 break;
             case NoiseAlgorithms.fBm:
-                displayNoise(fBm.generateFBMNoise(gridSize,cellSize, false));
+                displayNoise(fBm.generateFBMNoise(parameters.GridSize,parameters.CellSize, false));
                 break;
             case NoiseAlgorithms.Ridge:
-                displayNoise(fBm.generateFBMNoise(gridSize,cellSize, true));
+                displayNoise(fBm.generateFBMNoise(parameters.GridSize,parameters.CellSize, true));
                 break;
         }
     }
 
     public void generateSeed(){
-        seed = Random.Range(-2147483648, 2147483647);
+        parameters.CurrentSeed = Random.Range(-2147483648, 2147483647);
     }
     public void displayNoise(Color[] pixels){
         BrightnessToMesh(pixels);
-        switch(currTerrainParams){
+        switch(parameters.TerrainColoring){
             case TerrainColoringParams.Texture:
                 terrainColoring.updatePixelTex();
                 break;
@@ -99,7 +87,7 @@ public class NoiseRenderer : MonoBehaviour{
 
     public Vector2[,] generateGraidentVectors(int gridSize){
         // update the random with the current seed
-        Random.InitState((int)seed);
+        Random.InitState((int)parameters.CurrentSeed);
         Vector2[,] grads = new Vector2[gridSize + 1, gridSize + 1];
         for(int i = 0; i < gridSize + 1; i++){
             for(int j = 0; j < gridSize + 1; j++){
@@ -113,7 +101,7 @@ public class NoiseRenderer : MonoBehaviour{
     }
 
     void BrightnessToMesh(Color[] pixels) {
-        int size = gridSize * cellSize;
+        int size = parameters.GridSize * parameters.CellSize;
         (Vector3[] vertices, Vector2[] uvs) = changeVerticeHeights(size, pixels);
         generateMesh(uvs,vertices, size);
     }
@@ -129,7 +117,7 @@ public class NoiseRenderer : MonoBehaviour{
                 
                 Vector3 pos = new Vector3(x, 0, y);
                 Color vertColor = pixels[index];
-                float vertHeight = Mathf.Clamp(vertColor.r * heightExageration, -100000, 100000);
+                float vertHeight = Mathf.Clamp(vertColor.r * parameters.HeightExageration, -100000, 100000);
                 pos.y = vertHeight;
                 vertices[index] = pos;
                 

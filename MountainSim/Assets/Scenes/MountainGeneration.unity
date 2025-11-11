@@ -244,6 +244,18 @@ MonoBehaviour:
   lockImage: {fileID: 805412337}
   arrowTransform: {fileID: 1689942056}
   arrowImage: {fileID: 1689942057}
+  parameters: {fileID: 11400000, guid: 6d9e8ce32b878f743a790db6e8bd6a21, type: 2}
+  seedInputField: {fileID: 384082745}
+  octaveCountSlider: {fileID: 1860879058}
+  lacunaritySlider: {fileID: 1176584046}
+  persistenceSlider: {fileID: 112933511}
+  heightExagerationSlider: {fileID: 1043345591}
+  rFactorSlider: {fileID: 1990098237}
+  gridSizeSlider: {fileID: 264802387}
+  cellSizeSlider: {fileID: 379847593}
+  noiseAlgorithmDropdown: {fileID: 1420300089}
+  terrainColoringDropdown: {fileID: 1407737485}
+  generateButton: {fileID: 256142633}
 --- !u!114 &26757867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -892,7 +904,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 256142634}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 26757866}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: btnPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
 --- !u!114 &256142634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -907,7 +931,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.7207546, g: 0.36309713, b: 0.36309713, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1050,10 +1074,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 154395706}
   m_HandleRect: {fileID: 1838542913}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: 1
+  m_MaxValue: 20
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1322,13 +1346,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 574c90f62da556c448a7bd962c989016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numOctaves: 5
-  lacunarity: 5
-  peristence: 0.3
-  rFactor: 10
   offset: {x: 0, y: 0}
   freqeuncy: 610.3516
   amplitude: 1.818369e+11
+  parameters: {fileID: 11400000, guid: 6d9e8ce32b878f743a790db6e8bd6a21, type: 2}
 --- !u!114 &318641821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1341,13 +1362,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d997a634bf2b6e469b5fe9eadb71340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parameters: {fileID: 11400000, guid: 6d9e8ce32b878f743a790db6e8bd6a21, type: 2}
   targetRenderer: {fileID: 1849630966}
-  seed: 0
-  gridSize: 200
-  cellSize: 4
-  heightExageration: 100
-  currentNoiseAlgorithm: 2
-  currTerrainParams: 0
 --- !u!1 &319672257
 GameObject:
   m_ObjectHideFlags: 0
@@ -1812,10 +1828,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1139067976}
   m_HandleRect: {fileID: 1948803477}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: 1
+  m_MaxValue: 20
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -4444,10 +4460,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1786366654}
   m_HandleRect: {fileID: 1739320160}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: 1
+  m_MaxValue: 1000000
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -7626,8 +7642,8 @@ MonoBehaviour:
   m_HandleRect: {fileID: 358801863}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
+  m_MaxValue: 10
+  m_WholeNumbers: 1
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8180,7 +8196,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1526813189}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 20
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:

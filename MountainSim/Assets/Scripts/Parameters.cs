@@ -4,7 +4,7 @@ using UnityEngine;
 public class Parameters : ScriptableObject
 {
     [Header("Generation Parameters")]
-    [SerializeField] private NoiseAlgorithms noiseAlgorithms;
+    [SerializeField] private NoiseAlgorithms currAlgorithm;
     [SerializeField] private int octaveCount;
     [SerializeField] private float lacunarity;
     [SerializeField] private float persistence;
@@ -23,10 +23,10 @@ public class Parameters : ScriptableObject
 
 
 // getters / setters 
-    public NoiseAlgorithms NoiseAlgorithms
+    public NoiseAlgorithms CurrAlgorithm
     {
-        get => noiseAlgorithms;
-        set => noiseAlgorithms = value;
+        get => currAlgorithm;
+        set => currAlgorithm = value;
     }
 
     public int OctaveCount

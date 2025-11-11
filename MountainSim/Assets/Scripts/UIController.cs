@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 
 public enum UIState
 {
@@ -20,10 +20,33 @@ public class UIController : MonoBehaviour
     [Header("RotateArrow")]
     [SerializeField] RectTransform arrowTransform;
     [SerializeField] Image arrowImage;
+    [SerializeField] Parameters parameters;
+
+    [Header("Menu UI Elements")]
+    
+    // Input Field
+    [SerializeField] TMP_InputField seedInputField;
+
+    // Sliders
+    [SerializeField] Slider octaveCountSlider;
+    [SerializeField] Slider lacunaritySlider;
+    [SerializeField] Slider persistenceSlider;
+    [SerializeField] Slider heightExagerationSlider;
+    [SerializeField] Slider rFactorSlider;
+    [SerializeField] Slider gridSizeSlider;
+    [SerializeField] Slider cellSizeSlider;
+
+    // Dropdowns
+    [SerializeField] TMP_Dropdown noiseAlgorithmDropdown;
+    [SerializeField] TMP_Dropdown terrainColoringDropdown;
+    
+    // Button
+    [SerializeField] Button generateButton;
 
     public delegate void PauseEvent(bool paused);
 
     public static event PauseEvent OnPause;
+    bool isBtnPressed;
 
     
     // Start is called before the first frame update
@@ -37,9 +60,9 @@ public class UIController : MonoBehaviour
         elemMove = GetComponent<UIElemMove>();
         elemMove.setAlpha(lockImage, 0);
         elemMove.setAlpha(arrowImage,0);
+        isBtnPressed = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         updateState();
@@ -55,6 +78,12 @@ public class UIController : MonoBehaviour
                 {
                     Time.timeScale = 0.0f;
                     menu.SetActive(true);
+                    if (generateButton.IsInvoking())
+                    {
+                        updateParametersFile();
+                        updateMenuParameters();
+                        currState = UIState.Playing;
+                    }
                     break;
                 }
         }
@@ -85,23 +114,85 @@ public class UIController : MonoBehaviour
     }
 
 
-    void updateState()
+void updateState()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || isBtnPressed)
         {
-            if(currState == UIState.Playing) currState = UIState.Menu;
-            else currState = UIState.Playing;
-            OnPause?.Invoke(currState != UIState.Playing);
+            if (currState == UIState.Playing)
+            {
+                updateMenuParameters();
+                currState = UIState.Menu;
+                OnPause?.Invoke(true);
+            }
+            else
+            {
+                updateParametersFile();
+                currState = UIState.Playing;
+                OnPause?.Invoke(false);
+                isBtnPressed = false;
+            }
+        }
+
+        if (currState == UIState.Menu && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
+        {
+            updateParametersFile();
+            currState = UIState.Playing;
+            OnPause?.Invoke(false);
+            isBtnPressed = false;
         }
     }
 
-    void showMenu(bool show)
-    {
-        
+    public void btnPressed(){
+        isBtnPressed = true;
+    }
+
+    // push changes to the file
+    void updateParametersFile(){
+        if (parameters == null)
+        {
+            Debug.LogError("Parameters asset is not assigned in the Inspector!");
+            return;
+        }
+        if (int.TryParse(seedInputField.text, out int seed))
+        {
+            parameters.CurrentSeed = seed;
+        }
+        parameters.OctaveCount = (int)octaveCountSlider.value;
+        parameters.Lacunarity = lacunaritySlider.value;
+        parameters.Persistence = persistenceSlider.value;
+        parameters.HeightExageration = heightExagerationSlider.value;
+        parameters.RFactor = (int)rFactorSlider.value;
+        parameters.GridSize = (int)gridSizeSlider.value;
+        parameters.CellSize = (int)cellSizeSlider.value;
+
+        parameters.CurrAlgorithm = (NoiseAlgorithms)noiseAlgorithmDropdown.value;
+        parameters.TerrainColoring = (TerrainColoringParams)terrainColoringDropdown.value;
     }
 
 
-    
 
+// update menu refrence
+    void updateMenuParameters()
+    {
+        if (parameters == null)
+        {
+            Debug.LogError("Parameters asset is not assigned in the Inspector!");
+            return;
+        }
+        // Input Field
+        seedInputField.text = parameters.CurrentSeed.ToString();
 
+        // Sliders
+        octaveCountSlider.value = parameters.OctaveCount;
+        lacunaritySlider.value = parameters.Lacunarity;
+        persistenceSlider.value = parameters.Persistence;
+        heightExagerationSlider.value = parameters.HeightExageration;
+        rFactorSlider.value = parameters.RFactor;
+        gridSizeSlider.value = parameters.GridSize;
+        cellSizeSlider.value = parameters.CellSize;
+
+        // Dropdowns
+        noiseAlgorithmDropdown.value = (int)parameters.CurrAlgorithm;
+        terrainColoringDropdown.value = (int)parameters.TerrainColoring;
+    }
 }

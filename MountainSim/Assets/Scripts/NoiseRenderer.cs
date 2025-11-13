@@ -23,6 +23,7 @@ public class NoiseRenderer : MonoBehaviour{
     public Renderer targetRenderer;
     PerlinNoise perlin;
     FbmNoise fBm;
+    bool generateBtnPressed;
 
 
     TerrainColoring terrainColoring;
@@ -37,8 +38,9 @@ public class NoiseRenderer : MonoBehaviour{
     }
     void Update(){
         bool updateNoise = false;
-        if(Input.GetMouseButtonDown(0) && !inMenu){
+        if(Input.GetMouseButtonDown(0) && !inMenu || generateBtnPressed){
             updateNoise = true;
+            generateBtnPressed = false;
         }
         if(Input.GetMouseButtonDown(1)){
             generateSeed();
@@ -57,6 +59,11 @@ public class NoiseRenderer : MonoBehaviour{
                 displayNoise(fBm.generateFBMNoise(parameters.GridSize,parameters.CellSize, true));
                 break;
         }
+    }
+
+    public void generateTerrain()
+    {
+        generateBtnPressed = true;
     }
 
     public void generateSeed(){

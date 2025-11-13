@@ -64,6 +64,7 @@ public class UIController : MonoBehaviour
         elemMove.setAlpha(arrowImage,0);
         isBtnPressed = false;
         seedInputField.onValueChanged.AddListener(_ => seedDirtyFromUI = true);
+        enableSizeParams();
     }
 
     void Update()

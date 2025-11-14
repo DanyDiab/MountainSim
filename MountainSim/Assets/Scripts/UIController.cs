@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public enum UIState
 {
@@ -22,6 +24,15 @@ public class UIController : MonoBehaviour
     [SerializeField] Image arrowImage;
     [SerializeField] Parameters parameters;
 
+    [Header("Menu Panels")]
+    [SerializeField] GameObject sizePanel;
+    [SerializeField] GameObject HeightPanel;
+    [SerializeField] GameObject FeaturePanel;
+    [SerializeField] GameObject GeneralPanel;
+
+    List<GameObject> panels;
+
+
     [Header("Menu UI Elements")]
     
     // Input Field
@@ -36,6 +47,9 @@ public class UIController : MonoBehaviour
     [SerializeField] Slider gridSizeSlider;
     [SerializeField] Slider cellSizeSlider;
 
+
+
+    
     // Dropdowns
     [SerializeField] TMP_Dropdown noiseAlgorithmDropdown;
     [SerializeField] TMP_Dropdown terrainColoringDropdown;
@@ -52,6 +66,7 @@ public class UIController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        panels = new List<GameObject>();
         menu = GameObject.FindGameObjectWithTag("Menu");
         currState = UIState.Playing;
         CameraController.OnLock += checkLock;
@@ -61,6 +76,11 @@ public class UIController : MonoBehaviour
         elemMove.setAlpha(lockImage, 0);
         elemMove.setAlpha(arrowImage,0);
         isBtnPressed = false;
+        panels.Add(sizePanel);
+        panels.Add(HeightPanel);
+        panels.Add(FeaturePanel);
+        panels.Add(GeneralPanel);
+        enablePanel(sizePanel);
     }
 
     void Update()
@@ -193,6 +213,25 @@ void updateState()
 
         // Dropdowns
         noiseAlgorithmDropdown.value = (int)parameters.CurrAlgorithm;
-        terrainColoringDropdown.value = (int)parameters.TerrainColoring;
+        // terrainColoringDropdown.value = (int)parameters.TerrainColoring;
+    }
+
+    public void randomizeSeed() {
+        parameters.CurrentSeed = UnityEngine.Random.Range(int.MinValue, int.MaxValue); // your current call :contentReference[oaicite:4]{index=4}
+        seedInputField.SetTextWithoutNotify(parameters.CurrentSeed.ToString());
+        seedInputField.ForceLabelUpdate();
+        updateMenuParameters();
+    }
+    
+    void disableAllPanels() {
+        foreach(GameObject panel in panels) {
+            panel.SetActive(false);
+        }
+    }
+
+    public void enablePanel(GameObject panelToEnable) {
+        foreach(GameObject panel in panels) {
+            panel.SetActive(panel == panelToEnable);
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public enum UIState
 {
     Playing,
-    Menu
+    Menu,
 }
 public class UIController : MonoBehaviour
 {
@@ -52,15 +52,16 @@ public class UIController : MonoBehaviour
     
     // Dropdowns
     [SerializeField] TMP_Dropdown noiseAlgorithmDropdown;
-    [SerializeField] TMP_Dropdown terrainColoringDropdown;
+    // [SerializeField] TMP_Dropdown terrainColoringDropdown;
     
-    // Button
-    [SerializeField] Button generateButton;
+    [SerializeField] Button generateRandSeed;
+
 
     public delegate void PauseEvent(bool paused);
 
     public static event PauseEvent OnPause;
     bool isBtnPressed;
+    bool seedDirtyFromUI;
 
     
     // Start is called before the first frame update
@@ -76,11 +77,8 @@ public class UIController : MonoBehaviour
         elemMove.setAlpha(lockImage, 0);
         elemMove.setAlpha(arrowImage,0);
         isBtnPressed = false;
-        panels.Add(sizePanel);
-        panels.Add(HeightPanel);
-        panels.Add(FeaturePanel);
-        panels.Add(GeneralPanel);
-        enablePanel(sizePanel);
+        seedInputField.onValueChanged.AddListener(_ => seedDirtyFromUI = true);
+        enableSizeParams();
     }
 
     void Update()
@@ -90,20 +88,12 @@ public class UIController : MonoBehaviour
         {
             case UIState.Playing:
                 {
-                    Time.timeScale = 1.0f;
                     menu.SetActive(false);
                     break;
                 }
             case UIState.Menu:
                 {
-                    Time.timeScale = 0.0f;
                     menu.SetActive(true);
-                    if (generateButton.IsInvoking())
-                    {
-                        updateParametersFile();
-                        updateMenuParameters();
-                        currState = UIState.Playing;
-                    }
                     break;
                 }
         }
@@ -134,18 +124,20 @@ public class UIController : MonoBehaviour
     }
 
 
-void updateState()
+    void updateState()
     {
         if (Input.GetKeyDown(KeyCode.Escape) || isBtnPressed)
         {
             if (currState == UIState.Playing)
             {
+                Time.timeScale = 0.0f;
                 updateMenuParameters();
                 currState = UIState.Menu;
                 OnPause?.Invoke(true);
             }
             else
             {
+                Time.timeScale = 1.0f;
                 updateParametersFile();
                 currState = UIState.Playing;
                 OnPause?.Invoke(false);
@@ -173,10 +165,10 @@ void updateState()
             Debug.LogError("Parameters asset is not assigned in the Inspector!");
             return;
         }
-        if (int.TryParse(seedInputField.text, out int seed))
-        {
-            parameters.CurrentSeed = seed;
+        if (seedDirtyFromUI && int.TryParse(seedInputField.text, out int seed)) {
+                parameters.CurrentSeed = seed;
         }
+        seedDirtyFromUI = false;
         parameters.OctaveCount = (int)octaveCountSlider.value;
         parameters.Lacunarity = lacunaritySlider.value;
         parameters.Persistence = persistenceSlider.value;
@@ -186,7 +178,7 @@ void updateState()
         parameters.CellSize = (int)cellSizeSlider.value;
 
         parameters.CurrAlgorithm = (NoiseAlgorithms)noiseAlgorithmDropdown.value;
-        parameters.TerrainColoring = (TerrainColoringParams)terrainColoringDropdown.value;
+        // parameters.TerrainColoring = (TerrainColoringParams)terrainColoringDropdown.value;
     }
 
 
@@ -200,8 +192,10 @@ void updateState()
             return;
         }
         // Input Field
+        if (EventSystem.current.currentSelectedGameObject == seedInputField.gameObject){
+            EventSystem.current.SetSelectedGameObject(null);
+        }
         seedInputField.text = parameters.CurrentSeed.ToString();
-
         // Sliders
         octaveCountSlider.value = parameters.OctaveCount;
         lacunaritySlider.value = parameters.Lacunarity;
@@ -218,20 +212,63 @@ void updateState()
 
     public void randomizeSeed() {
         parameters.CurrentSeed = UnityEngine.Random.Range(int.MinValue, int.MaxValue); // your current call :contentReference[oaicite:4]{index=4}
-        seedInputField.SetTextWithoutNotify(parameters.CurrentSeed.ToString());
-        seedInputField.ForceLabelUpdate();
+
+        if (seedInputField != null) {
+            if (UnityEngine.EventSystems.EventSystem.current != null &&
+                UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == seedInputField.gameObject) {
+                UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
+            }
+
+            seedInputField.SetTextWithoutNotify(parameters.CurrentSeed.ToString());
+            seedInputField.ForceLabelUpdate();
+        }
+
+        seedDirtyFromUI = false;
         updateMenuParameters();
     }
-    
-    void disableAllPanels() {
-        foreach(GameObject panel in panels) {
-            panel.SetActive(false);
-        }
+
+    public void enableSizeParams(){
+        turnOffAllElements();
+        updateParametersFile();
+        cellSizeSlider.transform.parent.gameObject.SetActive(true);
+        gridSizeSlider.transform.parent.gameObject.SetActive(true);
     }
 
-    public void enablePanel(GameObject panelToEnable) {
-        foreach(GameObject panel in panels) {
-            panel.SetActive(panel == panelToEnable);
-        }
+    public void enableHeightParams(){
+        turnOffAllElements();
+        updateParametersFile();
+        heightExagerationSlider.transform.parent.gameObject.SetActive(true);
+        rFactorSlider.transform.parent.gameObject.SetActive(true);
+    }
+
+    public void enableFeatureParams(){
+        turnOffAllElements();
+        updateParametersFile();
+        octaveCountSlider.transform.parent.gameObject.SetActive(true);
+        lacunaritySlider.transform.parent.gameObject.SetActive(true);
+        persistenceSlider.transform.parent.gameObject.SetActive(true);
+    }
+
+    public void enableGeneralParams() {
+        turnOffAllElements();
+        updateParametersFile();
+        seedInputField.transform.parent.gameObject.SetActive(true);
+        noiseAlgorithmDropdown.transform.parent.gameObject.SetActive(true);
+        generateRandSeed.gameObject.SetActive(true);
+
+    }
+
+    private void turnOffAllElements(){
+        cellSizeSlider.transform.parent.gameObject.SetActive(false);
+        gridSizeSlider.transform.parent.gameObject.SetActive(false);
+        heightExagerationSlider.transform.parent.gameObject.SetActive(false);
+        rFactorSlider.transform.parent.gameObject.SetActive(false);
+        octaveCountSlider.transform.parent.gameObject.SetActive(false);
+        lacunaritySlider.transform.parent.gameObject.SetActive(false);
+        persistenceSlider.transform.parent.gameObject.SetActive(false);
+        seedInputField.transform.parent.gameObject.SetActive(false);
+        noiseAlgorithmDropdown.transform.parent.gameObject.SetActive(false);
+        noiseAlgorithmDropdown.transform.parent.gameObject.SetActive(false);
+        generateRandSeed.gameObject.SetActive(false);
     }
 }

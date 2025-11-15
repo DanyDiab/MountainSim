@@ -23,7 +23,7 @@ MonoBehaviour:
   cellSize: 1
   terrainColoring: 0
   numPossibleElements: 20
-  layers: 5
+  layers: 1
   colors:
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 1, g: 1, b: 1, a: 0}

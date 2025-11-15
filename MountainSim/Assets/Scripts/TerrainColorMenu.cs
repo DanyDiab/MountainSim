@@ -49,6 +49,8 @@ public class TerrainColorMenu : MonoBehaviour
         desiredSpacing = new Vector2(10, 10);
         numColumns = 5;
         totalPossibleChoices = parameters.NumPossibleElements;
+        loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, layerPickerSubMenu.transform, loadPickMenu);
+
     }
 
     // Update is called once per frame

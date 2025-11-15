@@ -40,6 +40,7 @@ public class TerrainColorMenu : MonoBehaviour
     int totalPossibleChoices;
 
     void Start(){
+        LoadParameters();
         elementRectTransform = elementPicker.GetComponent<RectTransform>();
         elementPickerGrid = colorPickingPanel.GetComponent<GridLayoutGroup>();
         layerRectTransform = layerPicker.GetComponent<RectTransform>();

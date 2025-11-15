@@ -12,16 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 868fba14fbdadb440a1e3a07c728f5e3, type: 3}
   m_Name: Parameters
   m_EditorClassIdentifier: 
-  noiseAlgorithms: 0
-  octaveCount: 0
-  lacunarity: 0
+  currAlgorithm: 0
+  octaveCount: 1
+  lacunarity: 1.1
   persistence: 0
-  currentSeed: 0
-  heightExageration: 0
+  currentSeed: 235456714
+  heightExageration: 1
   rFactor: 0
-  gridSize: 0
-  cellSize: 0
+  gridSize: 1
+  cellSize: 1
   terrainColoring: 0
+  numPossibleElements: 20
+  layers: 5
   colors:
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 1, g: 1, b: 1, a: 0}

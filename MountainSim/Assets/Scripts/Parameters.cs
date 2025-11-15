@@ -4,22 +4,26 @@ using UnityEngine;
 public class Parameters : ScriptableObject
 {
     [Header("Generation Parameters")]
-    [SerializeField] private NoiseAlgorithms currAlgorithm;
-    [SerializeField] private int octaveCount;
-    [SerializeField] private float lacunarity;
-    [SerializeField] private float persistence;
-    [SerializeField] private int currentSeed;
-    [SerializeField] private float heightExageration;
-    [SerializeField] private int rFactor;
-    [SerializeField] private int gridSize;
-    [SerializeField] private int cellSize;
+    [SerializeField] NoiseAlgorithms currAlgorithm;
+    [SerializeField] int octaveCount;
+    [SerializeField] float lacunarity;
+    [SerializeField] float persistence;
+    [SerializeField] int currentSeed;
+    [SerializeField] float heightExageration;
+    [SerializeField] int rFactor;
+    [SerializeField] int gridSize;
+    [SerializeField] int cellSize;
 
     [Space(10)]
     [Header("Terrain Coloring Parameters")]
-    [SerializeField] private TerrainColoringParams terrainColoring;
+    [SerializeField] TerrainColoringParams terrainColoring;
+    
+    [SerializeField] int numPossibleElements;
+    [SerializeField] int layers;
+
     [ColorUsage(true,true)]
-    [SerializeField] private Color[] colors;
-    [SerializeField] private Texture2D[] textures;
+    [SerializeField] Color[] colors;
+    [SerializeField] Texture2D[] textures;
 
 
 // getters / setters 
@@ -93,5 +97,16 @@ public class Parameters : ScriptableObject
     {
         get => textures;
         set => textures = value;
+    }
+
+    public int NumPossibleElements
+    {
+        get => numPossibleElements;
+        set => numPossibleElements = value;
+    }
+    public int NumLayers
+    {
+        get => layers;
+        set => layers = value;
     }
 }

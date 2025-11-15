@@ -74,7 +74,7 @@ public class TerrainShapeMenu : MonoBehaviour
         cellSizeSlider.value = parameters.CellSize;
         noiseAlgorithmDropdown.value = (int)parameters.CurrAlgorithm;
         
-        seedDirtyFromUI = false; // Reset dirty flag
+        seedDirtyFromUI = false;
     }
 
     public void SaveParameters()

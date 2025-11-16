@@ -38,6 +38,7 @@ public class TerrainShapeMenu : MonoBehaviour
 
     void Start()
     {
+        SaveManger.LoadParameters(parameters);
         subPanels = new List<GameObject>
         {
             sizePanel,
@@ -84,6 +85,7 @@ public class TerrainShapeMenu : MonoBehaviour
             Debug.LogError("Parameters asset is not assigned in the Inspector!");
             return;
         }
+        SaveManger.SaveParameters(parameters);
 
         if (seedDirtyFromUI && int.TryParse(seedInputField.text, out int seed)) {
             parameters.CurrentSeed = seed;
@@ -108,10 +110,8 @@ public class TerrainShapeMenu : MonoBehaviour
         seedDirtyFromUI = false; // The parameter is already updated, no need to parse
     }
 
-    private void ShowSubPanel(GameObject panelToShow)
-    {
-        foreach(GameObject panel in subPanels)
-        {
+    private void ShowSubPanel(GameObject panelToShow){
+        foreach(GameObject panel in subPanels){
             panel.SetActive(panel == panelToShow);
         }
     }

@@ -40,6 +40,7 @@ public class TerrainColorMenu : MonoBehaviour
     int totalPossibleChoices;
 
     void Start(){
+        SaveManger.LoadParameters(parameters);
         LoadParameters();
         elementRectTransform = elementPicker.GetComponent<RectTransform>();
         elementPickerGrid = colorPickingPanel.GetComponent<GridLayoutGroup>();
@@ -50,7 +51,6 @@ public class TerrainColorMenu : MonoBehaviour
         numColumns = 5;
         totalPossibleChoices = parameters.NumPossibleElements;
         loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, layerPickerSubMenu.transform, loadPickMenu);
-
     }
 
     // Update is called once per frame
@@ -100,13 +100,13 @@ public class TerrainColorMenu : MonoBehaviour
 
     public void SaveParameters()
     {
+        SaveManger.SaveParameters(parameters);
         if (parameters == null)
         {
             Debug.LogError("Parameters asset is not assigned in the Inspector!");
             return;
         }
         parameters.NumLayers = (int) numberLayers.value;
-
     }
 
     public void loadPickMenu(int elementIndex) {

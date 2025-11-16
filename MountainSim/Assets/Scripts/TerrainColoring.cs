@@ -87,7 +87,6 @@ public class TerrainColoring : MonoBehaviour
         mr.material = currMat;
         mesh = meshFilter.mesh;
         (float min, float max) = calculateGradients(mesh);
-        Debug.Log("min grad: " + min + "    max Grad: " + max);
         float[] bounds = determineBounds(parameters.Textures.Length,min,max);
         currMat.SetFloatArray("_Bounds", bounds);
         currMat.SetInt("_numBounds", bounds.Length);

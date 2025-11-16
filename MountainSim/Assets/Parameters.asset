@@ -13,18 +13,19 @@ MonoBehaviour:
   m_Name: Parameters
   m_EditorClassIdentifier: 
   currAlgorithm: 0
-  octaveCount: 1
-  lacunarity: 1.1
-  persistence: 0
-  currentSeed: 235456714
-  heightExageration: 1
-  rFactor: 0
-  gridSize: 1
-  cellSize: 1
+  octaveCount: 13
+  lacunarity: 2.1960294
+  persistence: 0.5264706
+  currentSeed: 1739712347
+  heightExageration: 1780.2329
+  rFactor: 38
+  gridSize: 7
+  cellSize: 36
   terrainColoring: 0
   numPossibleElements: 20
   layers: 1
   colors:
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 1, g: 1, b: 1, a: 0}
-  textures: []
+  textures:
+  - {fileID: 0}

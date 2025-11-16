@@ -33,6 +33,7 @@ public class UIController : MonoBehaviour
 
     [Header("Menu Controllers")]
     [SerializeField] TerrainShapeMenu terrainShapeMenuController;
+    [SerializeField] TerrainColorMenu terrainColorMenuController;
 
     public delegate void PauseEvent(bool paused);
     public static event PauseEvent OnPause;
@@ -102,6 +103,7 @@ public class UIController : MonoBehaviour
         isGeneratePressed = false;
 
         if (terrainShapeMenuController) terrainShapeMenuController.SaveParameters();
+        if (terrainColorMenuController) terrainColorMenuController.SaveParameters();
     }
 
     /// <summary>
@@ -112,7 +114,6 @@ public class UIController : MonoBehaviour
         isGeneratePressed = true;
     }
 
-    // --- This section handles switching the MAIN menus ---
 
     /// <summary>
     /// Hides all main menus and shows the one specified.

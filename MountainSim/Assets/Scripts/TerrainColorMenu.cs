@@ -48,21 +48,21 @@ public class TerrainColorMenu : MonoBehaviour
         LoadParameters();
         SaveParameters();
         elementRectTransform = elementPicker.GetComponent<RectTransform>();
-        elementPickerGrid = colorPickingPanel.GetComponent<GridLayoutGroup>();
+        elementPickerGrid = colorPickingPanel.GetComponentInChildren<GridLayoutGroup>();
         layerRectTransform = layerPicker.GetComponent<RectTransform>();
         layerPickerGrid = layerPickerSubMenu.GetComponent<GridLayoutGroup>();
         desiredCellSize = new Vector2(100, 100);
         desiredSpacing = new Vector2(10, 10);
         numColumns = 5;
         totalPossibleChoices = parameters.NumPossibleElements;
-        loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, layerPickerSubMenu.transform, loadPickMenu, currTextures);
+        loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
     }
 
     // Update is called once per frame
     void Update(){
         if(parameters.Layers == numberLayers.value && !updateUI) return;
         SaveParameters();
-        loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, layerPickerSubMenu.transform, loadPickMenu, currTextures);
+        loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
         updateUI = false;
     }
 
@@ -115,7 +115,7 @@ public void SaveParameters()
         SaveManger.SaveParameters(parameters);
     }
 
-    public void loadDyanmicGrid(GridLayoutGroup grid, int total, GameObject prefab, Transform parent, Action<int> onElementClickAction, Texture2D[] texList){
+    public void loadDyanmicGrid(GridLayoutGroup grid, int total, GameObject prefab, Action<int> onElementClickAction, Texture2D[] texList){
         if (grid == null) {
             Debug.LogError("Grid Layout Group is not assigned!");
             return;
@@ -124,12 +124,12 @@ public void SaveParameters()
         grid.cellSize = desiredCellSize;
         grid.spacing = desiredSpacing;
 
-        foreach (Transform child in parent) {
+        foreach (Transform child in grid.transform) {
             Destroy(child.gameObject);
         }
 
         for (int i = 0; i < total; i++) {
-            GameObject newElement = Instantiate(prefab, parent);
+            GameObject newElement = Instantiate(prefab, grid.transform);
             newElement.transform.localScale = Vector3.one;
             Button button = newElement.GetComponentInChildren<Button>();
             RawImage img = newElement.GetComponentInChildren<RawImage>();
@@ -150,7 +150,7 @@ public void SaveParameters()
         currentIndexEditing = elementIndex;
         mainPanel.SetActive(false);
         colorPickingPanel.SetActive(true);
-        loadDyanmicGrid(elementPickerGrid, totalPossibleChoices,elementPicker, colorPickingPanel.transform, loadMainMenu, textureList);
+        loadDyanmicGrid(elementPickerGrid, totalPossibleChoices,elementPicker, loadMainMenu, textureList);
     }
 
     public void loadMainMenu(int elementIndex) {

@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: Parameters
   m_EditorClassIdentifier: 
   currAlgorithm: 0
-  octaveCount: 13
-  lacunarity: 2.1960294
-  persistence: 0.5264706
-  currentSeed: 1739712347
-  heightExageration: 1780.2329
-  rFactor: 38
-  gridSize: 7
-  cellSize: 17
-  terrainColoring: 0
+  octaveCount: 7
+  lacunarity: 3.1172059
+  persistence: 0.29705882
+  currentSeed: 1270056340
+  heightExageration: 2927.177
+  rFactor: 1
+  gridSize: 36
+  cellSize: 35
+  terrainColoring: 1
   numPossibleElements: 6
-  layers: 5
+  layers: 3
   colors:
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 1, g: 1, b: 1, a: 0}
@@ -36,8 +36,6 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 133dc91bc0027424f846f4cff389cb9f, type: 3}
   - {fileID: 2800000, guid: 70c2a3c2834790547a7ba7854f98782f, type: 3}
   currTextures:
-  - {fileID: 2800000, guid: 133dc91bc0027424f846f4cff389cb9f, type: 3}
-  - {fileID: 2800000, guid: 0ff3d736d50e41a4c9f26cfbfd0672e6, type: 3}
-  - {fileID: 2800000, guid: aa701e5be2dbcd24aad4fb9c3ca284da, type: 3}
-  - {fileID: 2800000, guid: 0ff3d736d50e41a4c9f26cfbfd0672e6, type: 3}
   - {fileID: 2800000, guid: b900361e13e6eaa44963cb851faf3ed3, type: 3}
+  - {fileID: 2800000, guid: 0ff3d736d50e41a4c9f26cfbfd0672e6, type: 3}
+  - {fileID: 2800000, guid: 8a3ef1722a8fd3a4c8353e18116e7a19, type: 3}

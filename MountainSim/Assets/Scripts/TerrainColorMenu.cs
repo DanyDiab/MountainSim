@@ -12,7 +12,8 @@ public class TerrainColorMenu : MonoBehaviour
     [Header("Menu UI Elements")]
     [SerializeField] Slider numberLayers;
     [SerializeField] TMP_Dropdown colorAlgo;
-    Texture[] textureList;
+    Texture2D[] textureList;
+    Texture2D[] currTextures;
 
     // Buttons
     [Header("Picker Elements")]
@@ -32,6 +33,7 @@ public class TerrainColorMenu : MonoBehaviour
     RectTransform layerRectTransform;
     RectTransform elementRectTransform;
     int currentNumLayers;
+    int currentIndexEditing;
 
 
 
@@ -39,10 +41,12 @@ public class TerrainColorMenu : MonoBehaviour
     Vector2 desiredSpacing;
     int numColumns;
     int totalPossibleChoices;
+    bool updateUI;
 
     void Start(){
         SaveManger.LoadParameters(parameters);
         LoadParameters();
+        SaveParameters();
         elementRectTransform = elementPicker.GetComponent<RectTransform>();
         elementPickerGrid = colorPickingPanel.GetComponent<GridLayoutGroup>();
         layerRectTransform = layerPicker.GetComponent<RectTransform>();
@@ -51,14 +55,15 @@ public class TerrainColorMenu : MonoBehaviour
         desiredSpacing = new Vector2(10, 10);
         numColumns = 5;
         totalPossibleChoices = parameters.NumPossibleElements;
-        loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, layerPickerSubMenu.transform, loadPickMenu);
+        loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, layerPickerSubMenu.transform, loadPickMenu, currTextures);
     }
 
     // Update is called once per frame
     void Update(){
-        if(parameters.NumLayers == numberLayers.value) return;
+        if(parameters.Layers == numberLayers.value && !updateUI) return;
         SaveParameters();
-        loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, layerPickerSubMenu.transform, loadPickMenu);
+        loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, layerPickerSubMenu.transform, loadPickMenu, currTextures);
+        updateUI = false;
     }
 
 
@@ -72,11 +77,45 @@ public class TerrainColorMenu : MonoBehaviour
             Debug.LogError("Parameters asset is not assigned in the Inspector!");
             return;
         }
-        numberLayers.value = parameters.NumLayers;
+        colorAlgo.value = (int)parameters.TerrainColoring;
+        numberLayers.value = parameters.Layers;
+        currTextures = parameters.CurrTextures;
         textureList = parameters.AllTextures;
     }
 
-    public void loadDyanmicGrid(GridLayoutGroup grid, int total, GameObject prefab, Transform parent, Action<int> onElementClickAction) {
+public void SaveParameters()
+    {
+        if (parameters == null)
+        {
+            Debug.LogError("Parameters asset is not assigned in the Inspector!");
+            return;
+        }
+
+        int newLayerCount = (int)numberLayers.value;
+
+        if (currTextures == null || currTextures.Length != newLayerCount)
+        {
+            Texture2D[] newTextures = new Texture2D[newLayerCount];
+
+            if (currTextures != null)
+            {
+                int itemsToCopy = Mathf.Min(newLayerCount, currTextures.Length);
+                for (int i = 0; i < itemsToCopy; i++)
+                {
+                    newTextures[i] = currTextures[i];
+                }
+            }
+            
+            currTextures = newTextures;
+        }
+
+        parameters.TerrainColoring = (TerrainColoringParams)colorAlgo.value;
+        parameters.Layers = newLayerCount;
+        parameters.CurrTextures = currTextures;
+        SaveManger.SaveParameters(parameters);
+    }
+
+    public void loadDyanmicGrid(GridLayoutGroup grid, int total, GameObject prefab, Transform parent, Action<int> onElementClickAction, Texture2D[] texList){
         if (grid == null) {
             Debug.LogError("Grid Layout Group is not assigned!");
             return;
@@ -94,33 +133,30 @@ public class TerrainColorMenu : MonoBehaviour
             newElement.transform.localScale = Vector3.one;
             Button button = newElement.GetComponentInChildren<Button>();
             RawImage img = newElement.GetComponentInChildren<RawImage>();
-            if (img != null) {
-                img.texture = textureList[i];
+            if (img != null && texList[i] != null) {
+                img.texture = texList[i];
             }
             if (button != null) {
-                button.onClick.AddListener(() => onElementClickAction(i));
+                int capturedIndex = i;
+                button.onClick.AddListener(() => onElementClickAction(capturedIndex));
             }
         }
     }
 
-    public void SaveParameters()
-    {
-        SaveManger.SaveParameters(parameters);
-        if (parameters == null)
-        {
-            Debug.LogError("Parameters asset is not assigned in the Inspector!");
-            return;
-        }
-        parameters.NumLayers = (int) numberLayers.value;
-    }
+
 
     public void loadPickMenu(int elementIndex) {
+        Debug.Log("Loading pick menu for element index: " + elementIndex);
+        currentIndexEditing = elementIndex;
         mainPanel.SetActive(false);
         colorPickingPanel.SetActive(true);
-        loadDyanmicGrid(elementPickerGrid, totalPossibleChoices,elementPicker, colorPickingPanel.transform, loadMainMenu);
+        loadDyanmicGrid(elementPickerGrid, totalPossibleChoices,elementPicker, colorPickingPanel.transform, loadMainMenu, textureList);
     }
 
     public void loadMainMenu(int elementIndex) {
+        Debug.Log("Picked index " + elementIndex + " for layer " + currentIndexEditing);
+        parameters.CurrTextures[currentIndexEditing] = textureList[elementIndex];
+        updateUI = true;
         mainPanel.SetActive(true);
         colorPickingPanel.SetActive(false);
     }

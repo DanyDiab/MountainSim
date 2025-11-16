@@ -105,13 +105,13 @@ public class Parameters : ScriptableObject
         get => currTextures;
         set => currTextures = value;
     }
-    
+
     public int NumPossibleElements
     {
         get => numPossibleElements;
         set => numPossibleElements = value;
     }
-    public int NumLayers
+    public int Layers
     {
         get => layers;
         set => layers = value;

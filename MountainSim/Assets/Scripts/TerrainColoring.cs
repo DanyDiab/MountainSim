@@ -69,14 +69,14 @@ public class TerrainColoring : MonoBehaviour
         currMat = textureMat;
         mr.material = currMat;
         mesh = meshFilter.mesh;
-        bounds = determineBounds(parameters.Textures.Length, mesh.bounds.min.y, mesh.bounds.max.y);
+        bounds = determineBounds(parameters.CurrTextures.Length, mesh.bounds.min.y, mesh.bounds.max.y);
         currMat.SetFloatArray("_Bounds", bounds);
         currMat.SetInt("_numBounds", bounds.Length);
         Texture2DArray texArray = new Texture2DArray(
             1024, 1024, bounds.Length, TextureFormat.ARGB32, true
         );
-        for (int i = 0; i < parameters.Textures.Length; i++) {
-            Texture2D normalTexture = tn.normalizeTexture(parameters.Textures[i]);
+        for (int i = 0; i < parameters.CurrTextures.Length; i++) {
+            Texture2D normalTexture = tn.normalizeTexture(parameters.CurrTextures[i]);
             Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
         }
         currMat.SetTexture("_Textures", texArray);   
@@ -87,14 +87,14 @@ public class TerrainColoring : MonoBehaviour
         mr.material = currMat;
         mesh = meshFilter.mesh;
         (float min, float max) = calculateGradients(mesh);
-        float[] bounds = determineBounds(parameters.Textures.Length,min,max);
+        float[] bounds = determineBounds(parameters.CurrTextures.Length,min,max);
         currMat.SetFloatArray("_Bounds", bounds);
         currMat.SetInt("_numBounds", bounds.Length);
         Texture2DArray texArray = new Texture2DArray(
             1024, 1024, bounds.Length, TextureFormat.ARGB32, true
         );
-        for (int i = 0; i < parameters.Textures.Length; i++) {
-            Texture2D normalTexture = tn.normalizeTexture(parameters.Textures[i]);
+        for (int i = 0; i < parameters.CurrTextures.Length; i++) {
+            Texture2D normalTexture = tn.normalizeTexture(parameters.CurrTextures[i]);
             Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
         }
         currMat.SetTexture("_Textures", texArray);  

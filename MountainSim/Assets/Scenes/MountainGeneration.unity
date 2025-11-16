@@ -7996,7 +7996,6 @@ MonoBehaviour:
   parameters: {fileID: 11400000, guid: 6d9e8ce32b878f743a790db6e8bd6a21, type: 2}
   numberLayers: {fileID: 1605363563}
   colorAlgo: {fileID: 310677325}
-  textureList: []
   elementPicker: {fileID: 8947392199501991580, guid: d5362ca4e52bddf4ebc6c1b862d96b28, type: 3}
   layerPicker: {fileID: 4070557296332719000, guid: c32f6dc3c2fffee4e8d4b7cc5dfaf29e, type: 3}
   mainPanel: {fileID: 580850714}

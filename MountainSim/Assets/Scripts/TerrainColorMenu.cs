@@ -12,9 +12,10 @@ public class TerrainColorMenu : MonoBehaviour
     [Header("Menu UI Elements")]
     [SerializeField] Slider numberLayers;
     [SerializeField] TMP_Dropdown colorAlgo;
+    Texture[] textureList;
+
     // Buttons
-    [Header("TextureList")]
-    [SerializeField] Texture[] textureList;
+    [Header("Picker Elements")]
     [SerializeField] GameObject elementPicker;
     [SerializeField] GameObject layerPicker;
 
@@ -72,7 +73,7 @@ public class TerrainColorMenu : MonoBehaviour
             return;
         }
         numberLayers.value = parameters.NumLayers;
-
+        textureList = parameters.AllTextures;
     }
 
     public void loadDyanmicGrid(GridLayoutGroup grid, int total, GameObject prefab, Transform parent, Action<int> onElementClickAction) {
@@ -92,6 +93,10 @@ public class TerrainColorMenu : MonoBehaviour
             GameObject newElement = Instantiate(prefab, parent);
             newElement.transform.localScale = Vector3.one;
             Button button = newElement.GetComponentInChildren<Button>();
+            RawImage img = newElement.GetComponentInChildren<RawImage>();
+            if (img != null) {
+                img.texture = textureList[i];
+            }
             if (button != null) {
                 button.onClick.AddListener(() => onElementClickAction(i));
             }

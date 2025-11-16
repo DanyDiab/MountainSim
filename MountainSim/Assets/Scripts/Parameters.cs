@@ -23,7 +23,9 @@ public class Parameters : ScriptableObject
 
     [ColorUsage(true,true)]
     [SerializeField] Color[] colors;
-    [SerializeField] Texture2D[] textures;
+    [SerializeField] Texture2D[] allTextures;
+    [SerializeField] Texture2D[] currTextures;
+
 
 
 // getters / setters 
@@ -93,12 +95,17 @@ public class Parameters : ScriptableObject
         set => colors = value;
     }
 
-    public Texture2D[] Textures
+    public Texture2D[] AllTextures
     {
-        get => textures;
-        set => textures = value;
+        get => allTextures;
+        set => allTextures = value;
     }
-
+    public Texture2D[] CurrTextures
+    {
+        get => currTextures;
+        set => currTextures = value;
+    }
+    
     public int NumPossibleElements
     {
         get => numPossibleElements;

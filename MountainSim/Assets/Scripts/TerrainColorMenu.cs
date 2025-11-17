@@ -12,34 +12,29 @@ public class TerrainColorMenu : MonoBehaviour
     [Header("Menu UI Elements")]
     [SerializeField] Slider numberLayers;
     [SerializeField] TMP_Dropdown colorAlgo;
+    [SerializeField] Slider uvScaleSlider;
     Texture2D[] textureList;
     Texture2D[] currTextures;
+
 
     // Buttons
     [Header("Picker Elements")]
     [SerializeField] GameObject elementPicker;
     [SerializeField] GameObject layerPicker;
-
-
-    [Header("Panels")]
-    [SerializeField] GameObject mainPanel;
-    [SerializeField] GameObject colorPickingPanel;
-    [SerializeField] GameObject layerPickerSubMenu;
-
-    GridLayoutGroup elementPickerGrid;
+    GridLayoutGroup texturePickerGrid;
     GridLayoutGroup layerPickerGrid;
-
-
-    RectTransform layerRectTransform;
-    RectTransform elementRectTransform;
-    int currentNumLayers;
     int currentIndexEditing;
 
 
+    [Header("Panels")]
+    [SerializeField] GameObject LayerPanel;
+    [SerializeField] GameObject LayerPickingGridParent;
+    [SerializeField] GameObject TexturePickerSubMenu;
+    [SerializeField] GameObject otherPanel;
 
+    // other
     Vector2 desiredCellSize;
     Vector2 desiredSpacing;
-    int numColumns;
     int totalPossibleChoices;
     bool updateUI;
 
@@ -47,13 +42,10 @@ public class TerrainColorMenu : MonoBehaviour
         SaveManger.LoadParameters(parameters);
         LoadParameters();
         SaveParameters();
-        elementRectTransform = elementPicker.GetComponent<RectTransform>();
-        elementPickerGrid = colorPickingPanel.GetComponentInChildren<GridLayoutGroup>();
-        layerRectTransform = layerPicker.GetComponent<RectTransform>();
-        layerPickerGrid = layerPickerSubMenu.GetComponent<GridLayoutGroup>();
+        texturePickerGrid = TexturePickerSubMenu.GetComponentInChildren<GridLayoutGroup>();
+        layerPickerGrid = LayerPickingGridParent.GetComponent<GridLayoutGroup>();
         desiredCellSize = new Vector2(100, 100);
         desiredSpacing = new Vector2(10, 10);
-        numColumns = 5;
         totalPossibleChoices = parameters.NumPossibleElements;
         loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
     }
@@ -81,6 +73,7 @@ public class TerrainColorMenu : MonoBehaviour
         numberLayers.value = parameters.Layers;
         currTextures = parameters.CurrTextures;
         textureList = parameters.AllTextures;
+        uvScaleSlider.value = parameters.UVScale;
     }
 
 public void SaveParameters()
@@ -108,7 +101,7 @@ public void SaveParameters()
             
             currTextures = newTextures;
         }
-
+        parameters.UVScale = uvScaleSlider.value;
         parameters.TerrainColoring = (TerrainColoringParams)colorAlgo.value;
         parameters.Layers = newLayerCount;
         parameters.CurrTextures = currTextures;
@@ -145,19 +138,31 @@ public void SaveParameters()
 
 
 
-    public void loadPickMenu(int elementIndex) {
+    void loadPickMenu(int elementIndex) {
         Debug.Log("Loading pick menu for element index: " + elementIndex);
         currentIndexEditing = elementIndex;
-        mainPanel.SetActive(false);
-        colorPickingPanel.SetActive(true);
-        loadDyanmicGrid(elementPickerGrid, totalPossibleChoices,elementPicker, loadMainMenu, textureList);
+        LayerPanel.SetActive(false);
+        TexturePickerSubMenu.SetActive(true);
+        loadDyanmicGrid(texturePickerGrid, totalPossibleChoices,elementPicker, loadMainMenu, textureList);
     }
 
-    public void loadMainMenu(int elementIndex) {
+    void loadMainMenu(int elementIndex) {
         Debug.Log("Picked index " + elementIndex + " for layer " + currentIndexEditing);
         parameters.CurrTextures[currentIndexEditing] = textureList[elementIndex];
         updateUI = true;
-        mainPanel.SetActive(true);
-        colorPickingPanel.SetActive(false);
+        LayerPanel.SetActive(true);
+        TexturePickerSubMenu.SetActive(false);
     }
+
+    public void loadLayerPanel() {
+        LayerPanel.SetActive(true);
+        otherPanel.SetActive(false);
+    }
+
+    public void loadOtherPanel() {
+        LayerPanel.SetActive(false);
+        otherPanel.SetActive(true);
+    }
+
+
 }

@@ -25,6 +25,7 @@ public class Parameters : ScriptableObject
     [SerializeField] Color[] colors;
     [SerializeField] Texture2D[] allTextures;
     [SerializeField] Texture2D[] currTextures;
+    [SerializeField] float uvScale;
 
 
 
@@ -115,5 +116,10 @@ public class Parameters : ScriptableObject
     {
         get => layers;
         set => layers = value;
+    }
+    public float UVScale
+    {
+        get => uvScale;
+        set => uvScale = value;
     }
 }

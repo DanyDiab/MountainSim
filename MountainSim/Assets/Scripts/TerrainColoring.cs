@@ -72,6 +72,7 @@ public class TerrainColoring : MonoBehaviour
         bounds = determineBounds(parameters.Layers, mesh.bounds.min.y, mesh.bounds.max.y);
         currMat.SetFloatArray("_Bounds", bounds);
         currMat.SetInt("_numBounds", bounds.Length);
+        currMat.SetFloat("_TilingFactor",parameters.UVScale);
         Texture2DArray texArray = new Texture2DArray(
             1024, 1024, bounds.Length, TextureFormat.ARGB32, true
         );
@@ -90,6 +91,7 @@ public class TerrainColoring : MonoBehaviour
         float[] bounds = determineBounds(parameters.Layers,min,max);
         currMat.SetFloatArray("_Bounds", bounds);
         currMat.SetInt("_numBounds", bounds.Length);
+        currMat.SetFloat("_TilingFactor",parameters.UVScale);
         Texture2DArray texArray = new Texture2DArray(
             1024, 1024, bounds.Length, TextureFormat.ARGB32, true
         );

@@ -33,8 +33,6 @@ public class TerrainColorMenu : MonoBehaviour
     [SerializeField] GameObject otherPanel;
 
     // other
-    Vector2 desiredCellSize;
-    Vector2 desiredSpacing;
     int totalPossibleChoices;
     bool updateUI;
 
@@ -44,8 +42,6 @@ public class TerrainColorMenu : MonoBehaviour
         SaveParameters();
         texturePickerGrid = TexturePickerSubMenu.GetComponentInChildren<GridLayoutGroup>();
         layerPickerGrid = LayerPickingGridParent.GetComponent<GridLayoutGroup>();
-        desiredCellSize = new Vector2(100, 100);
-        desiredSpacing = new Vector2(10, 10);
         totalPossibleChoices = parameters.NumPossibleElements;
         loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
     }
@@ -114,8 +110,6 @@ public void SaveParameters()
             return;
         }
 
-        grid.cellSize = desiredCellSize;
-        grid.spacing = desiredSpacing;
 
         foreach (Transform child in grid.transform) {
             Destroy(child.gameObject);

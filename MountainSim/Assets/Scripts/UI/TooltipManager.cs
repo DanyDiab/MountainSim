@@ -8,6 +8,7 @@ public class TooltipManager : MonoBehaviour
 {
     static GameObject tooltip; 
     static TextMeshProUGUI ttText;
+    [SerializeField] Vector2 offset;
     
 
     void Awake(){
@@ -23,7 +24,6 @@ public class TooltipManager : MonoBehaviour
 
     void moveToolTipToMouse(){
         Vector2 mousePos = Input.mousePosition;
-        Vector2 offset = new Vector2(15, -15);
         Vector2 finalPos = mousePos + offset;
         tooltip.transform.position = finalPos;
     }

@@ -84,7 +84,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _TVal: 1
-    - _TilingFactor: 21.897058
+    - _TilingFactor: 4.09853
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

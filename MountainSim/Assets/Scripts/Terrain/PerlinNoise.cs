@@ -28,14 +28,14 @@ public class PerlinNoise : MonoBehaviour
                 float sampleX = (float)j / cellSize;
                 float sampleY = (float)i / cellSize;
                 float brightness = getPerlinValue(sampleX,sampleY, grads, cellSize, gridSize);
-                pixels[i * cellSize + j] = new Color(brightness,brightness,brightness);
+                pixels[i * width + j] = new Color(brightness,brightness,brightness);
             }
         }
         return pixels;
     }
 
 
-public float getPerlinValue(float sampleX, float sampleY, Vector2[,] grads, int sizeOfCell, int sizeOfGrid)
+public float getPerlinValue(float sampleX, float sampleY, Vector2[,] grads, int sizeOfCell, int sizeOfGrid, bool useTiling = false)
     {
         int gridX = Mathf.FloorToInt(sampleX);
         int gridY = Mathf.FloorToInt(sampleY);
@@ -43,13 +43,26 @@ public float getPerlinValue(float sampleX, float sampleY, Vector2[,] grads, int 
         float localX = sampleX - gridX;
         float localY = sampleY - gridY;
 
-        int gridX_0 = gridX % sizeOfGrid;
-        int gridY_0 = gridY % sizeOfGrid;
-        if (gridX_0 < 0) gridX_0 += sizeOfGrid;
-        if (gridY_0 < 0) gridY_0 += sizeOfGrid;
+        int gridX_0, gridY_0, gridX_1, gridY_1;
 
-        int gridX_1 = (gridX_0 + 1) % sizeOfGrid;
-        int gridY_1 = (gridY_0 + 1) % sizeOfGrid;
+        if (useTiling)
+        {
+            gridX_0 = gridX % sizeOfGrid;
+            gridY_0 = gridY % sizeOfGrid;
+            if (gridX_0 < 0) gridX_0 += sizeOfGrid;
+            if (gridY_0 < 0) gridY_0 += sizeOfGrid;
+
+            gridX_1 = (gridX_0 + 1) % sizeOfGrid;
+            gridY_1 = (gridY_0 + 1) % sizeOfGrid;
+        }
+        else
+        {
+            gridX_0 = gridX;
+            gridY_0 = gridY;
+            gridX_1 = gridX + 1;
+            gridY_1 = gridY + 1;
+        }
+
 
         Vector2 tlGrad = grads[gridX_0, gridY_0];
         Vector2 trGrad = grads[gridX_1, gridY_0];

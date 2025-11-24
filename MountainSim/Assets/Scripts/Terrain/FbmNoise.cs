@@ -50,10 +50,10 @@ public class FbmNoise : MonoBehaviour
                     float y = ((float)i / width * freqeuncy) + (offset.y * freqeuncy);
                     float val;
                     if(ridge){
-                        val = 1 - math.abs(perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize));
+                        val = 1 - math.abs(perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize, true));
                     }
                     else{
-                        val = perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize);
+                        val = perlinNoise.getPerlinValue(x , y, gradientVectors, cellSize, gridSize, true);
                     }
                     float normalized = (val + 1f) / 2f;
                     float brightness = normalized * amplitude;

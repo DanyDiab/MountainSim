@@ -17,6 +17,13 @@ public class TerrainShapeMenu : MonoBehaviour
     [Header("Menu UI Elements")]
     //input fields 
     [SerializeField] TMP_InputField seedInputField;
+    [SerializeField] TMP_InputField octaveCountInputField;
+    [SerializeField] TMP_InputField lacunarityInputField;
+    [SerializeField] TMP_InputField persistenceInputField;
+    [SerializeField] TMP_InputField heightExagerationInputField;
+    [SerializeField] TMP_InputField rFactorInputField;
+    [SerializeField] TMP_InputField gridSizeInputField;
+    [SerializeField] TMP_InputField cellSizeInputField;
 
     // Sliders
     [SerializeField] Slider octaveCountSlider;
@@ -32,6 +39,8 @@ public class TerrainShapeMenu : MonoBehaviour
 
     // Buttons
     [SerializeField] Button generateRandSeed;
+
+    
 
     List<GameObject> subPanels;
     bool seedDirtyFromUI;
@@ -51,6 +60,23 @@ public class TerrainShapeMenu : MonoBehaviour
 
         seedInputField.onValueChanged.AddListener(_ => seedDirtyFromUI = true);
         
+        // Link sliders to input fields
+        octaveCountSlider.onValueChanged.AddListener(value => octaveCountInputField.SetTextWithoutNotify(((int)value).ToString()));
+        lacunaritySlider.onValueChanged.AddListener(value => lacunarityInputField.SetTextWithoutNotify(value.ToString("F2")));
+        persistenceSlider.onValueChanged.AddListener(value => persistenceInputField.SetTextWithoutNotify(value.ToString("F2")));
+        heightExagerationSlider.onValueChanged.AddListener(value => heightExagerationInputField.SetTextWithoutNotify(value.ToString("F2")));
+        rFactorSlider.onValueChanged.AddListener(value => rFactorInputField.SetTextWithoutNotify(((int)value).ToString()));
+        gridSizeSlider.onValueChanged.AddListener(value => gridSizeInputField.SetTextWithoutNotify(((int)value).ToString()));
+        cellSizeSlider.onValueChanged.AddListener(value => cellSizeInputField.SetTextWithoutNotify(((int)value).ToString()));
+
+        // Link input fields to sliders
+        octaveCountInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(octaveCountSlider, text));
+        lacunarityInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(lacunaritySlider, text));
+        persistenceInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(persistenceSlider, text));
+        heightExagerationInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(heightExagerationSlider, text));
+        rFactorInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(rFactorSlider, text));
+        gridSizeInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(gridSizeSlider, text));
+        cellSizeInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(cellSizeSlider, text));
     }
 
     /// <summary>
@@ -74,6 +100,15 @@ public class TerrainShapeMenu : MonoBehaviour
         gridSizeSlider.value = parameters.GridSize;
         cellSizeSlider.value = parameters.CellSize;
         noiseAlgorithmDropdown.value = (int)parameters.CurrAlgorithm;
+
+        // Update input fields with loaded values
+        octaveCountInputField.SetTextWithoutNotify(parameters.OctaveCount.ToString());
+        lacunarityInputField.SetTextWithoutNotify(parameters.Lacunarity.ToString("F2"));
+        persistenceInputField.SetTextWithoutNotify(parameters.Persistence.ToString("F2"));
+        heightExagerationInputField.SetTextWithoutNotify(parameters.HeightExageration.ToString("F2"));
+        rFactorInputField.SetTextWithoutNotify(parameters.RFactor.ToString());
+        gridSizeInputField.SetTextWithoutNotify(parameters.GridSize.ToString());
+        cellSizeInputField.SetTextWithoutNotify(parameters.CellSize.ToString());
         
         seedDirtyFromUI = false;
     }
@@ -108,6 +143,14 @@ public class TerrainShapeMenu : MonoBehaviour
         parameters.CurrentSeed = Random.Range(int.MinValue, int.MaxValue);
         seedInputField.SetTextWithoutNotify(parameters.CurrentSeed.ToString());
         seedDirtyFromUI = false; // The parameter is already updated, no need to parse
+    }
+
+    private void UpdateSliderFromInput(Slider slider, string text)
+    {
+        if (float.TryParse(text, out float value))
+        {
+            slider.value = Mathf.Clamp(value, slider.minValue, slider.maxValue);
+        }
     }
 
     private void ShowSubPanel(GameObject panelToShow){

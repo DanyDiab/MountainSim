@@ -76,11 +76,7 @@ public class UIController : MonoBehaviour
         }
         else if (currState == UIState.Menu)
         {
-            if (Input.GetKeyDown(KeyCode.Escape)){
-                CloseAndSaveMenu();
-            }
-            if (isGeneratePressed || Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
-            {
+            if (Input.GetKeyDown(KeyCode.Escape) || isGeneratePressed ){
                 CloseAndSaveMenu();
             }
         }

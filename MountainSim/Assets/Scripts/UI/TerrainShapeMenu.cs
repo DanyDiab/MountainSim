@@ -40,13 +40,16 @@ public class TerrainShapeMenu : MonoBehaviour
     // Buttons
     [SerializeField] Button generateRandSeed;
 
-    
+    [Header("Complexity Warning")]
+    [SerializeField] List<GameObject> warnIcons;
 
+    float complexityTresh;
     List<GameObject> subPanels;
     bool seedDirtyFromUI;
 
     void Start()
     {
+        complexityTresh = 1000000;
         SaveManger.LoadParameters(parameters);
         subPanels = new List<GameObject>
         {
@@ -55,28 +58,31 @@ public class TerrainShapeMenu : MonoBehaviour
             FeaturePanel,
             GeneralPanel
         };
+        addOnClickListeners();
+        ShowSubPanel(sizePanel);
+        UpdateComplexityWarning();
+    }
 
-        ShowSubPanel(sizePanel); 
-
+    void addOnClickListeners() {
         seedInputField.onValueChanged.AddListener(_ => seedDirtyFromUI = true);
-        
+
         // Link sliders to input fields
-        octaveCountSlider.onValueChanged.AddListener(value => octaveCountInputField.SetTextWithoutNotify(((int)value).ToString()));
+        octaveCountSlider.onValueChanged.AddListener(value => { octaveCountInputField.SetTextWithoutNotify(((int)value).ToString()); UpdateComplexityWarning(); });
         lacunaritySlider.onValueChanged.AddListener(value => lacunarityInputField.SetTextWithoutNotify(value.ToString("F2")));
         persistenceSlider.onValueChanged.AddListener(value => persistenceInputField.SetTextWithoutNotify(value.ToString("F2")));
         heightExagerationSlider.onValueChanged.AddListener(value => heightExagerationInputField.SetTextWithoutNotify(value.ToString("F2")));
         rFactorSlider.onValueChanged.AddListener(value => rFactorInputField.SetTextWithoutNotify(((int)value).ToString()));
-        gridSizeSlider.onValueChanged.AddListener(value => gridSizeInputField.SetTextWithoutNotify(((int)value).ToString()));
-        cellSizeSlider.onValueChanged.AddListener(value => cellSizeInputField.SetTextWithoutNotify(((int)value).ToString()));
+        gridSizeSlider.onValueChanged.AddListener(value => { gridSizeInputField.SetTextWithoutNotify(((int)value).ToString()); UpdateComplexityWarning(); });
+        cellSizeSlider.onValueChanged.AddListener(value => { cellSizeInputField.SetTextWithoutNotify(((int)value).ToString()); UpdateComplexityWarning(); });
 
         // Link input fields to sliders
-        octaveCountInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(octaveCountSlider, text));
+        octaveCountInputField.onEndEdit.AddListener(text => { UpdateSliderFromInput(octaveCountSlider, text); UpdateComplexityWarning(); });
         lacunarityInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(lacunaritySlider, text));
         persistenceInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(persistenceSlider, text));
         heightExagerationInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(heightExagerationSlider, text));
         rFactorInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(rFactorSlider, text));
-        gridSizeInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(gridSizeSlider, text));
-        cellSizeInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(cellSizeSlider, text));
+        gridSizeInputField.onEndEdit.AddListener(text => { UpdateSliderFromInput(gridSizeSlider, text); UpdateComplexityWarning(); });
+        cellSizeInputField.onEndEdit.AddListener(text => { UpdateSliderFromInput(cellSizeSlider, text); UpdateComplexityWarning(); });
     }
 
     /// <summary>
@@ -111,6 +117,7 @@ public class TerrainShapeMenu : MonoBehaviour
         cellSizeInputField.SetTextWithoutNotify(parameters.CellSize.ToString());
         
         seedDirtyFromUI = false;
+        UpdateComplexityWarning();
     }
 
     public void SaveParameters()
@@ -159,6 +166,29 @@ public class TerrainShapeMenu : MonoBehaviour
         }
     }
 
+    void UpdateComplexityWarning()
+    {
+        float complexity = getCurrentComplexity();
+        Debug.Log("curent compelxity" + complexity);
+
+        bool showWarnings = complexity >= complexityTresh;
+
+        for (int i = 0; i < warnIcons.Count; i++)
+        {
+            warnIcons[i].SetActive(showWarnings);
+        }
+    }
+
+
+// returns the total work that will be done to generate the terrain
+    float getCurrentComplexity(){
+        float octaveCount = octaveCountSlider.value;
+        float cellSize = cellSizeSlider.value;
+        float gridSize = gridSizeSlider.value;
+        float width = cellSize * gridSize;
+
+        return octaveCount * (width * width);
+    }
     public void ShowSizePanel() => ShowSubPanel(sizePanel);
     public void ShowHeightPanel() => ShowSubPanel(HeightPanel);
     public void ShowFeaturePanel() => ShowSubPanel(FeaturePanel);

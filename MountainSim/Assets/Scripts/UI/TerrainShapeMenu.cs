@@ -169,8 +169,6 @@ public class TerrainShapeMenu : MonoBehaviour
     void UpdateComplexityWarning()
     {
         float complexity = getCurrentComplexity();
-        Debug.Log("curent compelxity" + complexity);
-
         bool showWarnings = complexity >= complexityTresh;
 
         for (int i = 0; i < warnIcons.Count; i++)

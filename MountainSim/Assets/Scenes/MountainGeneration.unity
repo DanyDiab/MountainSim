@@ -8345,6 +8345,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 244722332}
     m_Modifications:
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6d5372022c03841b58c2b0d1d962d851, type: 3}
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Color.b
+      value: 0.2784314
+      objectReference: {fileID: 0}
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Color.g
+      value: 0.3090105
+      objectReference: {fileID: 0}
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Color.r
+      value: 0.46666667
+      objectReference: {fileID: 0}
     - target: {fileID: 6936374130375656050, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
       propertyPath: m_Name
       value: WarnIcon
@@ -15043,7 +15063,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoColor: {r: 0.27450982, g: 0.4666667, b: 0.32941177, a: 1}
-  warnColor: {r: 0.2784314, g: 0.3529412, b: 0.4666667, a: 1}
+  warnColor: {r: 0.4666667, g: 0.30980393, b: 0.2784314, a: 1}
   offset: {x: 275, y: 30}
 --- !u!1 &1599642019
 GameObject:
@@ -17558,6 +17578,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 435430351}
     m_Modifications:
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6d5372022c03841b58c2b0d1d962d851, type: 3}
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Color.b
+      value: 0.2784314
+      objectReference: {fileID: 0}
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Color.g
+      value: 0.3090105
+      objectReference: {fileID: 0}
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Color.r
+      value: 0.46666667
+      objectReference: {fileID: 0}
     - target: {fileID: 6936374130375656050, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
       propertyPath: m_Name
       value: WarnIcon
@@ -19862,6 +19902,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 450811621}
     m_Modifications:
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6d5372022c03841b58c2b0d1d962d851, type: 3}
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Color.b
+      value: 0.2784314
+      objectReference: {fileID: 0}
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Color.g
+      value: 0.3090105
+      objectReference: {fileID: 0}
+    - target: {fileID: 6833751695052434986, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
+      propertyPath: m_Color.r
+      value: 0.46666667
+      objectReference: {fileID: 0}
     - target: {fileID: 6936374130375656050, guid: 732fe314ff8caa04aabf51e95aff6225, type: 3}
       propertyPath: m_Name
       value: WarnIcon

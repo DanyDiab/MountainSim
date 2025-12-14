@@ -15,11 +15,11 @@ This repository serves as a portfolio piece demonstrating graphics programming, 
 
 ## Key Features
 
-*   **Algorithmic Generation:** Implements core noise algorithms (Perlin, fBm, and Ridged Multifractal) to generate height data programmatically.
-*   **Runtime Mesh Construction:** Dynamically builds 3D geometry (vertices, triangles, UVs) on the CPU, creating unique landscapes every time.
-*   **Custom Shaders:** Features bespoke HLSL shaders written for the Universal Render Pipeline (URP) to handle height-based texture blending and terrain coloring.
+*   **Algorithmic Generation:** Implements core noise algorithms (Perlin, fBm, and Ridged Multifractal) to generate height data programmatically, all built from scratch.
+*   **Runtime Mesh Construction:** Dynamically builds 3D geometry (vertices, triangles, UVs) on the CPU, based on generated data.
+*   **Custom Shaders:** Features bespoke HLSL shaders written for the Universal Render Pipeline (URP) to handle height based texture blending and terrain coloring.
 *   **Interactive Simulation:** Allows users to modify generation parameters, such as seed, octaves, and lacunarity, and see the mesh update.
-*   **Free-Roaming Camera:** Includes a smooth camera system for exploring the generated terrain from any angle.
+*   **Free-Roaming Camera:** Includes a smooth camera system for exploring the generated terrain from any angle, as well as camera tools at the users disposition, such as mesh rotation and camera locking.
 ---
 
 ## Technical Implementation

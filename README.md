@@ -26,6 +26,7 @@ This repository serves as a portfolio piece demonstrating graphics programming, 
 
 ### Core Generation Logic
 The heart of the simulation lies in `Assets/Scripts/Terrain`.
+*   **`PerlinNoise.cs`**: Implements the fundamental Perlin noise algorithm, utilizing gradient vectors and quintic interpolation to produce smooth, organic patterns.
 *   **`FbmNoise.cs`**: Implements Fractal Brownian Motion by layering multiple octaves of Perlin noise to create detailed, natural looking topography.
 *   **`NoiseRenderer.cs`**: Converts abstract noise data into physical Unity Meshes. It manages vertex positioning, normal recalculation, and supports high density meshes by dynamically adjusting indexing formats.
 

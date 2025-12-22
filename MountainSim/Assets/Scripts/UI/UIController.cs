@@ -34,6 +34,7 @@ public class UIController : MonoBehaviour
     [Header("Menu Controllers")]
     [SerializeField] TerrainShapeMenu terrainShapeMenuController;
     [SerializeField] TerrainColorMenu terrainColorMenuController;
+    [SerializeField] PresetsMenu presetsMenuController;
 
     public delegate void PauseEvent(bool paused);
     public static event PauseEvent OnPause;
@@ -102,23 +103,16 @@ public class UIController : MonoBehaviour
         if (terrainColorMenuController) terrainColorMenuController.SaveParameters();
     }
 
-    /// <summary>
-    /// This is for your "Generate" button's OnClick() event.
-    /// </summary>
     public void OnGenerateButtonPressed()
     {
         isGeneratePressed = true;
     }
 
 
-    /// <summary>
-    /// Hides all main menus and shows the one specified.
-    /// </summary>
     private void ShowMenu(GameObject menuToEnable) 
     {
         foreach(GameObject menu in mainMenus) 
         {
-            // Use '==' for GameObjects, or 'is' if checking component
             if (menu != null)
             {
                 menu.SetActive(menu == menuToEnable);
@@ -131,7 +125,6 @@ public class UIController : MonoBehaviour
     public void ShowMiscMenu() => ShowMenu(miscMenuPanel);
     public void ShowPresetsMenu() => ShowMenu(presetsMenuPanel);
 
-    // ... (checkLock and checkRotate methods are unchanged) ...
     void checkLock(bool locked){
         if(currState != UIState.Playing) return; 
         if (!locked)

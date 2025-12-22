@@ -52,7 +52,7 @@ public class TerrainShapeMenu : MonoBehaviour
 
     void Start()
     {
-        complexityTresh = 1000000;
+        complexityTresh = 2000000;
         SaveManger.Load(parameters, fileName);
         subPanels = new List<GameObject>
         {

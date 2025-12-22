@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Asset/Parameters")]
 public class Parameters : ScriptableObject
 {
+    [SerializeField] string name;
     [Header("Generation Parameters")]
     [SerializeField] NoiseAlgorithms currAlgorithm;
     [SerializeField] int octaveCount;
@@ -122,5 +123,10 @@ public class Parameters : ScriptableObject
     {
         get => uvScale;
         set => uvScale = value;
+    }
+
+    public string Name{
+        get => name;
+        set => name = value;
     }
 }

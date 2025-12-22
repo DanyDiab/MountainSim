@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TextureNormalizer : MonoBehaviour
+public class TextureNormalizer
 {
 
     int resolution;

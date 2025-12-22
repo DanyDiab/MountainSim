@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.IO;
 
 public class TerrainShapeMenu : MonoBehaviour 
 {
@@ -47,10 +48,12 @@ public class TerrainShapeMenu : MonoBehaviour
     List<GameObject> subPanels;
     bool seedDirtyFromUI;
 
+    private static string fileName = "parameters";
+
     void Start()
     {
         complexityTresh = 1000000;
-        SaveManger.LoadParameters(parameters);
+        SaveManger.Load(parameters, fileName);
         subPanels = new List<GameObject>
         {
             sizePanel,
@@ -127,7 +130,7 @@ public class TerrainShapeMenu : MonoBehaviour
             Debug.LogError("Parameters asset is not assigned in the Inspector!");
             return;
         }
-        SaveManger.SaveParameters(parameters);
+        SaveManger.Save(parameters, fileName);
 
         if (seedDirtyFromUI && int.TryParse(seedInputField.text, out int seed)) {
             parameters.CurrentSeed = seed;

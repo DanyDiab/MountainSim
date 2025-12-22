@@ -31,13 +31,15 @@ public class TerrainColorMenu : MonoBehaviour
     [SerializeField] GameObject LayerPickingGridParent;
     [SerializeField] GameObject TexturePickerSubMenu;
     [SerializeField] GameObject otherPanel;
+    private static string fileName = "parameters";
+
 
     // other
     int totalPossibleChoices;
     bool updateUI;
 
     void Start(){
-        SaveManger.LoadParameters(parameters);
+        SaveManger.Load(parameters, fileName);
         LoadParameters();
         SaveParameters();
         texturePickerGrid = TexturePickerSubMenu.GetComponentInChildren<GridLayoutGroup>();
@@ -101,7 +103,7 @@ public void SaveParameters()
         parameters.TerrainColoring = (TerrainColoringParams)colorAlgo.value;
         parameters.Layers = newLayerCount;
         parameters.CurrTextures = currTextures;
-        SaveManger.SaveParameters(parameters);
+        SaveManger.Save(parameters, fileName);
     }
 
     public void loadDyanmicGrid(GridLayoutGroup grid, int total, GameObject prefab, Action<int> onElementClickAction, Texture2D[] texList){

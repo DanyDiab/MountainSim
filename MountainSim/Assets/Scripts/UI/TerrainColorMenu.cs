@@ -57,10 +57,6 @@ public class TerrainColorMenu : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// This is called by the UIController when the menu is OPENED.
-    /// It loads the data from the Parameters asset into the UI elements.
-    /// </summary>
     public void LoadParameters(){
         if (parameters == null)
         {
@@ -84,12 +80,9 @@ public void SaveParameters()
 
         int newLayerCount = (int)numberLayers.value;
 
-        if (currTextures == null || currTextures.Length != newLayerCount)
-        {
+        if (currTextures == null || currTextures.Length != newLayerCount){
             Texture2D[] newTextures = new Texture2D[newLayerCount];
-
-            if (currTextures != null)
-            {
+            if (currTextures != null){
                 int itemsToCopy = Mathf.Min(newLayerCount, currTextures.Length);
                 for (int i = 0; i < itemsToCopy; i++)
                 {
@@ -111,7 +104,6 @@ public void SaveParameters()
             Debug.LogError("Grid Layout Group is not assigned!");
             return;
         }
-
 
         foreach (Transform child in grid.transform) {
             Destroy(child.gameObject);
@@ -135,7 +127,6 @@ public void SaveParameters()
 
 
     void loadPickMenu(int elementIndex) {
-        Debug.Log("Loading pick menu for element index: " + elementIndex);
         currentIndexEditing = elementIndex;
         LayerPanel.SetActive(false);
         TexturePickerSubMenu.SetActive(true);
@@ -143,7 +134,6 @@ public void SaveParameters()
     }
 
     void loadMainMenu(int elementIndex) {
-        Debug.Log("Picked index " + elementIndex + " for layer " + currentIndexEditing);
         parameters.CurrTextures[currentIndexEditing] = textureList[elementIndex];
         updateUI = true;
         LayerPanel.SetActive(true);
@@ -153,11 +143,13 @@ public void SaveParameters()
     public void loadLayerPanel() {
         LayerPanel.SetActive(true);
         otherPanel.SetActive(false);
+        TexturePickerSubMenu.SetActive(false);
     }
 
     public void loadOtherPanel() {
         LayerPanel.SetActive(false);
         otherPanel.SetActive(true);
+        TexturePickerSubMenu.SetActive(false);
     }
 
 

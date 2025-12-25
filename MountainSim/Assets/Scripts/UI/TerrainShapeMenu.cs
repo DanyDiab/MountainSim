@@ -46,7 +46,6 @@ public class TerrainShapeMenu : MonoBehaviour
 
     float complexityTresh;
     List<GameObject> subPanels;
-    bool seedDirtyFromUI;
 
     private static string fileName = "parameters";
 
@@ -67,8 +66,6 @@ public class TerrainShapeMenu : MonoBehaviour
     }
 
     void addOnClickListeners() {
-        seedInputField.onValueChanged.AddListener(_ => seedDirtyFromUI = true);
-
         MenuUtil.LinkSliderAndInputField(octaveCountSlider, octaveCountInputField, true, "F0", UpdateComplexityWarning);
         MenuUtil.LinkSliderAndInputField(lacunaritySlider, lacunarityInputField, false, "F2");
         MenuUtil.LinkSliderAndInputField(persistenceSlider, persistenceInputField, false, "F2");
@@ -78,10 +75,6 @@ public class TerrainShapeMenu : MonoBehaviour
         MenuUtil.LinkSliderAndInputField(cellSizeSlider, cellSizeInputField, true, "F0", UpdateComplexityWarning);
     }
 
-    /// <summary>
-    /// This is called by the UIController when the menu is OPENED.
-    /// It loads the data from the Parameters asset into the UI elements.
-    /// </summary>
     public void LoadParameters()
     {
         if (parameters == null)
@@ -109,7 +102,6 @@ public class TerrainShapeMenu : MonoBehaviour
         gridSizeInputField.SetTextWithoutNotify(parameters.GridSize.ToString());
         cellSizeInputField.SetTextWithoutNotify(parameters.CellSize.ToString());
         
-        seedDirtyFromUI = false;
         UpdateComplexityWarning();
     }
 
@@ -121,7 +113,7 @@ public class TerrainShapeMenu : MonoBehaviour
             return;
         }
 
-        if (seedDirtyFromUI && int.TryParse(seedInputField.text, out int seed)) {
+        if (int.TryParse(seedInputField.text, out int seed)) {
             parameters.CurrentSeed = seed;
         }
         
@@ -134,7 +126,6 @@ public class TerrainShapeMenu : MonoBehaviour
         parameters.CellSize = (int)cellSizeSlider.value;
         parameters.CurrAlgorithm = (NoiseAlgorithms)noiseAlgorithmDropdown.value;
 
-        seedDirtyFromUI = false;
         MenuUtil.Save(parameters, fileName);
     }
 
@@ -142,7 +133,6 @@ public class TerrainShapeMenu : MonoBehaviour
     {
         parameters.CurrentSeed = Random.Range(int.MinValue, int.MaxValue);
         seedInputField.SetTextWithoutNotify(parameters.CurrentSeed.ToString());
-        seedDirtyFromUI = false; // The parameter is already updated, no need to parse
     }
 
     void UpdateComplexityWarning()

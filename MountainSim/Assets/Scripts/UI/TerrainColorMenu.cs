@@ -51,7 +51,6 @@ public class TerrainColorMenu : MonoBehaviour
         MenuUtil.loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
     }
 
-    // Update is called once per frame
     void Update(){
         if(parameters.Layers == numberLayers.value && !updateUI) return;
         SaveParameters();

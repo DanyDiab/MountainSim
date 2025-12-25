@@ -67,9 +67,9 @@ public class TerrainShapeMenu : MonoBehaviour
 
     void addOnClickListeners() {
         MenuUtil.LinkSliderAndInputField(octaveCountSlider, octaveCountInputField, true, "F0", UpdateComplexityWarning);
-        MenuUtil.LinkSliderAndInputField(lacunaritySlider, lacunarityInputField, false, "F2");
-        MenuUtil.LinkSliderAndInputField(persistenceSlider, persistenceInputField, false, "F2");
-        MenuUtil.LinkSliderAndInputField(heightExagerationSlider, heightExagerationInputField, false, "F2");
+        MenuUtil.LinkSliderAndInputField(lacunaritySlider, lacunarityInputField, false, "0.##");
+        MenuUtil.LinkSliderAndInputField(persistenceSlider, persistenceInputField, false, "0.##");
+        MenuUtil.LinkSliderAndInputField(heightExagerationSlider, heightExagerationInputField, false, "0.##");
         MenuUtil.LinkSliderAndInputField(rFactorSlider, rFactorInputField, true, "F0");
         MenuUtil.LinkSliderAndInputField(gridSizeSlider, gridSizeInputField, true, "F0", UpdateComplexityWarning);
         MenuUtil.LinkSliderAndInputField(cellSizeSlider, cellSizeInputField, true, "F0", UpdateComplexityWarning);
@@ -95,9 +95,9 @@ public class TerrainShapeMenu : MonoBehaviour
 
         // Update input fields with loaded values
         octaveCountInputField.SetTextWithoutNotify(parameters.OctaveCount.ToString());
-        lacunarityInputField.SetTextWithoutNotify(parameters.Lacunarity.ToString("F2"));
-        persistenceInputField.SetTextWithoutNotify(parameters.Persistence.ToString("F2"));
-        heightExagerationInputField.SetTextWithoutNotify(parameters.HeightExageration.ToString("F2"));
+        lacunarityInputField.SetTextWithoutNotify(parameters.Lacunarity.ToString("0.##"));
+        persistenceInputField.SetTextWithoutNotify(parameters.Persistence.ToString("0.##"));
+        heightExagerationInputField.SetTextWithoutNotify(parameters.HeightExageration.ToString("0.##"));
         rFactorInputField.SetTextWithoutNotify(parameters.RFactor.ToString());
         gridSizeInputField.SetTextWithoutNotify(parameters.GridSize.ToString());
         cellSizeInputField.SetTextWithoutNotify(parameters.CellSize.ToString());

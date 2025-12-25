@@ -33,6 +33,7 @@ Shader "Custom/GradBlend"{
                         break;
                     }
                 }
+                
                 return blendTextures(percent, topIndex,botIndex, i.uv);
             }
             

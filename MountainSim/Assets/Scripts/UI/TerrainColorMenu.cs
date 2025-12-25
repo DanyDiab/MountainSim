@@ -32,6 +32,7 @@ public class TerrainColorMenu : MonoBehaviour
     [SerializeField] GameObject TexturePickerSubMenu;
     [SerializeField] GameObject otherPanel;
     private static string fileName = "parameters";
+    List<GameObject> subPanels;
 
 
     // other
@@ -39,20 +40,22 @@ public class TerrainColorMenu : MonoBehaviour
     bool updateUI;
 
     void Start(){
-        SaveManger.Load(parameters, fileName);
+        MenuUtil.Load(parameters, fileName);
         LoadParameters();
         SaveParameters();
         texturePickerGrid = TexturePickerSubMenu.GetComponentInChildren<GridLayoutGroup>();
         layerPickerGrid = LayerPickingGridParent.GetComponent<GridLayoutGroup>();
         totalPossibleChoices = parameters.NumPossibleElements;
-        loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
+        subPanels = new List<GameObject> { LayerPanel, otherPanel, TexturePickerSubMenu };
+        MenuUtil.ShowPanel(LayerPanel, subPanels);
+        MenuUtil.loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
     }
 
     // Update is called once per frame
     void Update(){
         if(parameters.Layers == numberLayers.value && !updateUI) return;
         SaveParameters();
-        loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
+        MenuUtil.loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
         updateUI = false;
     }
 
@@ -96,60 +99,29 @@ public void SaveParameters()
         parameters.TerrainColoring = (TerrainColoringParams)colorAlgo.value;
         parameters.Layers = newLayerCount;
         parameters.CurrTextures = currTextures;
-        SaveManger.Save(parameters, fileName);
-    }
-
-    public void loadDyanmicGrid(GridLayoutGroup grid, int total, GameObject prefab, Action<int> onElementClickAction, Texture2D[] texList){
-        if (grid == null) {
-            Debug.LogError("Grid Layout Group is not assigned!");
-            return;
-        }
-
-        foreach (Transform child in grid.transform) {
-            Destroy(child.gameObject);
-        }
-
-        for (int i = 0; i < total; i++) {
-            GameObject newElement = Instantiate(prefab, grid.transform);
-            newElement.transform.localScale = Vector3.one;
-            Button button = newElement.GetComponentInChildren<Button>();
-            RawImage img = newElement.GetComponentInChildren<RawImage>();
-            if (img != null && texList[i] != null) {
-                img.texture = texList[i];
-            }
-            if (button != null) {
-                int capturedIndex = i;
-                button.onClick.AddListener(() => onElementClickAction(capturedIndex));
-            }
-        }
+        MenuUtil.Save(parameters, fileName);
     }
 
 
 
     void loadPickMenu(int elementIndex) {
         currentIndexEditing = elementIndex;
-        LayerPanel.SetActive(false);
-        TexturePickerSubMenu.SetActive(true);
-        loadDyanmicGrid(texturePickerGrid, totalPossibleChoices,elementPicker, loadMainMenu, textureList);
+        MenuUtil.ShowPanel(TexturePickerSubMenu, subPanels);
+        MenuUtil.loadDyanmicGrid(texturePickerGrid, totalPossibleChoices,elementPicker, loadMainMenu, textureList);
     }
 
     void loadMainMenu(int elementIndex) {
         parameters.CurrTextures[currentIndexEditing] = textureList[elementIndex];
         updateUI = true;
-        LayerPanel.SetActive(true);
-        TexturePickerSubMenu.SetActive(false);
+        MenuUtil.ShowPanel(LayerPanel, subPanels);
     }
 
     public void loadLayerPanel() {
-        LayerPanel.SetActive(true);
-        otherPanel.SetActive(false);
-        TexturePickerSubMenu.SetActive(false);
+        MenuUtil.ShowPanel(LayerPanel, subPanels);
     }
 
     public void loadOtherPanel() {
-        LayerPanel.SetActive(false);
-        otherPanel.SetActive(true);
-        TexturePickerSubMenu.SetActive(false);
+        MenuUtil.ShowPanel(otherPanel, subPanels);
     }
 
 

@@ -53,7 +53,7 @@ public class TerrainShapeMenu : MonoBehaviour
     void Start()
     {
         complexityTresh = 2000000;
-        SaveManger.Load(parameters, fileName);
+        MenuUtil.Load(parameters, fileName);
         subPanels = new List<GameObject>
         {
             sizePanel,
@@ -62,30 +62,20 @@ public class TerrainShapeMenu : MonoBehaviour
             GeneralPanel
         };
         addOnClickListeners();
-        ShowSubPanel(sizePanel);
+        MenuUtil.ShowPanel(sizePanel, subPanels);
         UpdateComplexityWarning();
     }
 
     void addOnClickListeners() {
         seedInputField.onValueChanged.AddListener(_ => seedDirtyFromUI = true);
 
-        // Link sliders to input fields
-        octaveCountSlider.onValueChanged.AddListener(value => { octaveCountInputField.SetTextWithoutNotify(((int)value).ToString()); UpdateComplexityWarning(); });
-        lacunaritySlider.onValueChanged.AddListener(value => lacunarityInputField.SetTextWithoutNotify(value.ToString("F2")));
-        persistenceSlider.onValueChanged.AddListener(value => persistenceInputField.SetTextWithoutNotify(value.ToString("F2")));
-        heightExagerationSlider.onValueChanged.AddListener(value => heightExagerationInputField.SetTextWithoutNotify(value.ToString("F2")));
-        rFactorSlider.onValueChanged.AddListener(value => rFactorInputField.SetTextWithoutNotify(((int)value).ToString()));
-        gridSizeSlider.onValueChanged.AddListener(value => { gridSizeInputField.SetTextWithoutNotify(((int)value).ToString()); UpdateComplexityWarning(); });
-        cellSizeSlider.onValueChanged.AddListener(value => { cellSizeInputField.SetTextWithoutNotify(((int)value).ToString()); UpdateComplexityWarning(); });
-
-        // Link input fields to sliders
-        octaveCountInputField.onEndEdit.AddListener(text => { UpdateSliderFromInput(octaveCountSlider, text); UpdateComplexityWarning(); });
-        lacunarityInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(lacunaritySlider, text));
-        persistenceInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(persistenceSlider, text));
-        heightExagerationInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(heightExagerationSlider, text));
-        rFactorInputField.onEndEdit.AddListener(text => UpdateSliderFromInput(rFactorSlider, text));
-        gridSizeInputField.onEndEdit.AddListener(text => { UpdateSliderFromInput(gridSizeSlider, text); UpdateComplexityWarning(); });
-        cellSizeInputField.onEndEdit.AddListener(text => { UpdateSliderFromInput(cellSizeSlider, text); UpdateComplexityWarning(); });
+        MenuUtil.LinkSliderAndInputField(octaveCountSlider, octaveCountInputField, true, "F0", UpdateComplexityWarning);
+        MenuUtil.LinkSliderAndInputField(lacunaritySlider, lacunarityInputField, false, "F2");
+        MenuUtil.LinkSliderAndInputField(persistenceSlider, persistenceInputField, false, "F2");
+        MenuUtil.LinkSliderAndInputField(heightExagerationSlider, heightExagerationInputField, false, "F2");
+        MenuUtil.LinkSliderAndInputField(rFactorSlider, rFactorInputField, true, "F0");
+        MenuUtil.LinkSliderAndInputField(gridSizeSlider, gridSizeInputField, true, "F0", UpdateComplexityWarning);
+        MenuUtil.LinkSliderAndInputField(cellSizeSlider, cellSizeInputField, true, "F0", UpdateComplexityWarning);
     }
 
     /// <summary>
@@ -130,7 +120,6 @@ public class TerrainShapeMenu : MonoBehaviour
             Debug.LogError("Parameters asset is not assigned in the Inspector!");
             return;
         }
-        SaveManger.Save(parameters, fileName);
 
         if (seedDirtyFromUI && int.TryParse(seedInputField.text, out int seed)) {
             parameters.CurrentSeed = seed;
@@ -146,6 +135,7 @@ public class TerrainShapeMenu : MonoBehaviour
         parameters.CurrAlgorithm = (NoiseAlgorithms)noiseAlgorithmDropdown.value;
 
         seedDirtyFromUI = false;
+        MenuUtil.Save(parameters, fileName);
     }
 
     public void RandomizeSeed() 
@@ -153,20 +143,6 @@ public class TerrainShapeMenu : MonoBehaviour
         parameters.CurrentSeed = Random.Range(int.MinValue, int.MaxValue);
         seedInputField.SetTextWithoutNotify(parameters.CurrentSeed.ToString());
         seedDirtyFromUI = false; // The parameter is already updated, no need to parse
-    }
-
-    private void UpdateSliderFromInput(Slider slider, string text)
-    {
-        if (float.TryParse(text, out float value))
-        {
-            slider.value = Mathf.Clamp(value, slider.minValue, slider.maxValue);
-        }
-    }
-
-    private void ShowSubPanel(GameObject panelToShow){
-        foreach(GameObject panel in subPanels){
-            panel.SetActive(panel == panelToShow);
-        }
     }
 
     void UpdateComplexityWarning()
@@ -190,8 +166,8 @@ public class TerrainShapeMenu : MonoBehaviour
 
         return octaveCount * (width * width);
     }
-    public void ShowSizePanel() => ShowSubPanel(sizePanel);
-    public void ShowHeightPanel() => ShowSubPanel(HeightPanel);
-    public void ShowFeaturePanel() => ShowSubPanel(FeaturePanel);
-    public void ShowGeneralPanel() => ShowSubPanel(GeneralPanel);
+    public void ShowSizePanel() => MenuUtil.ShowPanel(sizePanel, subPanels);
+    public void ShowHeightPanel() => MenuUtil.ShowPanel(HeightPanel, subPanels);
+    public void ShowFeaturePanel() => MenuUtil.ShowPanel(FeaturePanel, subPanels);
+    public void ShowGeneralPanel() => MenuUtil.ShowPanel(GeneralPanel, subPanels);
 }

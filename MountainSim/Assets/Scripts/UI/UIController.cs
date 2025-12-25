@@ -61,7 +61,7 @@ public class UIController : MonoBehaviour
         
         isGeneratePressed = false;
         
-        ShowMenu(terrainShapeMenuPanel);
+        MenuUtil.ShowPanel(terrainShapeMenuPanel, mainMenus);
     }
 
     void Update(){
@@ -109,21 +109,10 @@ public class UIController : MonoBehaviour
     }
 
 
-    private void ShowMenu(GameObject menuToEnable) 
-    {
-        foreach(GameObject menu in mainMenus) 
-        {
-            if (menu != null)
-            {
-                menu.SetActive(menu == menuToEnable);
-            }
-        }
-    }
-
-    public void ShowTerrainShapeMenu() => ShowMenu(terrainShapeMenuPanel);
-    public void ShowTerrainColorMenu() => ShowMenu(terrainColorMenuPanel);
-    public void ShowMiscMenu() => ShowMenu(miscMenuPanel);
-    public void ShowPresetsMenu() => ShowMenu(presetsMenuPanel);
+    public void ShowTerrainShapeMenu() => MenuUtil.ShowPanel(terrainShapeMenuPanel, mainMenus);
+    public void ShowTerrainColorMenu() => MenuUtil.ShowPanel(terrainColorMenuPanel, mainMenus);
+    public void ShowMiscMenu() => MenuUtil.ShowPanel(miscMenuPanel, mainMenus);
+    public void ShowPresetsMenu() => MenuUtil.ShowPanel(presetsMenuPanel, mainMenus);
 
     void checkLock(bool locked){
         if(currState != UIState.Playing) return; 

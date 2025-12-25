@@ -8,7 +8,7 @@ public class PresetsMenu : MonoBehaviour
     Presets presets;
     void Start()
     {
-        SaveManger.Load(presets, fileName);
+        MenuUtil.Load(presets, fileName);
         
     }
 

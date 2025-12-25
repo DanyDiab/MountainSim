@@ -1,5 +1,10 @@
 # Mountain Sim Ideas
 
+
+## todo 
+
+- fix floating point input. Make text box bigger? or round?  
+
 # features 
 
 This is a list of features I want to have in my mountain simulator

@@ -74,4 +74,10 @@ public static class MenuUtil{
             }
         }
     }
+
+    public static void ShowPanel(GameObject panelToShow){
+        if(panelToShow == null) return;
+
+        panelToShow.SetActive(true);
+    }
 }

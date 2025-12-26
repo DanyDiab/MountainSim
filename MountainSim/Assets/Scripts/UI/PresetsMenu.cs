@@ -31,6 +31,7 @@ public class PresetsMenu : MonoBehaviour
 
     public void loadPreset(int index){
         Parameters paramChosen = paramList[index];
+        Debug.Log("CHOSEN");
     }
 
 }

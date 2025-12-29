@@ -34,6 +34,7 @@ public static class MenuUtil{
     }
 
     public static void Save<T>(T data, string filename){
+        Debug.Log(Application.persistentDataPath);
         string path = Path.Combine(Application.persistentDataPath, filename);
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(path, json);
@@ -63,6 +64,7 @@ public static class MenuUtil{
         });
     }
 
+// show this panel and hide all other panels
     public static void ShowPanel(GameObject panelToShow, List<GameObject> allPanels)
     {
         if (allPanels == null) return;
@@ -75,6 +77,7 @@ public static class MenuUtil{
         }
     }
 
+// show this panel
     public static void ShowPanel(GameObject panelToShow){
         if(panelToShow == null) return;
 

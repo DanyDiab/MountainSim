@@ -16,22 +16,17 @@ public class PresetsMenu : MonoBehaviour
     [SerializeField] GridLayoutGroup grid;
     [SerializeField] GameObject prefab;
     
-    void Start(){
+    void OnEnable(){
         paramList = presets.Preset;
         MenuUtil.Load(presets, fileName);
         MenuUtil.ShowPanel(mainPanel);
         Texture2D[] texs = new Texture2D[paramList.Count];
         MenuUtil.loadDyanmicGrid(grid,paramList.Count,prefab,loadPreset,texs);
     }
-    // public static void loadDyanmicGrid(GridLayoutGroup grid, int total, GameObject prefab, Action<int> onElementClickAction, Texture2D[] texList){
-
-    void Update(){
-        
-    }
 
     public void loadPreset(int index){
         Parameters paramChosen = paramList[index];
-        Debug.Log("CHOSEN");
+        Debug.Log("CHOSEN" + index);
     }
 
 }

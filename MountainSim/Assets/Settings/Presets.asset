@@ -101,10 +101,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   presets:
   - {fileID: 11400000, guid: 6d9e8ce32b878f743a790db6e8bd6a21, type: 2}
-  - {fileID: 5278249372297894094}
-  - {fileID: -8223857368585520061}
-  - {fileID: -4965591390498265473}
-  - {fileID: -3978592101070893169}
+  - {fileID: 11400000, guid: 6d9e8ce32b878f743a790db6e8bd6a21, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &5278249372297894094
 MonoBehaviour:
   m_ObjectHideFlags: 0

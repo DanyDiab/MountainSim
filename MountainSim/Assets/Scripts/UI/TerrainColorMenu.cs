@@ -4,6 +4,7 @@ using TMPro;
 using System;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using System.Linq;
 
 public class TerrainColorMenu : MonoBehaviour
 {
@@ -40,12 +41,16 @@ public class TerrainColorMenu : MonoBehaviour
     bool updateUI;
 
     void Start(){
-        MenuUtil.Load(parameters, fileName);
+        if(parameters != null) {
+            ParametersSaveData data = parameters.GetSaveData();
+            MenuUtil.Load(data, fileName);
+            parameters.LoadFromSaveData(data);
+        }
         LoadParameters();
         SaveParameters();
         texturePickerGrid = TexturePickerSubMenu.GetComponentInChildren<GridLayoutGroup>();
         layerPickerGrid = LayerPickingGridParent.GetComponent<GridLayoutGroup>();
-        totalPossibleChoices = parameters.NumPossibleElements;
+        totalPossibleChoices = parameters.textureLibrary.AllTextures.Length;
         subPanels = new List<GameObject> { LayerPanel, otherPanel, TexturePickerSubMenu };
         MenuUtil.ShowPanel(LayerPanel, subPanels);
         MenuUtil.loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
@@ -98,7 +103,7 @@ public void SaveParameters()
         parameters.TerrainColoring = (TerrainColoringParams)colorAlgo.value;
         parameters.Layers = newLayerCount;
         parameters.CurrTextures = currTextures;
-        MenuUtil.Save(parameters, fileName);
+        MenuUtil.Save(parameters.GetSaveData(), fileName);
     }
 
 

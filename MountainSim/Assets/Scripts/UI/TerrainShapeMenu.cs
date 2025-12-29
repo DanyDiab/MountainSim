@@ -126,7 +126,7 @@ public class TerrainShapeMenu : MonoBehaviour
         parameters.CellSize = (int)cellSizeSlider.value;
         parameters.CurrAlgorithm = (NoiseAlgorithms)noiseAlgorithmDropdown.value;
 
-        MenuUtil.Save(parameters, fileName);
+        MenuUtil.Save(parameters.GetSaveData(), fileName);
     }
 
     public void RandomizeSeed() 

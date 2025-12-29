@@ -65,8 +65,7 @@ public class FbmNoise : MonoBehaviour
         }
         for(int k = 0; k < pixelBrightness.Length; k++){
             float currBrightness = pixelBrightness[k] / totalAmplitude;
-            float finalBrightness = currBrightness;
-            if(ridge) finalBrightness = (float) math.pow(currBrightness, parameters.RFactor);
+            float finalBrightness = (float) math.pow(currBrightness, parameters.RFactor);
             pixelColors[k] = new Color(finalBrightness, finalBrightness, finalBrightness);
         }
         return pixelColors;

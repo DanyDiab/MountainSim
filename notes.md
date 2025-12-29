@@ -3,7 +3,9 @@
 
 ## todo 
 
-- fix floating point input. Make text box bigger? or round?  
+- finish presets menu
+- fix texturing and json saving bug
+- finish misc menu 
 
 # future ideas 
 

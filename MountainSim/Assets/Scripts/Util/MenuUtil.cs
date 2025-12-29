@@ -63,6 +63,7 @@ public static class MenuUtil{
         });
     }
 
+// show this panel and hide all other panels
     public static void ShowPanel(GameObject panelToShow, List<GameObject> allPanels)
     {
         if (allPanels == null) return;
@@ -73,5 +74,12 @@ public static class MenuUtil{
                 panel.SetActive(panel == panelToShow);
             }
         }
+    }
+
+// show this panel
+    public static void ShowPanel(GameObject panelToShow){
+        if(panelToShow == null) return;
+
+        panelToShow.SetActive(true);
     }
 }

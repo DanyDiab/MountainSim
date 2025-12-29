@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class TerrainColoring : MonoBehaviour
 {
-    bool reachedError = false;
     public MeshFilter meshFilter;
     Mesh mesh;
 

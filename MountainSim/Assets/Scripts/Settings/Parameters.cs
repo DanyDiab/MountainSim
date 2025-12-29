@@ -1,4 +1,25 @@
 using UnityEngine;
+using System.Collections.Generic;
+
+[System.Serializable]
+public class ParametersSaveData
+{
+    public NoiseAlgorithms currAlgorithm;
+    public int octaveCount;
+    public float lacunarity;
+    public float persistence;
+    public int currentSeed;
+    public float heightExageration;
+    public int rFactor;
+    public int gridSize;
+    public int cellSize;
+    public TerrainColoringParams terrainColoring;
+    public int layers;
+    public Color[] colors;
+    public float uvScale;
+    public string name;
+    public List<int> textureIndices = new List<int>();
+}
 
 [System.Serializable]
 [CreateAssetMenu(menuName = "Asset/Parameters")]
@@ -20,18 +41,74 @@ public class Parameters : ScriptableObject
     [Header("Terrain Coloring Parameters")]
     [SerializeField] TerrainColoringParams terrainColoring;
     
-    [SerializeField] int numPossibleElements;
     [SerializeField] int layers;
 
     [ColorUsage(true,true)]
     [SerializeField] Color[] colors;
-    [SerializeField] Texture2D[] allTextures;
+    public TextureLibrary textureLibrary;
     [SerializeField] Texture2D[] currTextures;
     [SerializeField] float uvScale;
 
+    public ParametersSaveData GetSaveData()
+    {
+        ParametersSaveData data = new ParametersSaveData();
+        data.currAlgorithm = currAlgorithm;
+        data.octaveCount = octaveCount;
+        data.lacunarity = lacunarity;
+        data.persistence = persistence;
+        data.currentSeed =  currentSeed;
+        data.heightExageration = heightExageration;
+        data.rFactor = rFactor;
+        data.gridSize = gridSize;
+        data.cellSize = cellSize;
+        data.terrainColoring = terrainColoring;
+        data.layers = layers;
+        data.colors = colors;
+        data.uvScale = uvScale;
+        data.name = name;
+
+        data.textureIndices = new List<int>();
+        if (currTextures == null || textureLibrary == null || textureLibrary.AllTextures == null) return data;
+
+        foreach (Texture2D tex in currTextures){
+            int i = System.Array.IndexOf(textureLibrary.AllTextures, tex);
+            data.textureIndices.Add(i);
+        }
+        return data;
+    }
+
+    public void LoadFromSaveData(ParametersSaveData data)
+    {
+        currAlgorithm = data.currAlgorithm;
+        octaveCount = data.octaveCount;
+        lacunarity = data.lacunarity;
+        persistence = data.persistence;
+        currentSeed = data.currentSeed;
+        heightExageration = data.heightExageration;
+        rFactor = data.rFactor;
+        gridSize = data.gridSize;
+        cellSize = data.cellSize;
+        terrainColoring = data.terrainColoring;
+        layers = data.layers;
+        colors = data.colors;
+        uvScale = data.uvScale;
+        name = data.name;
+
+        if (data.textureIndices == null || textureLibrary == null || textureLibrary.AllTextures == null) return;
+        
+        List<Texture2D> loadedTextures = new List<Texture2D>();
+        foreach (int i in data.textureIndices){
+            if (i >= 0 && i < textureLibrary.AllTextures.Length){
+                loadedTextures.Add(textureLibrary.AllTextures[i]);
+                continue;
+            }
+            loadedTextures.Add(null);
+        }
+        currTextures = loadedTextures.ToArray();
+    }
 
 
-// getters / setters 
+
     public NoiseAlgorithms CurrAlgorithm
     {
         get => currAlgorithm;
@@ -100,8 +177,7 @@ public class Parameters : ScriptableObject
 
     public Texture2D[] AllTextures
     {
-        get => allTextures;
-        set => allTextures = value;
+        get => textureLibrary != null ? textureLibrary.AllTextures : null;
     }
     public Texture2D[] CurrTextures
     {
@@ -109,11 +185,6 @@ public class Parameters : ScriptableObject
         set => currTextures = value;
     }
 
-    public int NumPossibleElements
-    {
-        get => numPossibleElements;
-        set => numPossibleElements = value;
-    }
     public int Layers
     {
         get => layers;
@@ -129,4 +200,5 @@ public class Parameters : ScriptableObject
         get => name;
         set => name = value;
     }
+
 }

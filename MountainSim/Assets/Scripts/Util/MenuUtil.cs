@@ -34,7 +34,6 @@ public static class MenuUtil{
     }
 
     public static void Save<T>(T data, string filename){
-        Debug.Log(Application.persistentDataPath);
         string path = Path.Combine(Application.persistentDataPath, filename);
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(path, json);

@@ -77,7 +77,10 @@ public class TerrainColoring : MonoBehaviour
         );
         for (int i = 0; i < parameters.Layers; i++) {
             Texture2D normalTexture = tn.normalizeTexture(parameters.CurrTextures[i]);
-            Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
+            for (int m = 0; m < normalTexture.mipmapCount; m++)
+            {
+                Graphics.CopyTexture(normalTexture, 0, m, texArray, i, m);
+            }
         }
         currMat.SetTexture("_Textures", texArray);   
     }
@@ -96,7 +99,10 @@ public class TerrainColoring : MonoBehaviour
         );
         for (int i = 0; i < parameters.Layers; i++) {
             Texture2D normalTexture = tn.normalizeTexture(parameters.CurrTextures[i]);
-            Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
+            for (int m = 0; m < normalTexture.mipmapCount; m++)
+            {
+                Graphics.CopyTexture(normalTexture, 0, m, texArray, i, m);
+            }
         }
         currMat.SetTexture("_Textures", texArray);  
     }

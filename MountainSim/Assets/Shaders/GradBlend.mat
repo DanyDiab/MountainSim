@@ -75,7 +75,11 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+<<<<<<< Updated upstream
     - _TilingFactor: 7.7014704
+=======
+    - _TilingFactor: 3.8463235
+>>>>>>> Stashed changes
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

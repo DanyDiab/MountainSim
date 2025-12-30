@@ -13,24 +13,32 @@ Shader "Custom/GradBlend"{
             #include "TextureBlend.cginc"
         
             float4 FragProgram(Interpolators i) : SV_TARGET{
-                float currGrad = 1 - saturate(i.normal.y);
-                float4 currTex = (0,0,0,0); 
-                if(currGrad > _Bounds[_numBounds - 1]){
-                    currTex = blendTextures(0,_numBounds - 1,_numBounds - 1,i.uv);
-                }
-                else if(currGrad < _Bounds[0]){
-                    currTex = blendTextures(0,0,0,i.uv);
-                }
+                float currGrad = _Bounds[_numBounds - 1] - saturate(i.normal.y);
+                
+                float botIndex = 0;
+                float topIndex = 0;
+                float percent = 0;
+
                 for(int idx = 0; idx < _numBounds - 1; idx++){
                     float currBound = _Bounds[idx];
                     float nextBound = _Bounds[idx + 1];
 
-                    float selectionMask = step(currBound, currGrad) && step(currGrad, nextBound);
+                    float inInterval = step(currBound, currGrad) * (1 - step(nextBound, currGrad));
+
+                    botIndex += idx * inInterval;
+                    topIndex += (idx + 1) * inInterval;
                     
-                    float percent = saturate((currGrad - currBound) / (nextBound - currBound));
-                    currTex = (selectionMask == 0) ? currTex : blendTextures(percent,idx,idx+1,i.uv) * selectionMask;
+                    float intervalRange = nextBound - currBound;
+
+                    float p = (currGrad - currBound) / max(intervalRange, 0.00001);
+                    percent += saturate(p) * inInterval;
                 }
-                return currTex;
+
+                float aboveLast = step(_Bounds[_numBounds - 1], currGrad);
+                botIndex += (_numBounds - 1) * aboveLast;
+                topIndex += (_numBounds - 1) * aboveLast;
+                
+                return blendTextures(percent, (int)topIndex, (int)botIndex, i.uv);
             }
             ENDCG
                 

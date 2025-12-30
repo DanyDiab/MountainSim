@@ -21,16 +21,16 @@ Shader "Custom/GradBlend"{
                 else if(currGrad < _Bounds[0]){
                     currTex = blendTextures(0,0,0,i.uv);
                 }
-                for(int idx = 0; idx < _numBounds - 1 && step((0,0,0,0), currTex); idx++){
+                for(int idx = 0; idx < _numBounds - 1; idx++){
                     float currBound = _Bounds[idx];
                     float nextBound = _Bounds[idx + 1];
 
                     float selectionMask = step(currBound, currGrad) && step(currGrad, nextBound);
                     
-                    percent = saturate((currGrad - currBound) / (nextBound - currBound));
-                    currTex = blendTextures(percent,idx,idx+1,i.uv) * selectionMask;
+                    float percent = saturate((currGrad - currBound) / (nextBound - currBound));
+                    currTex = (selectionMask == 0) ? currTex : blendTextures(percent,idx,idx+1,i.uv) * selectionMask;
                 }
-                return blendTextures(percent, topIndex,botIndex, i.uv);
+                return currTex;
             }
             ENDCG
                 

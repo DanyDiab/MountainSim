@@ -10,10 +10,14 @@ public class TerrainColorMenu : MonoBehaviour
 {
     [SerializeField] Parameters parameters;
 
-    [Header("Menu UI Elements")]
+    [Header("Sliders")]
     [SerializeField] Slider numberLayers;
-    [SerializeField] TMP_Dropdown colorAlgo;
     [SerializeField] Slider uvScaleSlider;
+
+    [Header("other Elements")]
+    [SerializeField] TMP_Dropdown colorAlgo;
+
+    [SerializeField] TMP_InputField layerInput;
     Texture2D[] textureList;
     Texture2D[] currTextures;
 
@@ -54,6 +58,8 @@ public class TerrainColorMenu : MonoBehaviour
         subPanels = new List<GameObject> { LayerPanel, otherPanel, TexturePickerSubMenu };
         MenuUtil.ShowPanel(LayerPanel, subPanels);
         MenuUtil.loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
+        MenuUtil.LinkSliderAndInputField(numberLayers, layerInput, true, "F0");
+
     }
 
     void Update(){

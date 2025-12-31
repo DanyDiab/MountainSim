@@ -45,7 +45,7 @@ public class Parameters : ScriptableObject
 
     [ColorUsage(true,true)]
     [SerializeField] Color[] colors;
-    public TextureLibrary textureLibrary;
+    [SerializeField] public TextureLibrary textureLibrary;
     [SerializeField] Texture2D[] currTextures;
     [SerializeField] float uvScale;
 
@@ -68,12 +68,16 @@ public class Parameters : ScriptableObject
         data.name = name;
 
         data.textureIndices = new List<int>();
-        if (currTextures == null || textureLibrary == null || textureLibrary.AllTextures == null) return data;
-
+        if (currTextures == null || textureLibrary == null || textureLibrary.AllTextures == null){
+            Debug.LogFormat("currTexs | {0}\ntexLib | {1}\ntextureLibrary.AllTextures | {2}", currTextures, textureLibrary, textureLibrary != null ? textureLibrary.AllTextures : "null");
+            return data;
+        }
+        Debug.Log("loading texs from library");
         foreach (Texture2D tex in currTextures){
             int i = System.Array.IndexOf(textureLibrary.AllTextures, tex);
             data.textureIndices.Add(i);
         }
+
         return data;
     }
 
@@ -97,6 +101,10 @@ public class Parameters : ScriptableObject
         if (data.textureIndices == null || textureLibrary == null || textureLibrary.AllTextures == null) return;
         
         List<Texture2D> loadedTextures = new List<Texture2D>();
+        if(textureLibrary.AllTextures.Length == 0){
+            textureLibrary.LoadAllTextures();
+            Debug.Log("loading textures into the library");
+        }
         foreach (int i in data.textureIndices){
             if (i >= 0 && i < textureLibrary.AllTextures.Length){
                 loadedTextures.Add(textureLibrary.AllTextures[i]);

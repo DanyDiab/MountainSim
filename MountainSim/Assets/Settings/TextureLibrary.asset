@@ -12,4 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e3d2bac0ab8a552a62189008224c87, type: 3}
   m_Name: TextureLibrary
   m_EditorClassIdentifier: 
-  allTextures: []
+  allTextures:
+  - {fileID: 2800000, guid: 1b309d74cdd7aa7ea8286bf4ae4c1f78, type: 3}
+  - {fileID: 2800000, guid: e2b9ab808734a4cb9a42317453e6cce4, type: 3}
+  - {fileID: 2800000, guid: 92fe3729c9f2ccc708a7422a77514bf8, type: 3}
+  - {fileID: 2800000, guid: 74361fd7f32c4dde09674dbb11f0fcd1, type: 3}
+  - {fileID: 2800000, guid: 4bcb2dbebce5c50a6acd428b43bf6fdd, type: 3}
+  - {fileID: 2800000, guid: 22bcfb3a8937751e8b2480f76793d451, type: 3}
+  - {fileID: 2800000, guid: 62606f84317776215a8e54f2232efb35, type: 3}
+  - {fileID: 2800000, guid: 559108ba9dc367282b8e2728c74207e2, type: 3}
+  - {fileID: 2800000, guid: 65ad19589cea236b581f613afd27aec0, type: 3}
+  - {fileID: 2800000, guid: e7a52a705a8f5c421abbf403dbb4c6f6, type: 3}
+  - {fileID: 2800000, guid: 48d980a70b24301728f6edc374af2e13, type: 3}
+  - {fileID: 2800000, guid: 245a83f07d0754462a3aa2ba2044c3d8, type: 3}
+  - {fileID: 2800000, guid: 252f4e741b1f8680da673a6ff6020d99, type: 3}
+  - {fileID: 2800000, guid: 56726c9f594ac66bba8b59b5ee83e534, type: 3}
+  - {fileID: 2800000, guid: fe2cb6b8b1790f85e8c265ea228ed7c1, type: 3}
+  - {fileID: 2800000, guid: 8fd24d9c69330451ca95b6a0bbc94a9f, type: 3}
+  - {fileID: 2800000, guid: a95d77191a89fb583831d45d55c01d80, type: 3}
+  - {fileID: 2800000, guid: 0d3d527250d362e5988ee43e153ed736, type: 3}

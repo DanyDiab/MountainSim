@@ -13,36 +13,31 @@ Shader "Custom/HeightBlend"{
 
             float4 FragProgram(Interpolators i) : SV_TARGET{
                 float yPos = i.localPos.y;
+                
+                float botIndex = 0;
+                float topIndex = 0;
+                float percent = 0;
 
-                if (yPos <= _Bounds[0]) {
-                    // Sample texture at index 0
-                    float3 uvLayer = float3(i.uv * _TilingFactor, 0);
-                    return UNITY_SAMPLE_TEX2DARRAY_LOD(_Textures, uvLayer, 0);
-                }
-
-                if (yPos >= _Bounds[_numBounds - 1]) {
-                    // Sample texture at the last index
-                    float3 uvLayer = float3(i.uv * _TilingFactor, _numBounds - 1);
-                    return UNITY_SAMPLE_TEX2DARRAY_LOD(_Textures, uvLayer, 0);
-                }
-
-                for (int idx = 0; idx < _numBounds - 1; idx++){
-                    float boundY = _Bounds[idx];
+                for(int idx = 0; idx < _numBounds - 1; idx++){
+                    float currBound = _Bounds[idx];
                     float nextBound = _Bounds[idx + 1];
 
-                    if(yPos >= boundY && yPos < nextBound){
-                        int topIndex = idx + 1;
-                        int botIndex = idx;
-                        float percent = saturate((yPos - boundY) / (nextBound - boundY));
-                        
-                        // We found our slice, so blend and return
-                        return blendTextures(percent, topIndex, botIndex, i.uv);
-                    }
+                    float inInterval = step(currBound, yPos) * (1 - step(nextBound, yPos));
+
+                    botIndex += idx * inInterval;
+                    topIndex += (idx + 1) * inInterval;
+                    
+                    float intervalRange = nextBound - currBound;
+
+                    float p = (yPos - currBound) / max(intervalRange, 0.00001);
+                    percent += saturate(p) * inInterval;
                 }
 
-                // Failsafe (should never be hit, but good practice)
-                float3 uvLayer = float3(i.uv * _TilingFactor, 0);
-                return UNITY_SAMPLE_TEX2DARRAY_LOD(_Textures, uvLayer, 0);
+                float aboveLast = step(_Bounds[_numBounds - 1], yPos);
+                botIndex += (_numBounds - 1) * aboveLast;
+                topIndex += (_numBounds - 1) * aboveLast;
+                
+                return blendTextures(percent, (int)topIndex, (int)botIndex, i.uv);
             }
             ENDCG
         }

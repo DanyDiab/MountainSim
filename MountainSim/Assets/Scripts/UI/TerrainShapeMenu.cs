@@ -46,7 +46,6 @@ public class TerrainShapeMenu : MonoBehaviour
 
     float complexityTresh;
     List<GameObject> subPanels;
-
     private static string fileName = "parameters";
 
     void Start()

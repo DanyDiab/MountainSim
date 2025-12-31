@@ -33,4 +33,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  uvScale: 12.67353
+  - {fileID: 0}
+  - {fileID: 0}
+  uvScale: 1

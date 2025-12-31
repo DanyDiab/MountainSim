@@ -13,31 +13,35 @@ Shader "Custom/GradBlend"{
             #include "TextureBlend.cginc"
         
             float4 FragProgram(Interpolators i) : SV_TARGET{
-                float currGrad = 1 - saturate(i.normal.y);
-                int topIndex = 0;
-                int botIndex = 0;
+                float currGrad = _Bounds[_numBounds - 1] - saturate(i.normal.y);
+                
+                float botIndex = 0;
+                float topIndex = 0;
                 float percent = 0;
-                if(currGrad > _Bounds[_numBounds - 1]){
-                    return blendTextures(1,_numBounds - 1,_numBounds - 1, i.uv);
-                }
-                else if(currGrad < _Bounds[0]){
-                    return blendTextures(1,0,0, i.uv);
-                }
+
                 for(int idx = 0; idx < _numBounds - 1; idx++){
                     float currBound = _Bounds[idx];
                     float nextBound = _Bounds[idx + 1];
-                    if(currGrad >= currBound && currGrad < nextBound){
-                        topIndex = idx + 1;
-                        botIndex = idx;
-                        percent = saturate((currGrad - currBound) / (nextBound - currBound));
-                        break;
-                    }
+
+                    float inInterval = step(currBound, currGrad) * (1 - step(nextBound, currGrad));
+
+                    botIndex += idx * inInterval;
+                    topIndex += (idx + 1) * inInterval;
+                    
+                    float intervalRange = nextBound - currBound;
+
+                    float p = (currGrad - currBound) / max(intervalRange, 0.00001);
+                    percent += saturate(p) * inInterval;
                 }
+
+                float aboveLast = step(_Bounds[_numBounds - 1], currGrad);
+                botIndex += (_numBounds - 1) * aboveLast;
+                topIndex += (_numBounds - 1) * aboveLast;
                 
-                return blendTextures(percent, topIndex,botIndex, i.uv);
+                return blendTextures(percent, (int)topIndex, (int)botIndex, i.uv);
             }
-            
             ENDCG
+                
         }
     }
 }

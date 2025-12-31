@@ -40,8 +40,8 @@ float4 blendTextures(float percent, int topIndex, int botIndex, float2 uv) {
     float3 uvLayerLow = float3(uv * _TilingFactor, botIndex);
 
     // Grab the textures
-    float4 texTop = UNITY_SAMPLE_TEX2DARRAY_LOD(_Textures, uvLayerTop, 0);
-    float4 texLow = UNITY_SAMPLE_TEX2DARRAY_LOD(_Textures, uvLayerLow, 0);
+    float4 texTop = UNITY_SAMPLE_TEX2DARRAY(_Textures, uvLayerTop);
+    float4 texLow = UNITY_SAMPLE_TEX2DARRAY(_Textures, uvLayerLow);
 
     // Lerp between the 2 textures using the calculated percent
     return lerp(texLow, texTop, percent);

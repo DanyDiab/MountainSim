@@ -61,8 +61,18 @@ public class TerrainColoring : MonoBehaviour
             pixelColors[i] = pixelColor;
         }
         mesh.colors = pixelColors;
-        }
+    }
 
+    void copyTexsToGPU(Texture2DArray texArray){
+
+        for (int i = 0; i < parameters.Layers; i++) {
+            Texture2D normalTexture = tn.normalizeTexture(parameters.CurrTextures[i]);
+            for (int m = 0; m < normalTexture.mipmapCount; m++)
+            {
+                Graphics.CopyTexture(normalTexture, 0, m, texArray, i, m);
+            }
+        }
+    }
 
     public void updatePixelTex(){
         currMat = textureMat;
@@ -75,10 +85,7 @@ public class TerrainColoring : MonoBehaviour
         Texture2DArray texArray = new Texture2DArray(
             1024, 1024, bounds.Length, TextureFormat.ARGB32, true
         );
-        for (int i = 0; i < parameters.Layers; i++) {
-            Texture2D normalTexture = tn.normalizeTexture(parameters.CurrTextures[i]);
-            Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
-        }
+        copyTexsToGPU(texArray);
         currMat.SetTexture("_Textures", texArray);   
     }
 
@@ -94,10 +101,7 @@ public class TerrainColoring : MonoBehaviour
         Texture2DArray texArray = new Texture2DArray(
             1024, 1024, bounds.Length, TextureFormat.ARGB32, true
         );
-        for (int i = 0; i < parameters.Layers; i++) {
-            Texture2D normalTexture = tn.normalizeTexture(parameters.CurrTextures[i]);
-            Graphics.CopyTexture(normalTexture, 0, 0, texArray, i, 0);
-        }
+        copyTexsToGPU(texArray);
         currMat.SetTexture("_Textures", texArray);  
     }
     (float[], Color[]) findCloseBounds(float y){

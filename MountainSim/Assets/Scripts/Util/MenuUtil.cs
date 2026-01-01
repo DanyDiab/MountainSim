@@ -47,8 +47,7 @@ public static class MenuUtil{
         }
     }
 
-    public static void LinkSliderAndInputField(Slider slider, TMP_InputField inputField, bool isInt, string format, Action onUpdate = null)
-    {
+    public static void LinkSliderAndInputField(Slider slider, TMP_InputField inputField, bool isInt, string format, Action onUpdate = null){
         slider.onValueChanged.AddListener(value => {
             inputField.SetTextWithoutNotify(isInt ? ((int)value).ToString() : value.ToString(format));
             onUpdate?.Invoke();
@@ -61,6 +60,7 @@ public static class MenuUtil{
                 onUpdate?.Invoke();
             }
         });
+        inputField.text = slider.value.ToString();
     }
 
 // show this panel and hide all other panels

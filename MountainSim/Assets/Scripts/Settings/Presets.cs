@@ -7,10 +7,8 @@ using System.Linq;
 [CreateAssetMenu(menuName = "Asset/Presets")]
 
 public class Presets : ScriptableObject{
-    [SerializeField] List<Parameters> presets = new List<Parameters>();
-
-
-    public List<Parameters> Preset{
+    public List<ParametersSaveData> presets = new List<ParametersSaveData>();
+    public List<ParametersSaveData> Preset{
         get => presets;
         set => presets = value;
     }
@@ -19,7 +17,7 @@ public class Presets : ScriptableObject{
     public void addEmptyPreset(){
         Parameters presetToAdd = CreateInstance<Parameters>();
         presetToAdd.Name = "New Preset";
-        presets.Add(presetToAdd);
+        presets.Add(presetToAdd.GetSaveData());
 
         #if UNITY_EDITOR
         if (!Application.isPlaying)

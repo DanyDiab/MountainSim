@@ -97,8 +97,96 @@ MonoBehaviour:
   m_Name: Presets
   m_EditorClassIdentifier: 
   presets:
-  - {fileID: 11400000, guid: 6d9e8ce32b878f743a790db6e8bd6a21, type: 2}
-  - {fileID: 568454190556521250}
+  - currAlgorithm: 0
+    octaveCount: 10
+    lacunarity: 3.159853
+    persistence: 0.2514706
+    currentSeed: 684885996
+    heightExageration: 1236.1697
+    rFactor: 3
+    gridSize: 27
+    cellSize: 31
+    terrainColoring: 0
+    layers: 4
+    colors:
+    - {r: 0, g: 0, b: 0, a: 0}
+    - {r: 1, g: 1, b: 1, a: 0}
+    - {r: 1, g: 1, b: 1, a: 0}
+    uvScale: 17.789705
+    name: 
+    textureIndices: 0000000007000000090000000b000000
+  - currAlgorithm: 0
+    octaveCount: 10
+    lacunarity: 3.159853
+    persistence: 0.2514706
+    currentSeed: 684885996
+    heightExageration: 1236.1697
+    rFactor: 3
+    gridSize: 27
+    cellSize: 31
+    terrainColoring: 0
+    layers: 3
+    colors:
+    - {r: 0, g: 0, b: 0, a: 0}
+    - {r: 1, g: 1, b: 1, a: 0}
+    - {r: 1, g: 1, b: 1, a: 0}
+    uvScale: 17.789705
+    name: 
+    textureIndices: 0f0000000900000008000000
+  - currAlgorithm: 0
+    octaveCount: 10
+    lacunarity: 3.159853
+    persistence: 0.2514706
+    currentSeed: 684885996
+    heightExageration: 1236.1697
+    rFactor: 3
+    gridSize: 27
+    cellSize: 31
+    terrainColoring: 0
+    layers: 3
+    colors:
+    - {r: 0, g: 0, b: 0, a: 0}
+    - {r: 1, g: 1, b: 1, a: 0}
+    - {r: 1, g: 1, b: 1, a: 0}
+    uvScale: 17.789705
+    name: 
+    textureIndices: 0f0000000900000002000000
+  - currAlgorithm: 0
+    octaveCount: 10
+    lacunarity: 3.159853
+    persistence: 0.2514706
+    currentSeed: 684885996
+    heightExageration: 1236.1697
+    rFactor: 3
+    gridSize: 27
+    cellSize: 31
+    terrainColoring: 0
+    layers: 4
+    colors:
+    - {r: 0, g: 0, b: 0, a: 0}
+    - {r: 1, g: 1, b: 1, a: 0}
+    - {r: 1, g: 1, b: 1, a: 0}
+    uvScale: 17.789705
+    name: 
+    textureIndices: 0000000007000000090000000b000000
+  - currAlgorithm: 0
+    octaveCount: 10
+    lacunarity: 3.159853
+    persistence: 0.2514706
+    currentSeed: 684885996
+    heightExageration: 1236.1697
+    rFactor: 3
+    gridSize: 27
+    cellSize: 73
+    terrainColoring: 0
+    layers: 4
+    colors:
+    - {r: 0, g: 0, b: 0, a: 0}
+    - {r: 1, g: 1, b: 1, a: 0}
+    - {r: 1, g: 1, b: 1, a: 0}
+    uvScale: 17.789705
+    name: 
+    textureIndices: 0000000007000000090000000b000000
 --- !u!114 &568454190556521250
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -88,8 +88,19 @@ public class UIController : MonoBehaviour
         Time.timeScale = 0.0f;
         currState = UIState.Menu;
         OnPause?.Invoke(true);
+        saveMenu();
+    }
 
-        if (terrainShapeMenuController) terrainShapeMenuController.LoadParameters();
+    void saveMenu(){
+        if (terrainShapeMenuController) terrainShapeMenuController.SaveParameters();
+        if (terrainColorMenuController) terrainColorMenuController.SaveParameters();
+    }
+
+
+    void saveCurrentPanel(){
+        if(terrainShapeMenuPanel.activeInHierarchy) terrainShapeMenuController.SaveParameters();
+        if (terrainShapeMenuPanel.activeInHierarchy) terrainColorMenuController.SaveParameters();
+
     }
 
     void CloseAndSaveMenu()
@@ -99,8 +110,7 @@ public class UIController : MonoBehaviour
         OnPause?.Invoke(false);
         isGeneratePressed = false;
 
-        if (terrainShapeMenuController) terrainShapeMenuController.SaveParameters();
-        if (terrainColorMenuController) terrainColorMenuController.SaveParameters();
+        saveMenu();
     }
 
     public void OnGenerateButtonPressed()
@@ -109,10 +119,24 @@ public class UIController : MonoBehaviour
     }
 
 
-    public void ShowTerrainShapeMenu() => MenuUtil.ShowPanel(terrainShapeMenuPanel, mainMenus);
-    public void ShowTerrainColorMenu() => MenuUtil.ShowPanel(terrainColorMenuPanel, mainMenus);
-    public void ShowMiscMenu() => MenuUtil.ShowPanel(miscMenuPanel, mainMenus);
-    public void ShowPresetsMenu() => MenuUtil.ShowPanel(presetsMenuPanel, mainMenus);
+
+
+    public void ShowTerrainShapeMenu(){
+        saveCurrentPanel();
+        MenuUtil.ShowPanel(terrainShapeMenuPanel, mainMenus);
+    } 
+    public void ShowTerrainColorMenu(){
+        saveCurrentPanel();
+        MenuUtil.ShowPanel(terrainColorMenuPanel, mainMenus);
+    } 
+    public void ShowMiscMenu(){
+        saveCurrentPanel();
+        MenuUtil.ShowPanel(miscMenuPanel, mainMenus);
+    }
+    public void ShowPresetsMenu(){
+        saveCurrentPanel();
+        MenuUtil.ShowPanel(presetsMenuPanel, mainMenus);
+    }
 
     void checkLock(bool locked){
         if(currState != UIState.Playing) return; 

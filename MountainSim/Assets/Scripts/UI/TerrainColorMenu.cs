@@ -44,22 +44,23 @@ public class TerrainColorMenu : MonoBehaviour
     int totalPossibleChoices;
     bool updateUI;
 
-    void Start(){
+    void Awake(){
         if(parameters != null) {
             ParametersSaveData data = parameters.GetSaveData();
             MenuUtil.Load(data, fileName);
             parameters.LoadFromSaveData(data);
         }
-        LoadParameters();
-        SaveParameters();
         texturePickerGrid = TexturePickerSubMenu.GetComponentInChildren<GridLayoutGroup>();
         layerPickerGrid = LayerPickingGridParent.GetComponent<GridLayoutGroup>();
         totalPossibleChoices = parameters.textureLibrary.AllTextures.Length;
         subPanels = new List<GameObject> { LayerPanel, otherPanel, TexturePickerSubMenu };
+    }
+
+    void OnEnable(){
+        LoadParameters();
         MenuUtil.ShowPanel(LayerPanel, subPanels);
         MenuUtil.loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
         MenuUtil.LinkSliderAndInputField(numberLayers, layerInput, true, "F0");
-
     }
 
     void Update(){

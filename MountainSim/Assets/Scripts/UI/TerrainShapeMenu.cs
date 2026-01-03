@@ -48,10 +48,9 @@ public class TerrainShapeMenu : MonoBehaviour
     List<GameObject> subPanels;
     private static string fileName = "parameters";
 
-    void Start()
+    void Awake()
     {
         complexityTresh = 2000000;
-        MenuUtil.Load(parameters, fileName);
         subPanels = new List<GameObject>
         {
             sizePanel,
@@ -59,11 +58,17 @@ public class TerrainShapeMenu : MonoBehaviour
             FeaturePanel,
             GeneralPanel
         };
-        addOnClickListeners();
-        MenuUtil.ShowPanel(sizePanel, subPanels);
-        UpdateComplexityWarning();
+        MenuUtil.Load(parameters, fileName);
     }
 
+
+    void OnEnable(){
+        LoadParameters();
+        MenuUtil.ShowPanel(sizePanel, subPanels);
+
+        addOnClickListeners();
+        UpdateComplexityWarning();
+    }
     void addOnClickListeners() {
         MenuUtil.LinkSliderAndInputField(octaveCountSlider, octaveCountInputField, true, "F0", UpdateComplexityWarning);
         MenuUtil.LinkSliderAndInputField(lacunaritySlider, lacunarityInputField, false, "0.##");
@@ -92,7 +97,6 @@ public class TerrainShapeMenu : MonoBehaviour
         cellSizeSlider.value = parameters.CellSize;
         noiseAlgorithmDropdown.value = (int)parameters.CurrAlgorithm;
 
-        // Update input fields with loaded values
         octaveCountInputField.SetTextWithoutNotify(parameters.OctaveCount.ToString());
         lacunarityInputField.SetTextWithoutNotify(parameters.Lacunarity.ToString("0.##"));
         persistenceInputField.SetTextWithoutNotify(parameters.Persistence.ToString("0.##"));

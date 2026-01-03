@@ -23,10 +23,9 @@ MonoBehaviour:
   gridSize: 0
   cellSize: 0
   terrainColoring: 0
-  numPossibleElements: 0
   layers: 0
   colors: []
-  allTextures: []
+  textureLibrary: {fileID: 0}
   currTextures: []
   uvScale: 0
 --- !u!114 &-4965591390498265473
@@ -52,10 +51,9 @@ MonoBehaviour:
   gridSize: 0
   cellSize: 0
   terrainColoring: 0
-  numPossibleElements: 0
   layers: 0
   colors: []
-  allTextures: []
+  textureLibrary: {fileID: 0}
   currTextures: []
   uvScale: 0
 --- !u!114 &-3978592101070893169
@@ -81,10 +79,9 @@ MonoBehaviour:
   gridSize: 0
   cellSize: 0
   terrainColoring: 0
-  numPossibleElements: 0
   layers: 0
   colors: []
-  allTextures: []
+  textureLibrary: {fileID: 0}
   currTextures: []
   uvScale: 0
 --- !u!114 &11400000
@@ -101,10 +98,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   presets:
   - {fileID: 11400000, guid: 6d9e8ce32b878f743a790db6e8bd6a21, type: 2}
-  - {fileID: 11400000, guid: 6d9e8ce32b878f743a790db6e8bd6a21, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 568454190556521250}
+--- !u!114 &568454190556521250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 868fba14fbdadb440a1e3a07c728f5e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: New Preset
+  currAlgorithm: 0
+  octaveCount: 0
+  lacunarity: 0
+  persistence: 0
+  currentSeed: 0
+  heightExageration: 0
+  rFactor: 0
+  gridSize: 0
+  cellSize: 0
+  terrainColoring: 0
+  layers: 0
+  colors: []
+  textureLibrary: {fileID: 0}
+  currTextures: []
+  uvScale: 0
 --- !u!114 &5278249372297894094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,9 +150,8 @@ MonoBehaviour:
   gridSize: 0
   cellSize: 0
   terrainColoring: 0
-  numPossibleElements: 0
   layers: 0
   colors: []
-  allTextures: []
+  textureLibrary: {fileID: 0}
   currTextures: []
   uvScale: 0

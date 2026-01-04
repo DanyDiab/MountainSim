@@ -59,15 +59,28 @@ public class TerrainColorMenu : MonoBehaviour
     void OnEnable(){
         LoadParameters();
         MenuUtil.ShowPanel(LayerPanel, subPanels);
-        MenuUtil.loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
+        MenuUtil.loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, buttonToPickMenu, currTextures);
         MenuUtil.LinkSliderAndInputField(numberLayers, layerInput, true, "F0");
     }
 
     void Update(){
         if(parameters.Layers == numberLayers.value && !updateUI) return;
         SaveParameters();
-        MenuUtil.loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, loadPickMenu, currTextures);
+        MenuUtil.loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, buttonToPickMenu, currTextures);
         updateUI = false;
+    }
+
+    void buttonToPickMenu(GameObject prefabCreated, int index){
+        Button button = prefabCreated.GetComponentInChildren<Button>();
+        if(button == null) return;
+
+        button.onClick.AddListener(() => loadPickMenu(index));
+    }
+
+    void buttonToMainMenu(GameObject prefabCreated, int index){
+        Button button = prefabCreated.GetComponentInChildren<Button>();
+        if(button == null) return;
+        button.onClick.AddListener(() => loadMainMenu(index));
     }
 
 
@@ -84,8 +97,7 @@ public class TerrainColorMenu : MonoBehaviour
         uvScaleSlider.value = parameters.UVScale;
     }
 
-public void SaveParameters()
-    {
+    public void SaveParameters(){
         if (parameters == null)
         {
             Debug.LogError("Parameters asset is not assigned in the Inspector!");
@@ -118,7 +130,7 @@ public void SaveParameters()
     void loadPickMenu(int elementIndex) {
         currentIndexEditing = elementIndex;
         MenuUtil.ShowPanel(TexturePickerSubMenu, subPanels);
-        MenuUtil.loadDyanmicGrid(texturePickerGrid, totalPossibleChoices,elementPicker, loadMainMenu, textureList);
+        MenuUtil.loadDyanmicGrid(texturePickerGrid, totalPossibleChoices,elementPicker, buttonToMainMenu, textureList);
     }
 
     void loadMainMenu(int elementIndex) {

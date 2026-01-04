@@ -118,9 +118,6 @@ public class UIController : MonoBehaviour
         isGeneratePressed = true;
     }
 
-
-
-
     public void ShowTerrainShapeMenu(){
         saveCurrentPanel();
         MenuUtil.ShowPanel(terrainShapeMenuPanel, mainMenus);

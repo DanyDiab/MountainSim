@@ -8,7 +8,7 @@ using System.IO;
 using TMPro;
 
 public static class MenuUtil{
-    public static void loadDyanmicGrid(GridLayoutGroup grid, int total, GameObject prefab, Action<int> onElementClickAction, Texture2D[] texList){
+    public static void loadDyanmicGrid(GridLayoutGroup grid, int total, GameObject prefab, Action<GameObject,int> initFunc, Texture2D[] texList){
         if (grid == null) {
             Debug.LogError("Grid Layout Group is not assigned!");
             return;
@@ -21,15 +21,11 @@ public static class MenuUtil{
         for (int i = 0; i < total; i++) {
             GameObject newElement = UnityEngine.Object.Instantiate(prefab, grid.transform);
             newElement.transform.localScale = Vector3.one;
-            Button button = newElement.GetComponentInChildren<Button>();
             RawImage img = newElement.GetComponentInChildren<RawImage>();
             if (img != null && texList[i] != null) {
                 img.texture = texList[i];
             }
-            if (button != null) {
-                int capturedIndex = i;
-                button.onClick.AddListener(() => onElementClickAction(capturedIndex));
-            }
+            initFunc(newElement, i);
         }
     }
 

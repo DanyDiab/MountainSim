@@ -14,7 +14,6 @@ public class PresetsMenu : MonoBehaviour
     [SerializeField] GameObject mainPanel;
     [SerializeField] Parameters paramFile;
     Texture2D[] texs;
-
     [Header("Grid Settings")]
     [SerializeField] GridLayoutGroup grid;
     [SerializeField] GameObject prefab;
@@ -24,17 +23,28 @@ public class PresetsMenu : MonoBehaviour
         paramList = presets.Preset;
         MenuUtil.ShowPanel(mainPanel);
         texs = new Texture2D[paramList.Count];
-        MenuUtil.loadDyanmicGrid(grid,paramList.Count,prefab,loadPreset,texs);
+        MenuUtil.loadDyanmicGrid(grid,paramList.Count,prefab,initPresetButton,texs);
     }
 
+    public void initPresetButton(GameObject prefabCreated, int index){
+        Button loadBtn = prefabCreated.GetComponent<Button>();
+        Button deleteBtn = prefabCreated.GetComponentInChildren<Button>();
+
+        loadBtn.onClick.AddListener(() => loadPreset(index));
+        deleteBtn.onClick.AddListener(() => deletePreset(index));
+
+    }
     public void loadPreset(int index){
         if (index >= 0 && index < paramList.Count){
             ParametersSaveData paramChosen = paramList[index];
             paramFile.LoadFromSaveData(paramChosen);
-            Debug.Log("Updating, loading from " + index);
-            return;
         }
-        Debug.Log("Tried to update but index was not valid");
+    }
+
+    void deletePreset(int index){
+        if (index >= 0 && index < paramList.Count){
+            paramList.RemoveAt(index);
+        }
     }
 
 
@@ -44,6 +54,6 @@ public class PresetsMenu : MonoBehaviour
         presets.Preset = paramList;
 
         texs = new Texture2D[paramList.Count];
-        MenuUtil.loadDyanmicGrid(grid,paramList.Count,prefab,loadPreset,texs);
+        MenuUtil.loadDyanmicGrid(grid,paramList.Count,prefab,initPresetButton,texs);
     }
 }

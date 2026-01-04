@@ -1,9 +1,4 @@
-using TreeEditor;
-using Unity.VisualScripting;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UI;
-
 
 public enum NoiseAlgorithms{
     Ridge,

@@ -15,4 +15,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void OnPointerExit(PointerEventData eventData){
         TooltipManager.show(false, null, type);
     }
+    public void OnDestroy(){
+        TooltipManager.show(false, null, type);
+    }
 }

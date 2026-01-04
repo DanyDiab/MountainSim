@@ -45,7 +45,6 @@ public class PresetsMenu : MonoBehaviour
     }
 
     void deletePreset(int index){
-        Debug.Log("attempting a delete");
         if (index >= 0 && index < paramList.Count){
             paramList.RemoveAt(index);
             showGrid();

@@ -17,6 +17,7 @@ public class TooltipManager : MonoBehaviour
     [SerializeField] Color warnColor;
     [SerializeField] Vector2 offset;
     Vector2 finalOffset;
+    int xThreshold;
     
 
     void Awake(){
@@ -25,6 +26,7 @@ public class TooltipManager : MonoBehaviour
         ttText = tooltip.GetComponentInChildren<TextMeshProUGUI>();
         image = tooltip.GetComponent<Image>();
         show(false,null, ToolTipType.Info);
+        xThreshold = 650;
     }
 
     void Update(){
@@ -41,7 +43,7 @@ public class TooltipManager : MonoBehaviour
 
 // determines which side the tooltip will show on, updates finalOffset
     void determineSide(Vector2 mousePos){
-         int dir = mousePos.x > 650 ? -1 : 1;
+         int dir = mousePos.x > xThreshold ? -1 : 1;
          float x = offset.x * dir;
          finalOffset = new Vector2(x,offset.y);
     }

@@ -54,6 +54,7 @@ public class PresetsMenu : MonoBehaviour
 
     public void saveCurrent(){
         ParametersSaveData newParam = paramFile.GetSaveData();
+        newParam.name = "Preset Name";
         paramList.Add(newParam);
         presets.Preset = paramList;
 

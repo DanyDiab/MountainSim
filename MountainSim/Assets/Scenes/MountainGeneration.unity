@@ -9663,7 +9663,7 @@ MonoBehaviour:
   m_Padding:
     m_Left: 400
     m_Right: 0
-    m_Top: 100
+    m_Top: 150
     m_Bottom: 0
   m_ChildAlignment: 1
   m_StartCorner: 0

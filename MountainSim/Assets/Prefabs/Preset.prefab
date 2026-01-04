@@ -231,6 +231,7 @@ GameObject:
   m_Component:
   - component: {fileID: 704401927841602179}
   - component: {fileID: 1772715987850015726}
+  - component: {fileID: 9037286574634421371}
   m_Layer: 5
   m_Name: Preset
   m_TagString: Untagged
@@ -266,6 +267,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6219982586031981040}
   m_CullTransparentMesh: 1
+--- !u!114 &9037286574634421371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6219982586031981040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2bbdb2cecf5490b88d9dbfb659b0dc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadBtn: {fileID: 1024537951760950541}
+  deleteBtn: {fileID: 7714398439391405725}
+  deleteView: {fileID: 8525024001658343868}
 --- !u!1 &8525024001658343868
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,6 +294,7 @@ GameObject:
   - component: {fileID: 8009949967834196198}
   - component: {fileID: 2009661404347968364}
   - component: {fileID: 7714398439391405725}
+  - component: {fileID: 4698228442543789161}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -292,18 +309,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8525024001658343868}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1717602215057628362}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -20, y: -20}
   m_SizeDelta: {x: 35, y: 35}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 1}
 --- !u!222 &8009949967834196198
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -386,3 +403,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4698228442543789161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8525024001658343868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dfa12a81cd8214429b7c429a984adc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Delete Preset?
+  type: 1

@@ -18,20 +18,19 @@ public class PresetsMenu : MonoBehaviour
     [SerializeField] GridLayoutGroup grid;
     [SerializeField] GameObject prefab;
     
-    
-    void OnEnable(){
+    void Awake(){
         paramList = presets.Preset;
-        MenuUtil.ShowPanel(mainPanel);
         texs = new Texture2D[paramList.Count];
+    }
+    void OnEnable(){
+        MenuUtil.ShowPanel(mainPanel);
         MenuUtil.loadDyanmicGrid(grid,paramList.Count,prefab,initPresetButton,texs);
     }
 
     public void initPresetButton(GameObject prefabCreated, int index){
-        Button loadBtn = prefabCreated.GetComponent<Button>();
-        Button deleteBtn = prefabCreated.GetComponentInChildren<Button>();
-
-        loadBtn.onClick.AddListener(() => loadPreset(index));
-        deleteBtn.onClick.AddListener(() => deletePreset(index));
+        PresetItemView[] presetItemViews = GetComponentsInChildren<PresetItemView>();
+        PresetItemView piv = presetItemViews[presetItemViews.Length - 1];
+        piv.init(index,loadPreset,deletePreset);
 
     }
     public void loadPreset(int index){

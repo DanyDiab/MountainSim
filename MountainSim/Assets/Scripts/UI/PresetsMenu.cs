@@ -20,10 +20,14 @@ public class PresetsMenu : MonoBehaviour
     
     void Awake(){
         paramList = presets.Preset;
-        texs = new Texture2D[paramList.Count];
     }
     void OnEnable(){
         MenuUtil.ShowPanel(mainPanel);
+        showGrid();
+    }
+
+    void showGrid(){
+        texs = new Texture2D[paramList.Count];
         MenuUtil.loadDyanmicGrid(grid,paramList.Count,prefab,initPresetButton,texs);
     }
 
@@ -41,8 +45,10 @@ public class PresetsMenu : MonoBehaviour
     }
 
     void deletePreset(int index){
+        Debug.Log("attempting a delete");
         if (index >= 0 && index < paramList.Count){
             paramList.RemoveAt(index);
+            showGrid();
         }
     }
 
@@ -52,7 +58,6 @@ public class PresetsMenu : MonoBehaviour
         paramList.Add(newParam);
         presets.Preset = paramList;
 
-        texs = new Texture2D[paramList.Count];
-        MenuUtil.loadDyanmicGrid(grid,paramList.Count,prefab,initPresetButton,texs);
+        showGrid();
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.Presets;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,11 +33,20 @@ public class PresetsMenu : MonoBehaviour
     }
 
     public void initPresetButton(GameObject prefabCreated, int index){
-        PresetItemView[] presetItemViews = GetComponentsInChildren<PresetItemView>();
-        PresetItemView piv = presetItemViews[presetItemViews.Length - 1];
-        piv.init(index,loadPreset,deletePreset);
+        PresetItemView piv = prefabCreated.GetComponent<PresetItemView>();
+        if(piv == null) {
+            PresetItemView[] presetItemViews = GetComponentsInChildren<PresetItemView>();
+            piv = presetItemViews[presetItemViews.Length - 1];
+        }
+        
+        string currentName = "Preset " + index;
+        if(index >= 0 && index < paramList.Count && paramList[index] != null){
+            currentName = paramList[index].name;
+        }
 
+        piv.init(index, currentName, loadPreset, deletePreset, renamePreset);
     }
+
     public void loadPreset(int index){
         if (index >= 0 && index < paramList.Count){
             ParametersSaveData paramChosen = paramList[index];
@@ -51,6 +61,12 @@ public class PresetsMenu : MonoBehaviour
         }
     }
 
+    void renamePreset(int index, string newName){
+        if (index >= 0 && index < paramList.Count){
+            paramList[index].name = newName;
+            presets.Preset = paramList;             
+        }
+    }
 
     public void saveCurrent(){
         ParametersSaveData newParam = paramFile.GetSaveData();
@@ -59,4 +75,6 @@ public class PresetsMenu : MonoBehaviour
 
         showGrid();
     }
+
+
 }

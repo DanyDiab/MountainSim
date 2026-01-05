@@ -48,17 +48,20 @@ public class TerrainShapeMenu : MonoBehaviour
     List<GameObject> subPanels;
     private static string fileName = "parameters";
 
-    void Awake()
-    {
+    void Awake(){
+        if(parameters != null) {
+            ParametersSaveData data = parameters.GetSaveData();
+            MenuUtil.Load(data, fileName);
+            parameters.LoadFromSaveData(data);
+        }
         complexityTresh = 2000000;
-        subPanels = new List<GameObject>
-        {
+        subPanels = new List<GameObject>{
             sizePanel,
             HeightPanel,
             FeaturePanel,
             GeneralPanel
         };
-        MenuUtil.Load(parameters, fileName);
+
     }
 
 

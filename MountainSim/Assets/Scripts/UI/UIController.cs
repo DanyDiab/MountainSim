@@ -92,14 +92,13 @@ public class UIController : MonoBehaviour
     }
 
     void saveMenu(){
-        if (terrainShapeMenuController) terrainShapeMenuController.SaveParameters();
-        if (terrainColorMenuController) terrainColorMenuController.SaveParameters();
+        saveCurrentPanel();
     }
 
 
     void saveCurrentPanel(){
-        if(terrainShapeMenuPanel.activeInHierarchy) terrainShapeMenuController.SaveParameters();
-        if (terrainShapeMenuPanel.activeInHierarchy) terrainColorMenuController.SaveParameters();
+        if (terrainShapeMenuPanel.activeInHierarchy) terrainShapeMenuController.SaveParameters();
+        if (terrainColorMenuPanel.activeInHierarchy) terrainColorMenuController.SaveParameters();
 
     }
 

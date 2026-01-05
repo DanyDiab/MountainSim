@@ -3,22 +3,15 @@
 
 ## todo 
 
-- finish presets menu
-- fix texturing and json saving bug
-- finish misc menu 
+- Add Controls Menu
+- Main Menu
+- Add ToolTip to Terrain Color
+- Explaination for different Algorithms? Maybe as a dyanmic tooltip
 
-# future ideas 
+## optimizations
 
-This is a list of features I want to have in my mountain simulator
-
-### feature generation
-use noise to generate trees and maybe rocks or other features. Allow for density, height/gradient restrictions
-for example if the feature is ver tall or steep, no trees should spawn
-
-# optimizations
-only implement if more performance is needed
-
-### move all cpu generation to the gpu
+### GPU generation
+Move all CPU generation to the GPU to be done in parallel
 
 ### simplex noise
 This is a faster algorithm that produces similar results to perlin noise
@@ -26,14 +19,24 @@ This is a faster algorithm that produces similar results to perlin noise
 ### lod/mesh decimation
 This is a way to reduce the number of triangles and verticies in the mesh. You can have high detail when nearby, and low detail when far away.
 
-# future ideas
+## future ideas
 these ideas will be implemented if I pick up the project again in the future.
 
 ### erosion simulation
 Simulate erosion to make mountains even more real.
 
 ### chunk system
-Allow for user to infinietly explore using a chunking system. 
+Allow for user to infinietly explore using a chunking system.
+
+### feature generation
+use noise to generate trees and maybe rocks or other features. Allow for density, height/gradient restrictions
+for example if the feature is ver tall or steep, no trees should spawn
+
+### biomes
+use voronoi noise or other noise to generate biomes 
+
+### weather
+Use noise or other factors such as biome to drive weather. (Or maybe they can just be a parameter)
 
 ### experimenting different noise
 I am curious to know what other noise algorithms could look like.

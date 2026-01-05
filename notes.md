@@ -5,7 +5,6 @@
 
 - Add Controls Menu
 - Main Menu
-- Explaination for different Algorithms? Maybe as a dyanmic tooltip
 
 ## optimizations
 

@@ -18,12 +18,10 @@ public class DynamicTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         int index = targetDropdown.value;
         string textToShow = "";
 
-        if (index >= 0 && index < descriptions.Length)
-        {
+        if (index >= 0 && index < descriptions.Length){
             textToShow = descriptions[index];
         }
-        else
-        {
+        else{
             textToShow = "No description available for this selection.";
         }
 

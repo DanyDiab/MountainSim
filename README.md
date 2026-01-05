@@ -62,9 +62,9 @@ MountainSim/
 ## Gallery
 
 ![Mountain Example 1](MountainExamples/6.png)
-![Mountain Example 2](MountainExamples/1.PNG)
-![Mountain Example 3](MountainExamples/3.png)
-![Mountain Example 4](MountainExamples/4.png)
+![Mountain Example 2](MountainExamples/7.png)
+![Mountain Example 3](MountainExamples/8.png)
+![Mountain Example 4](MountainExamples/9.png)
 ![Mountain Example 5](MountainExamples/5.png)
 
 ## License

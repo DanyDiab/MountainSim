@@ -22,6 +22,7 @@ public class PresetsMenu : MonoBehaviour
         paramList = presets.Preset;
     }
     void OnEnable(){
+        loadPresets();
         MenuUtil.ShowPanel(mainPanel);
         showGrid();
     }
@@ -31,7 +32,7 @@ public class PresetsMenu : MonoBehaviour
         MenuUtil.loadDyanmicGrid(grid,paramList.Count,prefab,initPresetButton,texs);
     }
 
-    public void initPresetButton(GameObject prefabCreated, int index){
+    void initPresetButton(GameObject prefabCreated, int index){
         PresetItemView piv = prefabCreated.GetComponent<PresetItemView>();
         if(piv == null) {
             PresetItemView[] presetItemViews = GetComponentsInChildren<PresetItemView>();
@@ -46,7 +47,7 @@ public class PresetsMenu : MonoBehaviour
         piv.init(index, currentName, loadPreset, deletePreset, renamePreset);
     }
 
-    public void loadPreset(int index){
+    void loadPreset(int index){
         if (index >= 0 && index < paramList.Count){
             ParametersSaveData paramChosen = paramList[index];
             paramFile.LoadFromSaveData(paramChosen);
@@ -57,23 +58,44 @@ public class PresetsMenu : MonoBehaviour
         if (index >= 0 && index < paramList.Count){
             paramList.RemoveAt(index);
             showGrid();
+            SavePresets();
         }
     }
 
     void renamePreset(int index, string newName){
         if (index >= 0 && index < paramList.Count){
             paramList[index].name = newName;
-            presets.Preset = paramList;             
+            presets.Preset = paramList;
+            SavePresets();
         }
     }
 
-    public void saveCurrent(){
+    void saveCurrent(){
         ParametersSaveData newParam = paramFile.GetSaveData();
         newParam.name = "Preset Name";
         paramList.Add(newParam);
         presets.Preset = paramList;
 
         showGrid();
+        SavePresets();
+    }
+
+
+    public void SavePresets(){
+        if (presets == null){
+            Debug.LogError("Presets asset is not assigned in the Inspector!");
+            return;
+        }
+        MenuUtil.Save(presets, fileName);
+    }
+
+
+    public void loadPresets(){
+        if (presets == null){
+            Debug.LogError("Presets asset is not assigned in the Inspector!");
+            return;
+        }
+        MenuUtil.Load(presets,fileName);
     }
 
 

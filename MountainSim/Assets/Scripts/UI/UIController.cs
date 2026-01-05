@@ -88,10 +88,6 @@ public class UIController : MonoBehaviour
         Time.timeScale = 0.0f;
         currState = UIState.Menu;
         OnPause?.Invoke(true);
-        saveMenu();
-    }
-
-    void saveMenu(){
         saveCurrentPanel();
     }
 
@@ -99,6 +95,7 @@ public class UIController : MonoBehaviour
     void saveCurrentPanel(){
         if (terrainShapeMenuPanel.activeInHierarchy) terrainShapeMenuController.SaveParameters();
         if (terrainColorMenuPanel.activeInHierarchy) terrainColorMenuController.SaveParameters();
+        if(presetsMenuPanel.activeInHierarchy) presetsMenuController.SavePresets();
 
     }
 
@@ -109,7 +106,7 @@ public class UIController : MonoBehaviour
         OnPause?.Invoke(false);
         isGeneratePressed = false;
 
-        saveMenu();
+        saveCurrentPanel();
     }
 
     public void OnGenerateButtonPressed()

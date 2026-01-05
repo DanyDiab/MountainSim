@@ -5,8 +5,6 @@
 
 - Add Controls Menu
 - Main Menu
-- Add ToolTip to Terrain Color
-- Explaination for different Algorithms? Maybe as a dyanmic tooltip
 
 ## optimizations
 

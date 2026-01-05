@@ -18,6 +18,7 @@ public class TerrainColorMenu : MonoBehaviour
     [SerializeField] TMP_Dropdown colorAlgo;
 
     [SerializeField] TMP_InputField layerInput;
+    [SerializeField] TMP_InputField UVInput;
     Texture2D[] textureList;
     Texture2D[] currTextures;
 
@@ -61,6 +62,7 @@ public class TerrainColorMenu : MonoBehaviour
         MenuUtil.ShowPanel(LayerPanel, subPanels);
         MenuUtil.loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, buttonToPickMenu, currTextures);
         MenuUtil.LinkSliderAndInputField(numberLayers, layerInput, true, "F0");
+        MenuUtil.LinkSliderAndInputField(uvScaleSlider, UVInput, false, "F2");
     }
 
     void Update(){

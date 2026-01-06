@@ -20638,8 +20638,8 @@ MonoBehaviour:
   descriptions:
   - Creates sharp, jagged peaks and steep cliffs, mimicking rugged mountain ranges
     Built on top of Fractal Brownian Motion (fBm)
-  - Fractal Brownian Motion (fBm). Produces rolling hills and generally smoother,
-    cloud-like terrain. Built on top of Perlin Noise.
+  - Fractal Brownian Motion (fBm). Produces generally smoother, cloud-like terrain.
+    Built on top of Perlin Noise.
   - Standard Perlin noise. Generates soft, organic-looking hills suitable for simpler
     landscapes.
   type: 0

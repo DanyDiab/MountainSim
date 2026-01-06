@@ -3,10 +3,12 @@
 
 ## todo 
 
-- Add Controls Menu
-- Main Menu
 - Move Left Right Click to other keybinds
 - Make Cursor invisible by default, shows when menu is open
+
+
+- Add Controls Menu
+- Main Menu
 - Add a bunch more textures, more variety
 - Toast message to display alerts
 - loading symbol to show terrain is generating

@@ -3,7 +3,6 @@
 
 ## todo 
 
-- Move Left Right Click to other keybinds
 - Make Cursor invisible by default, shows when menu is open
 
 

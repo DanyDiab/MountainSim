@@ -51,7 +51,7 @@ public class UIController : MonoBehaviour
             presetsMenuPanel
         };
 
-        currState = UIState.Playing;
+        OpenMenu();
         CameraController.OnLock += checkLock;
         RotateAround.OnRotate += checkRotate;
 

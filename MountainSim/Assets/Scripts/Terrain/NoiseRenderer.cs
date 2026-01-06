@@ -33,11 +33,11 @@ public class NoiseRenderer : MonoBehaviour{
     }
     void Update(){
         bool updateNoise = false;
-        if(Input.GetMouseButtonDown(0) && !inMenu || generateBtnPressed){
+        if(Input.GetKeyDown(KeyCode.G) && !inMenu || generateBtnPressed){
             updateNoise = true;
             generateBtnPressed = false;
         }
-        if(Input.GetMouseButtonDown(1)){
+        if(Input.GetKeyDown(KeyCode.N)){
             generateSeed();
         }
         if(!updateNoise){

@@ -5,10 +5,11 @@
 
 - Add Controls Menu
 - Main Menu
-- Add a bunch more textures, more variety
 - Toast message to display alerts
 - loading symbol to show terrain is generating
-- explore skybox
+- Camera Settings 
+
+- 
 
 
 ## optimizations

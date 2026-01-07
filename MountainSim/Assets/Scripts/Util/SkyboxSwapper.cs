@@ -24,6 +24,5 @@ public class SkyboxSwapper : MonoBehaviour {
 
         RenderSettings.skybox = skyboxMaterials[index];
 
-        // DynamicGI.UpdateEnvironment();
     }
 }

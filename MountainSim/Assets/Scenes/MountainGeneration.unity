@@ -975,7 +975,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3308768887986550797, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3308768887986550797, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: m_AnchorMin.x
@@ -983,7 +983,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3308768887986550797, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3308768887986550797, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1023,11 +1023,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3308768887986550797, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 148.03
       objectReference: {fileID: 0}
     - target: {fileID: 3308768887986550797, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -50
       objectReference: {fileID: 0}
     - target: {fileID: 3308768887986550797, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2197,7 +2197,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3308768887986550797, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 296.28
+      value: 334.66
       objectReference: {fileID: 0}
     - target: {fileID: 3308768887986550797, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2221,7 +2221,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5097439101461817453, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: tooltipText
-      value: Determines the number of Textures to blend between
+      value: Determine the speed at which the camera travereses the world
       objectReference: {fileID: 0}
     - target: {fileID: 6996534876906624392, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: m_fontColor.b
@@ -3402,7 +3402,7 @@ GameObject:
   - component: {fileID: 244107616}
   - component: {fileID: 244107615}
   m_Layer: 0
-  m_Name: LayerInput
+  m_Name: SensInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4727,6 +4727,7 @@ GameObject:
   - component: {fileID: 320475493}
   - component: {fileID: 320475495}
   - component: {fileID: 320475494}
+  - component: {fileID: 320475496}
   m_Layer: 5
   m_Name: MiscMenu
   m_TagString: Untagged
@@ -4794,6 +4795,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 320475492}
   m_CullTransparentMesh: 1
+--- !u!114 &320475496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320475492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b7fbcf4a592a789989811e764046dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseSens: {fileID: 1602350402}
+  moveSpeed: {fileID: 874567116}
+  sensInput: {fileID: 244107616}
+  speedInput: {fileID: 588213072}
+  camPanel: {fileID: 1998659444}
+  controlsPanel: {fileID: 2015063372}
+  skyboxPanel: {fileID: 1162538258}
 --- !u!1 &327476129
 GameObject:
   m_ObjectHideFlags: 0
@@ -5564,8 +5584,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 123.14, y: -50}
-  m_SizeDelta: {x: 246.28, y: 33.52}
+  m_AnchoredPosition: {x: 142.33, y: -50}
+  m_SizeDelta: {x: 284.66, y: 33.52}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &365797731
 MonoBehaviour:
@@ -5601,7 +5621,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Number Of Layers
+  m_text: Camera Move Speed
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6380,7 +6400,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 49.015, y: -50}
-  m_SizeDelta: {x: 98.03, y: 0}
+  m_SizeDelta: {x: 98.03, y: 33.52}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &413628089
 MonoBehaviour:
@@ -9171,7 +9191,7 @@ GameObject:
   - component: {fileID: 588213072}
   - component: {fileID: 588213071}
   m_Layer: 0
-  m_Name: LayerInput
+  m_Name: SpeedInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11052,8 +11072,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 123.14, y: -50}
-  m_SizeDelta: {x: 246.28, y: 33.52}
+  m_AnchoredPosition: {x: 116.34, y: -50}
+  m_SizeDelta: {x: 232.68, y: 33.52}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &761181391
 MonoBehaviour:
@@ -11089,7 +11109,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Number Of Layers
+  m_text: Mouse Sensitivity
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -15589,9 +15609,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1308660165}
-        m_TargetAssemblyTypeName: TerrainColorMenu, Assembly-CSharp
-        m_MethodName: loadLayerPanel
+      - m_Target: {fileID: 320475496}
+        m_TargetAssemblyTypeName: MiscMenu, Assembly-CSharp
+        m_MethodName: loadCamPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -16796,7 +16816,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1162538259
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17211,7 +17231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3308768887986550797, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 296.28
+      value: 282.68
       objectReference: {fileID: 0}
     - target: {fileID: 3308768887986550797, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -17235,7 +17255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5097439101461817453, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: tooltipText
-      value: Determines the number of Textures to blend between
+      value: Determines how fast the camera changes angle
       objectReference: {fileID: 0}
     - target: {fileID: 6996534876906624392, guid: 11fe572fa0f1460428dc7ecb2c82f78f, type: 3}
       propertyPath: m_fontColor.b
@@ -19017,7 +19037,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e0fc9cc49b36df4cacb0317f1afefb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPanel: {fileID: 0}
+  targetPanel: {fileID: 2015063372}
   defaultColors:
     m_NormalColor: {r: 0.16470589, g: 0.16470589, b: 0.16470589, a: 1}
     m_HighlightedColor: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 1}
@@ -19078,9 +19098,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1308660165}
-        m_TargetAssemblyTypeName: TerrainColorMenu, Assembly-CSharp
-        m_MethodName: loadOtherPanel
+      - m_Target: {fileID: 320475496}
+        m_TargetAssemblyTypeName: MiscMenu, Assembly-CSharp
+        m_MethodName: loadControlsPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -23249,7 +23269,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 2}
-  m_SizeDelta: {x: 0, y: 150}
+  m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1688627770
 MonoBehaviour:
@@ -24807,7 +24827,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 700, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1798047395
@@ -24952,7 +24972,7 @@ Transform:
   m_GameObject: {fileID: 1807077839}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 130, z: 30.835484}
+  m_LocalPosition: {x: 0, y: 30, z: 30.835484}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -26428,7 +26448,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 30}
+  m_AnchoredPosition: {x: 0, y: 32}
   m_SizeDelta: {x: 700, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1912325735
@@ -27767,7 +27787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e0fc9cc49b36df4cacb0317f1afefb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPanel: {fileID: 0}
+  targetPanel: {fileID: 1162538258}
   defaultColors:
     m_NormalColor: {r: 0.16470589, g: 0.16470589, b: 0.16470589, a: 1}
     m_HighlightedColor: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 1}
@@ -27828,9 +27848,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1308660165}
-        m_TargetAssemblyTypeName: TerrainColorMenu, Assembly-CSharp
-        m_MethodName: loadOtherPanel
+      - m_Target: {fileID: 320475496}
+        m_TargetAssemblyTypeName: MiscMenu, Assembly-CSharp
+        m_MethodName: loadSkyboxPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -27903,7 +27923,7 @@ Transform:
   m_GameObject: {fileID: 2028075467}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 30, z: 30.83551}
+  m_LocalPosition: {x: 0, y: 68, z: 30.83551}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

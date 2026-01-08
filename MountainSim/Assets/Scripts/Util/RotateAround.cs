@@ -7,12 +7,21 @@ public class RotateAround : MonoBehaviour
     bool rotating;
     Mesh mesh;
     Vector3 center;
-    [SerializeField] float rotateSpeed;
+    [Header("Settings")]
+    [SerializeField] Settings settings;
+    float rotateSpeed;
 
     public delegate void RotateEvent(bool rotating);
     public static event RotateEvent OnRotate;
     void Start(){
         rotating = false;
+        UIController.OnPause += updateRotateSpeed;
+    }
+
+    void updateRotateSpeed(bool inMenu){
+        if(inMenu) return;
+
+        rotateSpeed = settings.RotationSpeed;
     }
 
     void Update(){

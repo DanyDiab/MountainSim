@@ -14326,9 +14326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 367f2ee30add9314b81d8ca1bf75ec63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 1
-  speed: 50
-  camSmoothing: 10
+  settings: {fileID: 11400000, guid: f003b8d9ca4a5b44e9dece5ba08ff422, type: 2}
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25855,7 +25853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bda6152cc592e7141986d401cdf76ff4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateSpeed: 10
+  settings: {fileID: 11400000, guid: f003b8d9ca4a5b44e9dece5ba08ff422, type: 2}
 --- !u!1 &1857300056
 GameObject:
   m_ObjectHideFlags: 0

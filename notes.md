@@ -3,11 +3,9 @@
 
 ## todo 
 
-- Add Controls Menu
 - Main Menu
 - Toast message to display alerts
 - loading symbol to show terrain is generating
-- Camera Settings 
 - Make Tex Load panel use a scroll view to be to display many more textures
 
 

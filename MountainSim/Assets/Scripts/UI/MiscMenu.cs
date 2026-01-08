@@ -39,7 +39,7 @@ public class MiscMenu : MonoBehaviour
 
     void OnEnable(){
         LoadSettings();
-        MenuUtil.ShowPanel(camPanel);
+        MenuUtil.ShowPanel(camPanel, subPanels);
         MenuUtil.LinkSliderAndInputField(mouseSens,sensInput,false,"F2", SaveSettings);
         MenuUtil.LinkSliderAndInputField(moveSpeed,speedInput,false,"F2", SaveSettings);
     }

@@ -4807,6 +4807,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b7fbcf4a592a789989811e764046dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settings: {fileID: 11400000, guid: f003b8d9ca4a5b44e9dece5ba08ff422, type: 2}
   mouseSens: {fileID: 1602350402}
   moveSpeed: {fileID: 874567116}
   sensInput: {fileID: 244107616}
@@ -12530,10 +12531,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1879088916}
   m_HandleRect: {fileID: 1119914950}
   m_Direction: 0
-  m_MinValue: 1
-  m_MaxValue: 4
-  m_WholeNumbers: 1
-  m_Value: 1
+  m_MinValue: 5
+  m_MaxValue: 500
+  m_WholeNumbers: 0
+  m_Value: 5
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -16850,6 +16851,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropdown: {fileID: 1795603525}
+  settings: {fileID: 0}
   skyboxMaterials:
   - {fileID: 2100000, guid: 9991b6265f7f87d43b7e3c676739f203, type: 2}
   - {fileID: 2100000, guid: 0b846be1b116429409a7669cacf2a62e, type: 2}
@@ -21782,9 +21784,9 @@ MonoBehaviour:
   m_FillRect: {fileID: 1203660761}
   m_HandleRect: {fileID: 2008066465}
   m_Direction: 0
-  m_MinValue: 1
-  m_MaxValue: 4
-  m_WholeNumbers: 1
+  m_MinValue: 0.1
+  m_MaxValue: 10
+  m_WholeNumbers: 0
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:

@@ -1,5 +1,15 @@
 using UnityEngine;
 
+[System.Serializable]
+public class SettingsSaveData
+{
+    public float cameraSpeed;
+    public float cameraSmoothing;
+    public float mouseSensitivity;
+    public float rotationSpeed;
+    public int skyboxIndex;
+}
+
 [CreateAssetMenu(menuName = "Asset/Settings")]
 public class Settings : ScriptableObject{
     [Header("Camera Settings")]
@@ -10,7 +20,28 @@ public class Settings : ScriptableObject{
     [Header("Mesh Settings")]
     [SerializeField] float rotationSpeed;
 
+    [Header("Environment Settings")]
+    [SerializeField] int skyboxIndex;
 
+    public SettingsSaveData GetSaveData()
+    {
+        SettingsSaveData data = new SettingsSaveData();
+        data.cameraSpeed = cameraSpeed;
+        data.cameraSmoothing = cameraSmoothing;
+        data.mouseSensitivity = mouseSensitivity;
+        data.rotationSpeed = rotationSpeed;
+        data.skyboxIndex = skyboxIndex;
+        return data;
+    }
+
+    public void LoadFromSaveData(SettingsSaveData data)
+    {
+        cameraSpeed = data.cameraSpeed;
+        cameraSmoothing = data.cameraSmoothing;
+        mouseSensitivity = data.mouseSensitivity;
+        rotationSpeed = data.rotationSpeed;
+        skyboxIndex = data.skyboxIndex;
+    }
 
     // getters /setters
     public float CameraSpeed
@@ -32,6 +63,11 @@ public class Settings : ScriptableObject{
     {
         get => cameraSmoothing;
         set => cameraSmoothing = value;
+    }
+    public int SkyboxIndex
+    {
+        get => skyboxIndex;
+        set => skyboxIndex = value;
     }
 
 

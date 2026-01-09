@@ -3,7 +3,7 @@
 
 ## todo 
 
-- Main Menu
+
 - Toast message to display alerts
 - loading symbol to show terrain is generating
 - Make Tex Load panel use a scroll view to be to display many more textures

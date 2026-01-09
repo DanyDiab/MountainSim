@@ -3,10 +3,10 @@
 
 ## todo 
 
-
 - Toast message to display alerts
 - loading symbol to show terrain is generating
-- Make Tex Load panel use a scroll view to be to display many more textures
+- Download And Upload Presets
+- Make a popup for preset menu
 
 
 ## optimizations

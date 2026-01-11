@@ -44,7 +44,7 @@ public class PresetsMenu : MonoBehaviour
             currentName = paramList[index].name;
         }
 
-        piv.init(index, currentName, loadPreset, deletePreset, renamePreset);
+        piv.init(index, currentName, loadPreset, deletePreset, renamePreset,saveToDisk);
     }
 
     void loadPreset(int index){
@@ -78,6 +78,14 @@ public class PresetsMenu : MonoBehaviour
 
         showGrid();
         SavePresets();
+    }
+
+
+    public void saveToDisk(int index) {
+        if (index >= 0 && index < paramList.Count){
+            ParametersSaveData data = paramList[index];
+            JsonSOConvert.OnSaveToDiskClicked(data);
+        }
     }
 
 

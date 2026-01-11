@@ -11,16 +11,18 @@ public class PresetItemView : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [SerializeField] Button loadBtn;
     [SerializeField] Button deleteBtn;
     [SerializeField] Button editNameBtn;
+    [SerializeField] Button SaveToDiskBtn;
     [SerializeField] GameObject deleteView;
 
     [Header("Text")]
     [SerializeField] TMP_Text titleText;
     [SerializeField] TMP_InputField titleInput;
 
-    public void init(int idx, string name, Action<int> onLoad, Action<int> onDelete, Action<int, string> onRename){
+    public void init(int idx, string name, Action<int> onLoad, Action<int> onDelete, Action<int, string> onRename, Action<int> onSaveToDisk){
         loadBtn.onClick.AddListener(() => onLoad(idx));
         deleteBtn.onClick.AddListener(() => onDelete(idx));
-        
+        SaveToDiskBtn.onClick.AddListener(() => onSaveToDisk(idx));
+
         initEditText(idx,name,onRename);
         deleteView.SetActive(false);
     }
@@ -41,6 +43,7 @@ public class PresetItemView : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             titleText.text = newName;
             onRename(idx, newName);
         });
+
 
         titleText.text = name;
         titleInput.gameObject.SetActive(false);

@@ -31,7 +31,7 @@ public static class JsonSOConvert
             File.WriteAllText(path,jsonString);
         }
         catch(Exception e) {
-            Debug.LogErrorFormat("something went wrong with the writing to disk: {0}", e.Message);
+            Debug.LogFormat("something went wrong with the writing to disk: {0}", e.Message);
         }
 
 

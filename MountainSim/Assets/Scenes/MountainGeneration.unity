@@ -419,7 +419,6 @@ GameObject:
   - component: {fileID: 26757862}
   - component: {fileID: 26757867}
   - component: {fileID: 26757866}
-  - component: {fileID: 26757868}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -547,18 +546,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: adc2355c580f22a498dbdf23d40063fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &26757868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 26757861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a1da1524f98d5695b10377b2fc02301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &26862363
@@ -7778,7 +7765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dfa12a81cd8214429b7c429a984adc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipText: Save current parameters into a preset
+  tooltipText: Load a preset from disk
   type: 0
 --- !u!114 &419915672
 MonoBehaviour:
@@ -7824,9 +7811,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 26757868}
-        m_TargetAssemblyTypeName: JsonSOConvert, Assembly-CSharp
-        m_MethodName: OnLoadButtonClicked
+      - m_Target: {fileID: 168736697}
+        m_TargetAssemblyTypeName: PresetsMenu, Assembly-CSharp
+        m_MethodName: LoadFromDisk
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

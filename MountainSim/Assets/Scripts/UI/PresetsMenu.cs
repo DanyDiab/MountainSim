@@ -73,7 +73,11 @@ public class PresetsMenu : MonoBehaviour
     void saveCurrent(){
         ParametersSaveData newParam = paramFile.GetSaveData();
         newParam.name = "Preset Name";
-        paramList.Add(newParam);
+        addParamToList(newParam);
+    }
+
+    public void addParamToList(ParametersSaveData data) {
+        paramList.Add(data);
         presets.Preset = paramList;
 
         showGrid();
@@ -85,6 +89,13 @@ public class PresetsMenu : MonoBehaviour
         if (index >= 0 && index < paramList.Count){
             ParametersSaveData data = paramList[index];
             JsonSOConvert.OnSaveToDiskClicked(data);
+        }
+    }
+
+    public void LoadFromDisk() {
+        ParametersSaveData data = JsonSOConvert.OnLoadClicked();
+        if (data != null) {
+            addParamToList(data);
         }
     }
 

@@ -10,10 +10,15 @@ public static class JsonSOConvert
     // Update is called once per frame
 
 
-    public static void OnLoadClicked() {
+    public static ParametersSaveData OnLoadClicked() {
         // open dialog and choose and take the first path
-        string path = StandaloneFileBrowser.OpenFilePanel("presets", "", "json",false)[0];
-
+        var paths = StandaloneFileBrowser.OpenFilePanel("presets", "", "preset",false);
+        if (paths.Length > 0 && !string.IsNullOrEmpty(paths[0])) {
+            string path = paths[0];
+            string jsonContent = File.ReadAllText(path);
+            return ParametersSaveData.GetSaveFromJsonString(jsonContent);
+        }
+        return null;
     }
 
     public static void OnSaveToDiskClicked(ParametersSaveData data) {
@@ -21,7 +26,13 @@ public static class JsonSOConvert
         string name = data.name;
         string path = StandaloneFileBrowser.SaveFilePanel("Save Preset","", name,"preset");
 
-        
+        string jsonString = data.GetJsonString(data);
+        try {
+            File.WriteAllText(path,jsonString);
+        }
+        catch(Exception e) {
+            Debug.LogErrorFormat("something went wrong with the writing to disk: {0}", e.Message);
+        }
 
 
     }

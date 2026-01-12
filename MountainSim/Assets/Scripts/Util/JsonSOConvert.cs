@@ -7,8 +7,6 @@ using System.IO;
 
 public static class JsonSOConvert
 {
-    // Update is called once per frame
-
 
     public static ParametersSaveData OnLoadClicked() {
         // open dialog and choose and take the first path

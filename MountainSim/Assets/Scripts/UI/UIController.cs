@@ -37,8 +37,13 @@ public class UIController : MonoBehaviour
     [SerializeField] PresetsMenu presetsMenuController;
     [SerializeField] MiscMenu miscMenuController;
 
+    
     public delegate void PauseEvent(bool paused);
     public static event PauseEvent OnPause;
+
+    [Header("Instances")]
+    [SerializeField] Settings settings;
+    [SerializeField] Popup popup;
     
     bool isGeneratePressed;
 
@@ -72,12 +77,10 @@ public class UIController : MonoBehaviour
 
     void updateState()
     {
-        if (currState == UIState.Playing && Input.GetKeyDown(KeyCode.Escape))
-        {
+        if (currState == UIState.Playing && Input.GetKeyDown(KeyCode.Escape)){
             OpenMenu();
         }
-        else if (currState == UIState.Menu)
-        {
+        else if (currState == UIState.Menu){
             if (Input.GetKeyDown(KeyCode.Escape) || isGeneratePressed ){
                 CloseAndSaveMenu();
             }
@@ -86,6 +89,10 @@ public class UIController : MonoBehaviour
 
     void OpenMenu()
     {
+        if (settings.IsFirstTime) {
+            popup.show();
+            settings.IsFirstTime = false;
+        }
         Time.timeScale = 0.0f;
         currState = UIState.Menu;
         OnPause?.Invoke(true);

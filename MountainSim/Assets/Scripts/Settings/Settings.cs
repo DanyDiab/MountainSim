@@ -22,6 +22,8 @@ public class Settings : ScriptableObject{
 
     [Header("Environment Settings")]
     [SerializeField] int skyboxIndex;
+    bool isFirstTime = true;
+
 
     public SettingsSaveData GetSaveData()
     {
@@ -68,6 +70,11 @@ public class Settings : ScriptableObject{
     {
         get => skyboxIndex;
         set => skyboxIndex = value;
+    }
+    
+    public bool IsFirstTime {
+        get => isFirstTime;
+        set => isFirstTime = value;
     }
 
 

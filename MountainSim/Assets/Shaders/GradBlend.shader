@@ -20,8 +20,8 @@ Shader "Custom/GradBlend"{
                 float topIndex = 0;
                 float percent = 0;
                 
-                [unroll(MAX_BOUNDS)] for(int idx = 0; idx < MAX_BOUNDS; idx++){
-                    if(idx > _numBounds - 1) break;
+                for(int idx = 0; idx < MAX_BOUNDS; idx++){
+                    if(idx >= _numBounds - 1) break;
                     float currBound = _Bounds[idx];
                     float nextBound = _Bounds[min(idx + 1, 3)];
 
@@ -42,8 +42,7 @@ Shader "Custom/GradBlend"{
                 saturate(percent);
                 return blendTextures(percent, (int)topIndex, (int)botIndex, i.uv);
             }
-            ENDCG
-                
+            ENDCG       
         }
     }
 }

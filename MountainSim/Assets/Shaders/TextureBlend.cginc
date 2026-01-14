@@ -5,7 +5,7 @@
 
 // Shader Properties
 uniform float _TilingFactor;
-uniform float _Bounds[10];
+uniform float _Bounds[4];
 uniform int _numBounds;
 UNITY_DECLARE_TEX2DARRAY(_Textures);
 

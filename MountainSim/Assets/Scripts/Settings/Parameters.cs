@@ -19,6 +19,16 @@ public class ParametersSaveData
     public float uvScale;
     public string name;
     public List<int> textureIndices = new List<int>();
+
+    public string GetJsonString(ParametersSaveData data) {
+        return JsonUtility.ToJson(data, true);
+    }
+
+    public static ParametersSaveData GetSaveFromJsonString(string json) {
+        ParametersSaveData data = JsonUtility.FromJson<ParametersSaveData>(json);
+        return data;
+    }
+
 }
 
 [System.Serializable]
@@ -109,6 +119,7 @@ public class Parameters : ScriptableObject
         }
         currTextures = loadedTextures.ToArray();
     }
+
 
 
 

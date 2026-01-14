@@ -3,13 +3,10 @@
 
 ## todo 
 
-- Add Controls Menu
-- Main Menu
 - Toast message to display alerts
 - loading symbol to show terrain is generating
-- Camera Settings 
-
-- 
+- Download And Upload Presets
+- Make a popup for preset menu
 
 
 ## optimizations

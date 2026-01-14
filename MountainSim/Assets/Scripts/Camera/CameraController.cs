@@ -8,11 +8,15 @@ public class CameraController : MonoBehaviour
 {
     Vector3 pos;
     Vector3 prevMousePos;
+
+    [Header("Settings")]
+    [SerializeField] Settings settings;
     
     [Header("Camera Settings")]
-    [SerializeField]float mouseSensitivity = 1f;
-    [SerializeField] float speed = 1;
-    [SerializeField]float camSmoothing = 2f;
+
+    float sens;
+    float speed;
+    float camSmoothing = 2f;
     float minPitch = -90f;
     float maxPitch = 90f;
     float currPitch = 0f;
@@ -36,6 +40,14 @@ public class CameraController : MonoBehaviour
         prevMousePos = Input.mousePosition;
         pos = transform.position;
         cameraTP = GetComponent<CameraTP>();
+        UIController.OnPause += updateCamVars;
+    }
+
+    void updateCamVars(bool inMenu){
+        if(inMenu) return;
+        
+        speed = settings.CameraSpeed;
+        sens = settings.MouseSensitivity;
     }
 
     // Update is called once per frame
@@ -81,8 +93,8 @@ public class CameraController : MonoBehaviour
     
     void rotateCam(){
         // calculate vector to rotate towards
-        float rotationY = Input.GetAxis("Mouse X") * mouseSensitivity;
-        float rotationX = -Input.GetAxis("Mouse Y") * mouseSensitivity;
+        float rotationY = Input.GetAxis("Mouse X") * sens;
+        float rotationX = -Input.GetAxis("Mouse Y") * sens;
 
         targetPitch = Mathf.Clamp(targetPitch + rotationX, minPitch, maxPitch);
         targetYaw += rotationY;

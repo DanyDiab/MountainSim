@@ -35,8 +35,11 @@ public class PopupManager : MonoBehaviour {
     public static void Show(string header, string description) {
         if (instance == null) return;
         
-        if (instance.headerObj != null) instance.headerObj.text = header;
-        if (instance.descObj != null) instance.descObj.text = description;
+        string formattedHeader = header.Replace("\\n", "\n").Replace("\\t", "\t");
+        string formattedDesc = description.Replace("\\n", "\n").Replace("\\t", "\t");
+
+        if (instance.headerObj != null) instance.headerObj.text = formattedHeader;
+        if (instance.descObj != null) instance.descObj.text = formattedDesc;
         
         if (instance.panel != null) instance.panel.SetActive(true);
     }

@@ -89,10 +89,10 @@ public class UIController : MonoBehaviour
 
     void OpenMenu()
     {
-        if (settings.IsFirstTime) {
+        // if (settings.IsFirstTime) {
             popup.show();
             settings.IsFirstTime = false;
-        }
+        // }
         Time.timeScale = 0.0f;
         currState = UIState.Menu;
         OnPause?.Invoke(true);

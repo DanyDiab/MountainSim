@@ -45,7 +45,6 @@ public class Settings : ScriptableObject{
         skyboxIndex = data.skyboxIndex;
     }
 
-    // getters /setters
     public float CameraSpeed
     {
         get => cameraSpeed;
@@ -76,6 +75,6 @@ public class Settings : ScriptableObject{
         get => isFirstTime;
         set => isFirstTime = value;
     }
-
+ 
 
 }

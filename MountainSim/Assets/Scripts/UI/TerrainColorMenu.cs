@@ -19,6 +19,8 @@ public class TerrainColorMenu : MonoBehaviour
 
     [SerializeField] TMP_InputField layerInput;
     [SerializeField] TMP_InputField UVInput;
+
+    [SerializeField] GameObject bugTooltip;
     Texture2D[] textureList;
     Texture2D[] currTextures;
 
@@ -61,7 +63,7 @@ public class TerrainColorMenu : MonoBehaviour
         LoadParameters();
         MenuUtil.ShowPanel(LayerPanel, subPanels);
         MenuUtil.loadDyanmicGrid(layerPickerGrid, (int)numberLayers.value, layerPicker, buttonToPickMenu, currTextures);
-        MenuUtil.LinkSliderAndInputField(numberLayers, layerInput, true, "F0");
+        MenuUtil.LinkSliderAndInputField(numberLayers, layerInput, true, "F0", showKnownBugToolTip);
         MenuUtil.LinkSliderAndInputField(uvScaleSlider, UVInput, false, "F2");
     }
 
@@ -127,7 +129,10 @@ public class TerrainColorMenu : MonoBehaviour
         MenuUtil.Save(parameters.GetSaveData(), fileName);
     }
 
-
+    void showKnownBugToolTip(){
+        bool showBugTooltip = numberLayers.value > 2 && (TerrainColoringParams)colorAlgo.value == TerrainColoringParams.TextureGrad;
+        bugTooltip.SetActive(showBugTooltip);
+    }
 
     void loadPickMenu(int elementIndex) {
         currentIndexEditing = elementIndex;

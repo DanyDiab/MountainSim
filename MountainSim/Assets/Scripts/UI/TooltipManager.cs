@@ -13,9 +13,12 @@ public class TooltipManager : MonoBehaviour
     static TextMeshProUGUI ttText;
     static Image image;
 
+    [Header("Colors")] 
     [SerializeField] Color infoColor;
     [SerializeField] Color warnColor;
     [SerializeField] Color noteColor;
+    [SerializeField] Color yellowWarn;
+    [Header("Offset")]
     [SerializeField] Vector2 offset;
     Vector2 finalOffset;
     int xThreshold;
@@ -61,6 +64,9 @@ public class TooltipManager : MonoBehaviour
                 break;
             case ToolTipType.Note:
                 currColor = instance.noteColor;
+                break;
+            case ToolTipType.YellowWarn:
+                currColor = instance.yellowWarn;
                 break;
         }
 

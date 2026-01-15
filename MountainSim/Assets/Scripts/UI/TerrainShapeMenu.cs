@@ -15,8 +15,9 @@ public class TerrainShapeMenu : MonoBehaviour
     [SerializeField] GameObject FeaturePanel;
     [SerializeField] GameObject GeneralPanel;
 
-    [Header("Menu UI Elements")]
-    //input fields 
+    [Header("Input Fields")]
+
+    
     [SerializeField] TMP_InputField seedInputField;
     [SerializeField] TMP_InputField octaveCountInputField;
     [SerializeField] TMP_InputField lacunarityInputField;
@@ -26,7 +27,7 @@ public class TerrainShapeMenu : MonoBehaviour
     [SerializeField] TMP_InputField gridSizeInputField;
     [SerializeField] TMP_InputField cellSizeInputField;
 
-    // Sliders
+    [Header("Sliders")]
     [SerializeField] Slider octaveCountSlider;
     [SerializeField] Slider lacunaritySlider;
     [SerializeField] Slider persistenceSlider;
@@ -34,11 +35,14 @@ public class TerrainShapeMenu : MonoBehaviour
     [SerializeField] Slider rFactorSlider;
     [SerializeField] Slider gridSizeSlider;
     [SerializeField] Slider cellSizeSlider;
+
+    [Header("Game Objects")]
+    [SerializeField] GameObject rFactorObj;
   
-    // Dropdowns
+    [Header("Drop downs")]
     [SerializeField] TMP_Dropdown noiseAlgorithmDropdown;
 
-    // Buttons
+    [Header("Buttons")]
     [SerializeField] Button generateRandSeed;
 
     [Header("Complexity Warning")]
@@ -62,6 +66,11 @@ public class TerrainShapeMenu : MonoBehaviour
             GeneralPanel
         };
 
+    }
+
+    void Update(){
+        bool shouldShow = (NoiseAlgorithms)noiseAlgorithmDropdown.value == NoiseAlgorithms.Ridge;
+        rFactorObj.SetActive(shouldShow);
     }
 
 

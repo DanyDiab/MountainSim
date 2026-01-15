@@ -1,5 +1,6 @@
 public enum ToolTipType
 {
     Info,
-    Warn
+    Warn,
+    Note
 }

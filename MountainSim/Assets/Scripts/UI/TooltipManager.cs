@@ -15,6 +15,7 @@ public class TooltipManager : MonoBehaviour
 
     [SerializeField] Color infoColor;
     [SerializeField] Color warnColor;
+    [SerializeField] Color noteColor;
     [SerializeField] Vector2 offset;
     Vector2 finalOffset;
     int xThreshold;
@@ -57,6 +58,9 @@ public class TooltipManager : MonoBehaviour
                 break;
             case ToolTipType.Warn:
                 currColor = instance.warnColor;
+                break;
+            case ToolTipType.Note:
+                currColor = instance.noteColor;
                 break;
         }
 

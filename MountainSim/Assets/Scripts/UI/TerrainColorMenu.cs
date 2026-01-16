@@ -121,7 +121,7 @@ public class TerrainColorMenu : MonoBehaviour
             currTextures = newTextures;
         }
         parameters.UVScale = uvScaleSlider.value;
-        parameters.TerrainColoring = (TerrainColoringParams)colorAlgo.value;
+        parameters.TerrainColoring = (TerrainColoringAlgorithms)colorAlgo.value;
         parameters.Layers = newLayerCount;
         parameters.CurrTextures = currTextures;
         MenuUtil.Save(parameters.GetSaveData(), fileName);

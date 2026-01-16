@@ -1,4 +1,7 @@
+using System;
+using Unity.Collections;
 using UnityEngine;
+using Unity.Mathematics;
 
 public class PerlinNoise : MonoBehaviour
 {
@@ -17,9 +20,6 @@ public class PerlinNoise : MonoBehaviour
         return pixels;
     }
 
-
-
-
     Color[] getPerlinValues(int gridSize, int cellSize, Vector2[,] grads){
         int width = gridSize * cellSize;
         Color[] pixels = new Color[width * width];
@@ -27,7 +27,7 @@ public class PerlinNoise : MonoBehaviour
             for(int j = 0; j < width; j++){
                 float sampleX = (float)j / cellSize;
                 float sampleY = (float)i / cellSize;
-                float brightness = getPerlinValue(sampleX,sampleY, grads, cellSize, gridSize);
+                float brightness = getPerlinValue(sampleX,sampleY, grads, gridSize);
                 pixels[i * width + j] = new Color(brightness,brightness,brightness);
             }
         }
@@ -35,8 +35,7 @@ public class PerlinNoise : MonoBehaviour
     }
 
 
-public float getPerlinValue(float sampleX, float sampleY, Vector2[,] grads, int sizeOfCell, int sizeOfGrid, bool useTiling = false)
-    {
+    public float getPerlinValue(float sampleX, float sampleY, Vector2[,] grads, int sizeOfGrid, bool useTiling = false){
         int gridX = Mathf.FloorToInt(sampleX);
         int gridY = Mathf.FloorToInt(sampleY);
 
@@ -63,7 +62,6 @@ public float getPerlinValue(float sampleX, float sampleY, Vector2[,] grads, int 
             gridY_1 = gridY + 1;
         }
 
-
         Vector2 tlGrad = grads[gridX_0, gridY_0];
         Vector2 trGrad = grads[gridX_1, gridY_0];
         Vector2 blGrad = grads[gridX_0, gridY_1];
@@ -74,17 +72,69 @@ public float getPerlinValue(float sampleX, float sampleY, Vector2[,] grads, int 
         Vector2 bl = new Vector2(localX, localY - 1);
         Vector2 br = new Vector2(localX - 1, localY - 1);
 
-        float tlI = Vector2Dot(tl, tlGrad);
-        float trI = Vector2Dot(tr, trGrad);
-        float blI = Vector2Dot(bl, blGrad);
-        float brI = Vector2Dot(br, brGrad);
+        float tlI = Vector2.Dot(tl, tlGrad);
+        float trI = Vector2.Dot(tr, trGrad);
+        float blI = Vector2.Dot(bl, blGrad);
+        float brI = Vector2.Dot(br, brGrad);
 
         float u = fade(localX);
         float v = fade(localY);
 
-        float top = lerp(tlI, trI, u);
-        float bot = lerp(blI, brI, u);
-        float final = lerp(top, bot, v);
+        float top = Mathf.Lerp(tlI, trI, u);
+        float bot = Mathf.Lerp(blI, brI, u);
+        float final = Mathf.Lerp(top, bot, v);
+
+        return final;
+    }
+
+    public static float getPerlinValue(float sampleX, float sampleY, NativeArray<Vector2>grads, int sizeOfGrid, bool useTiling = false){
+        int gridX = (int)math.floor(sampleX);
+        int gridY = (int)math.floor(sampleY);
+
+        float localX = sampleX - gridX;
+        float localY = sampleY - gridY;
+
+        int gridX_0, gridY_0, gridX_1, gridY_1;
+
+        if (useTiling)
+        {
+            gridX_0 = gridX % sizeOfGrid;
+            gridY_0 = gridY % sizeOfGrid;
+            if (gridX_0 < 0) gridX_0 += sizeOfGrid;
+            if (gridY_0 < 0) gridY_0 += sizeOfGrid;
+
+            gridX_1 = (gridX_0 + 1) % sizeOfGrid;
+            gridY_1 = (gridY_0 + 1) % sizeOfGrid;
+        }
+        else
+        {
+            gridX_0 = gridX;
+            gridY_0 = gridY;
+            gridX_1 = gridX + 1;
+            gridY_1 = gridY + 1;
+        }
+        
+        Vector2 tlGrad = grads[gridX_0 + (gridY_0 * sizeOfGrid)];
+        Vector2 trGrad = grads[gridX_1 + (gridY_0 * sizeOfGrid)];
+        Vector2 blGrad = grads[gridX_0 +(gridY_1 * sizeOfGrid)];
+        Vector2 brGrad = grads[gridX_1 + (gridY_1 * sizeOfGrid)];
+
+        Vector2 tl = new Vector2(localX, localY);
+        Vector2 tr = new Vector2(localX - 1, localY);
+        Vector2 bl = new Vector2(localX, localY - 1);
+        Vector2 br = new Vector2(localX - 1, localY - 1);
+
+        float tlI = Vector2.Dot(tl, tlGrad);
+        float trI = Vector2.Dot(tr, trGrad);
+        float blI = Vector2.Dot(bl, blGrad);
+        float brI = Vector2.Dot(br, brGrad);
+
+        float u = fade(localX);
+        float v = fade(localY);
+
+        float top = math.lerp(tlI, trI, u);
+        float bot = math.lerp(blI, brI, u);
+        float final = math.lerp(top, bot, v);
 
         return final;
     }
@@ -93,18 +143,10 @@ public float getPerlinValue(float sampleX, float sampleY, Vector2[,] grads, int 
         return (value + 1f) / 2f;
     }
 
-    float fade(float t){
+    static float fade(float t){
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
-    float lerp(float a, float b, float t){
-        return a + (b - a) * t;
-    }
-    
-
-    float Vector2Dot(Vector2 v1, Vector2 v2){
-        return (v1.x * v2.x) + (v1.y * v2.y);
-    }
 
 
 

@@ -6,7 +6,7 @@ public enum NoiseAlgorithms{
     Perlin
 }
 
-public enum TerrainColoringParams{
+public enum TerrainColoringAlgorithms{
     TextureGrad,
     Texture,
     Color,
@@ -48,10 +48,10 @@ public class NoiseRenderer : MonoBehaviour{
                 displayNoise(perlin.generatePerlinNoise(parameters.GridSize,parameters.CellSize));
                 break;
             case NoiseAlgorithms.fBm:
-                displayNoise(fBm.generateFBMNoise(parameters.GridSize,parameters.CellSize, false));
+                displayNoise(fBm.generateFBMNoiseJobs(parameters.GridSize,parameters.CellSize, false));
                 break;
             case NoiseAlgorithms.Ridge:
-                displayNoise(fBm.generateFBMNoise(parameters.GridSize,parameters.CellSize, true));
+                displayNoise(fBm.generateFBMNoiseJobs(parameters.GridSize,parameters.CellSize, true));
                 break;
         }
     }
@@ -67,13 +67,13 @@ public class NoiseRenderer : MonoBehaviour{
     public void displayNoise(Color[] pixels){
         BrightnessToMesh(pixels);
         switch(parameters.TerrainColoring){
-            case TerrainColoringParams.Texture:
+            case TerrainColoringAlgorithms.Texture:
                 terrainColoring.updatePixelTex();
                 break;
-            case TerrainColoringParams.Color:
+            case TerrainColoringAlgorithms.Color:
                 terrainColoring.updatePixelColors();
                 break;
-            case TerrainColoringParams.TextureGrad:
+            case TerrainColoringAlgorithms.TextureGrad:
                 terrainColoring.updateGradTex();
                 break;
         }
@@ -101,6 +101,21 @@ public class NoiseRenderer : MonoBehaviour{
         }
         return grads;
     }
+
+    public Vector2[] generateGraidentVectors1D(int gridSize){
+        // update the random with the current seed
+        Random.InitState((int)parameters.CurrentSeed);
+        int totalSize = gridSize * gridSize;
+        Vector2[] grads = new Vector2[totalSize];
+        for(int i = 0; i < totalSize; i++){
+            float randDirX = Random.Range(-1f,1f);
+            float randDirY = Random.Range(-1f,1f);
+            Vector2 gradientVector = new Vector2(randDirX,randDirY).normalized;
+            grads[i] = gradientVector;
+        }   
+        return grads;
+    }
+
 
     void BrightnessToMesh(Color[] pixels) {
         int size = parameters.GridSize * parameters.CellSize;

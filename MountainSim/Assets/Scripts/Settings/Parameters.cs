@@ -13,7 +13,7 @@ public class ParametersSaveData
     public int rFactor;
     public int gridSize;
     public int cellSize;
-    public TerrainColoringParams terrainColoring;
+    public TerrainColoringAlgorithms terrainColoring;
     public int layers;
     public Color[] colors;
     public float uvScale;
@@ -49,7 +49,7 @@ public class Parameters : ScriptableObject
 
     [Space(10)]
     [Header("Terrain Coloring Parameters")]
-    [SerializeField] TerrainColoringParams terrainColoring;
+    [SerializeField] TerrainColoringAlgorithms terrainColoring;
     
     [SerializeField] int layers;
 
@@ -177,7 +177,7 @@ public class Parameters : ScriptableObject
         set => cellSize = value;
     }
 
-    public TerrainColoringParams TerrainColoring
+    public TerrainColoringAlgorithms TerrainColoring
     {
         get => terrainColoring;
         set => terrainColoring = value;

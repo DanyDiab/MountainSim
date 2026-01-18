@@ -130,7 +130,7 @@ public class TerrainColorMenu : MonoBehaviour
     }
 
     void showKnownBugToolTip(){
-        bool showBugTooltip = numberLayers.value > 2 && (TerrainColoringParams)colorAlgo.value == TerrainColoringParams.TextureGrad;
+        bool showBugTooltip = numberLayers.value > 2 && (TerrainColoringAlgorithms)colorAlgo.value == TerrainColoringAlgorithms.TextureGrad;
         bugTooltip.SetActive(showBugTooltip);
     }
 

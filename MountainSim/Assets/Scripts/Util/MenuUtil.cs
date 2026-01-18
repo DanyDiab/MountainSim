@@ -56,6 +56,9 @@ public static class MenuUtil{
                 onUpdate?.Invoke();
             }
         });
+        // invoke the onupdate once at the start
+        onUpdate?.Invoke();
+        // update text on start
         inputField.text = slider.value.ToString();
     }
 

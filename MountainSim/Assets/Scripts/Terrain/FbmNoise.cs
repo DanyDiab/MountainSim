@@ -71,7 +71,7 @@ public class FbmNoise : MonoBehaviour
         }
         return pixelColors;
     }
-public void generateFBMNoiseJobs(int gridSize, int cellSize, bool ridge) {
+    public void generateFBMNoiseJobs(int gridSize, int cellSize, bool ridge) {
         StartCoroutine(GenerateNoiseRoutine(gridSize, cellSize, ridge));
     }
 

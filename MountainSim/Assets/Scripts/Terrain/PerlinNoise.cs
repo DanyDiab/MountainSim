@@ -44,8 +44,7 @@ public class PerlinNoise : MonoBehaviour
 
         int gridX_0, gridY_0, gridX_1, gridY_1;
 
-        if (useTiling)
-        {
+        if (useTiling){
             gridX_0 = gridX % sizeOfGrid;
             gridY_0 = gridY % sizeOfGrid;
             if (gridX_0 < 0) gridX_0 += sizeOfGrid;
@@ -54,8 +53,7 @@ public class PerlinNoise : MonoBehaviour
             gridX_1 = (gridX_0 + 1) % sizeOfGrid;
             gridY_1 = (gridY_0 + 1) % sizeOfGrid;
         }
-        else
-        {
+        else{
             gridX_0 = gridX;
             gridY_0 = gridY;
             gridX_1 = gridX + 1;

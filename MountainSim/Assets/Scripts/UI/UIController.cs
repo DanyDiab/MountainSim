@@ -36,7 +36,6 @@ public class UIController : MonoBehaviour
     [SerializeField] TerrainColorMenu terrainColorMenuController;
     [SerializeField] PresetsMenu presetsMenuController;
     [SerializeField] MiscMenu miscMenuController;
-
     public delegate void PauseEvent(bool paused);
     public static event PauseEvent OnPause;
 

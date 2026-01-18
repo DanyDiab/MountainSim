@@ -30,6 +30,7 @@ public class NoiseRenderer : MonoBehaviour{
         fBm = GetComponent<FbmNoise>();
         inMenu = false;
         UIController.OnPause += updateInMenu;
+        FbmNoise.OnGenerated += displayNoise;
     }
     void Update(){
         bool updateNoise = false;
@@ -48,10 +49,10 @@ public class NoiseRenderer : MonoBehaviour{
                 displayNoise(perlin.generatePerlinNoise(parameters.GridSize,parameters.CellSize));
                 break;
             case NoiseAlgorithms.fBm:
-                displayNoise(fBm.generateFBMNoiseJobs(parameters.GridSize,parameters.CellSize, false));
+                fBm.generateFBMNoiseJobs(parameters.GridSize,parameters.CellSize, false);
                 break;
             case NoiseAlgorithms.Ridge:
-                displayNoise(fBm.generateFBMNoiseJobs(parameters.GridSize,parameters.CellSize, true));
+                fBm.generateFBMNoiseJobs(parameters.GridSize,parameters.CellSize, true);
                 break;
         }
     }
@@ -131,13 +132,11 @@ public class NoiseRenderer : MonoBehaviour{
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int index = y * height + x;
-                
                 Vector3 pos = new Vector3(x, 0, y);
                 Color vertColor = pixels[index];
                 float vertHeight = Mathf.Clamp(vertColor.r * parameters.HeightExageration, -100000, 100000);
                 pos.y = vertHeight;
                 vertices[index] = pos;
-                
                 uvs[index] = new Vector2((float)x / (width - 1), (float)y / (height - 1));
             }
         }

@@ -3,6 +3,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using Unity.Burst;
+using System.Collections;
 
 public class FbmNoise : MonoBehaviour
 {
@@ -10,17 +11,17 @@ public class FbmNoise : MonoBehaviour
     [Header("fBm parameters")]
 
     [SerializeField] Vector2 offset;
-
-
     NoiseRenderer noiseRenderer;
-
     [SerializeField] float freqeuncy = 1;
     [SerializeField] float amplitude = 1;
     [SerializeField] Parameters parameters;
-
-
-
     PerlinNoise perlinNoise;
+    bool computing;
+    JobHandle jobHandle;
+    fbmJob job;
+
+    public delegate void NoiseGeneratedEvent(Color[] pixelBrightness);
+    public static event NoiseGeneratedEvent OnGenerated;
     
     void Start(){
         noiseRenderer = GetComponent<NoiseRenderer>();
@@ -70,26 +71,28 @@ public class FbmNoise : MonoBehaviour
         }
         return pixelColors;
     }
-    public Color[] generateFBMNoiseJobs(int gridSize, int cellSize, bool ridge){
-        System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
-        stopwatch.Start();
+public void generateFBMNoiseJobs(int gridSize, int cellSize, bool ridge) {
+        StartCoroutine(GenerateNoiseRoutine(gridSize, cellSize, ridge));
+    }
+
+    IEnumerator GenerateNoiseRoutine(int gridSize, int cellSize, bool ridge) {
+        computing = true;
+
         float randX = UnityEngine.Random.value;
         float randY = UnityEngine.Random.value;
-        offset = new Vector2(randX,randY);
+        offset = new Vector2(randX, randY);
         int width = gridSize * cellSize;
-        float[] pixelBrightness = new float[width * width];
+        
         float maxPossibleAmplitude = 0;
         float currentAmp = 1;
         for (int i = 0; i < parameters.OctaveCount; i++) {
             maxPossibleAmplitude += currentAmp;
             currentAmp *= parameters.Persistence;
         }
-        Color[] pixelColors = new Color[width * width];
 
         Vector2[] gradientVectors = noiseRenderer.generateGraidentVectors1D(gridSize);
-
-        NativeArray<Vector2> gradNative = new NativeArray<Vector2>(gradientVectors,Allocator.Persistent);
-        NativeArray<float> pixelBrightNative = new NativeArray<float>(pixelBrightness, Allocator.Persistent);
+        NativeArray<Vector2> gradNative = new NativeArray<Vector2>(gradientVectors, Allocator.Persistent);
+        NativeArray<Color> pixelColorsNative = new NativeArray<Color>(width * width, Allocator.Persistent);
 
         fbmJob job = new fbmJob {
             gridSize = gridSize,
@@ -101,29 +104,29 @@ public class FbmNoise : MonoBehaviour
             lacunarity = parameters.Lacunarity,
             persistence = parameters.Persistence,
             offset = offset,
-            pixelBrightness = pixelBrightNative,
-            gradientVectors = gradNative
+            pixelColors = pixelColorsNative,
+            gradientVectors = gradNative,
+            maxPossibleAmplitude = maxPossibleAmplitude,
+            rFactor = parameters.RFactor
         };
 
-        JobHandle jobHandle = job.Schedule(width * width, 32);
+        jobHandle = job.Schedule(width * width, 64);
 
+        while (!jobHandle.IsCompleted) {
+            yield return null; 
+        }
         jobHandle.Complete();
 
-        for(int k = 0; k < pixelBrightNative.Length; k++){
-            float brightness = pixelBrightNative[k] / maxPossibleAmplitude;
-            if(ridge) brightness = (float) math.pow(brightness, parameters.RFactor);
-            pixelColors[k] = new Color(brightness, brightness, brightness);
-        }
+        Color[] resultColors = new Color[width * width];
+        pixelColorsNative.CopyTo(resultColors);
 
-        pixelBrightNative.Dispose();
+        OnGenerated?.Invoke(resultColors);
+
+        pixelColorsNative.Dispose();
         gradNative.Dispose();
-        stopwatch.Stop();
-        Debug.Log("took "+ stopwatch.ElapsedMilliseconds + " ms");
-        return pixelColors;
+        computing = false;
     }
-
 }
-
 
 [BurstCompile]
 struct fbmJob : IJobParallelFor {
@@ -135,8 +138,11 @@ struct fbmJob : IJobParallelFor {
     public float amplitude;
     public float lacunarity;
     public float persistence;
+    public int rFactor;
     public Vector2 offset;
-    [WriteOnly] public NativeArray<float> pixelBrightness;
+
+    [ReadOnly] public float maxPossibleAmplitude;
+    [WriteOnly] public NativeArray<Color> pixelColors;
     [ReadOnly] public NativeArray<Vector2> gradientVectors;
     public void Execute(int index) {
 
@@ -166,7 +172,12 @@ struct fbmJob : IJobParallelFor {
             currentFreq *= lacunarity;
             currentAmp *= persistence;
         }
-        pixelBrightness[index] = totalPixelBrightness;
+        float finalBrightness = totalPixelBrightness / maxPossibleAmplitude;
+        
+        if (ridge) {
+             finalBrightness = math.pow(finalBrightness, rFactor);
+        }
 
+        pixelColors[index] = new Color(finalBrightness, finalBrightness, finalBrightness, 1f);
     }
 }

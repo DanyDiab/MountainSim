@@ -85,7 +85,7 @@ public class PerlinNoise : MonoBehaviour
         return final;
     }
 
-    public static float getPerlinValue(float sampleX, float sampleY, NativeArray<Vector2>grads, int sizeOfGrid, bool useTiling = false){
+    public static float getPerlinValue(float sampleX, float sampleY, NativeArray<float2>grads, int sizeOfGrid, bool useTiling = false){
         int gridX = (int)math.floor(sampleX);
         int gridY = (int)math.floor(sampleY);
 
@@ -112,20 +112,20 @@ public class PerlinNoise : MonoBehaviour
             gridY_1 = gridY + 1;
         }
         
-        Vector2 tlGrad = grads[gridX_0 + (gridY_0 * sizeOfGrid)];
-        Vector2 trGrad = grads[gridX_1 + (gridY_0 * sizeOfGrid)];
-        Vector2 blGrad = grads[gridX_0 +(gridY_1 * sizeOfGrid)];
-        Vector2 brGrad = grads[gridX_1 + (gridY_1 * sizeOfGrid)];
+        float2 tlGrad = grads[gridX_0 + (gridY_0 * sizeOfGrid)];
+        float2 trGrad = grads[gridX_1 + (gridY_0 * sizeOfGrid)];
+        float2 blGrad = grads[gridX_0 +(gridY_1 * sizeOfGrid)];
+        float2 brGrad = grads[gridX_1 + (gridY_1 * sizeOfGrid)];
 
-        Vector2 tl = new Vector2(localX, localY);
-        Vector2 tr = new Vector2(localX - 1, localY);
-        Vector2 bl = new Vector2(localX, localY - 1);
-        Vector2 br = new Vector2(localX - 1, localY - 1);
+        float2 tl = new float2(localX, localY);
+        float2 tr = new float2(localX - 1, localY);
+        float2 bl = new float2(localX, localY - 1);
+        float2 br = new float2(localX - 1, localY - 1);
 
-        float tlI = Vector2.Dot(tl, tlGrad);
-        float trI = Vector2.Dot(tr, trGrad);
-        float blI = Vector2.Dot(bl, blGrad);
-        float brI = Vector2.Dot(br, brGrad);
+        float tlI = math.dot(tl, tlGrad);
+        float trI = math.dot(tr, trGrad);
+        float blI = math.dot(bl, blGrad);
+        float brI = math.dot(br, brGrad);
 
         float u = fade(localX);
         float v = fade(localY);

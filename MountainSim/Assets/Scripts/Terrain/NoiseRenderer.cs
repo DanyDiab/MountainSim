@@ -108,15 +108,15 @@ public class NoiseRenderer : MonoBehaviour{
         return grads;
     }
 
-    public Vector2[] generateGraidentVectors1D(int gridSize){
+    public float2[] generateGraidentVectors1D(int gridSize){
         // update the random with the current seed
         UnityEngine.Random.InitState((int)parameters.CurrentSeed);
         int totalSize = gridSize * gridSize;
-        Vector2[] grads = new Vector2[totalSize];
+        float2[] grads = new float2[totalSize];
         for(int i = 0; i < totalSize; i++){
             float randDirX = UnityEngine.Random.Range(-1f,1f);
             float randDirY = UnityEngine.Random.Range(-1f,1f);
-            Vector2 gradientVector = new Vector2(randDirX,randDirY).normalized;
+            float2 gradientVector = new Vector2(randDirX,randDirY).normalized;
             grads[i] = gradientVector;
         }   
         return grads;
@@ -136,10 +136,10 @@ public class NoiseRenderer : MonoBehaviour{
         int numQuads = (size - 1) * (size - 1);
         int numIndices = numQuads * 6;
 
-        NativeArray<float3> verticesNative = new NativeArray<float3>(numVerts, Allocator.Persistent);
-        NativeArray<float2> uvsNative = new NativeArray<float2>(numVerts, Allocator.Persistent);
-        NativeArray<int> trianglesNative = new NativeArray<int>(numIndices, Allocator.Persistent);
-        NativeArray<Color> pixelColorsNative = new NativeArray<Color>(pixels, Allocator.Persistent);
+        NativeArray<float3> verticesNative = new NativeArray<float3>(numVerts, Allocator.TempJob);
+        NativeArray<float2> uvsNative = new NativeArray<float2>(numVerts, Allocator.TempJob);
+        NativeArray<int> trianglesNative = new NativeArray<int>(numIndices, Allocator.TempJob);
+        NativeArray<Color> pixelColorsNative = new NativeArray<Color>(pixels, Allocator.TempJob);
 
 
         meshJob meshJob = new meshJob {

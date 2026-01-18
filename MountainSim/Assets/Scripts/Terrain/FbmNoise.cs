@@ -90,9 +90,9 @@ public class FbmNoise : MonoBehaviour
             currentAmp *= parameters.Persistence;
         }
 
-        Vector2[] gradientVectors = noiseRenderer.generateGraidentVectors1D(gridSize);
-        NativeArray<Vector2> gradNative = new NativeArray<Vector2>(gradientVectors, Allocator.Persistent);
-        NativeArray<Color> pixelColorsNative = new NativeArray<Color>(width * width, Allocator.Persistent);
+        float2[] gradientVectors = noiseRenderer.generateGraidentVectors1D(gridSize);
+        NativeArray<float2> gradNative = new NativeArray<float2>(gradientVectors, Allocator.TempJob);
+        NativeArray<Color> pixelColorsNative = new NativeArray<Color>(width * width, Allocator.TempJob);
 
         fbmJob job = new fbmJob {
             gridSize = gridSize,
@@ -139,11 +139,11 @@ struct fbmJob : IJobParallelFor {
     public float lacunarity;
     public float persistence;
     public int rFactor;
-    public Vector2 offset;
+    public float2 offset;
 
     [ReadOnly] public float maxPossibleAmplitude;
     [WriteOnly] public NativeArray<Color> pixelColors;
-    [ReadOnly] public NativeArray<Vector2> gradientVectors;
+    [ReadOnly] public NativeArray<float2> gradientVectors;
     public void Execute(int index) {
 
         int width = gridSize * cellSize;

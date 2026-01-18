@@ -25594,8 +25594,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   infoColor: {r: 0.27450982, g: 0.4666667, b: 0.32941177, a: 1}
   warnColor: {r: 0.30904645, g: 0.2784314, b: 0.46666667, a: 1}
-  noteColor: {r: 0.32373622, g: 0.5478965, b: 0.7075472, a: 0}
-  yellowWarn: {r: 0.6431373, g: 0.6392157, b: 0.19215687, a: 1}
+  noteColor: {r: 0, g: 0, b: 0, a: 0}
+  yellowWarn: {r: 0, g: 0, b: 0, a: 0}
   offset: {x: 275, y: 30}
 --- !u!114 &1597675376
 MonoBehaviour:

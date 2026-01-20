@@ -5,8 +5,6 @@
 
 - Toast message to display alerts
 - loading symbol to show terrain is generating
-- Download And Upload Presets
-- Make a popup for preset menu
 
 
 ## optimizations

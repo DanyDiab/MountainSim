@@ -95,7 +95,7 @@ public class NoiseRenderer : MonoBehaviour{
 
     public Vector2[,] generateGraidentVectors(int gridSize){
         // update the random with the current seed
-        UnityEngine.Random.InitState((int)parameters.CurrentSeed);
+        UnityEngine.Random.InitState(parameters.CurrentSeed);
         Vector2[,] grads = new Vector2[gridSize + 1, gridSize + 1];
         for(int i = 0; i < gridSize + 1; i++){
             for(int j = 0; j < gridSize + 1; j++){
@@ -110,7 +110,7 @@ public class NoiseRenderer : MonoBehaviour{
 
     public float2[] generateGraidentVectors1D(int gridSize){
         // update the random with the current seed
-        UnityEngine.Random.InitState((int)parameters.CurrentSeed);
+        UnityEngine.Random.InitState(parameters.CurrentSeed);
         int totalSize = gridSize * gridSize;
         float2[] grads = new float2[totalSize];
         for(int i = 0; i < totalSize; i++){

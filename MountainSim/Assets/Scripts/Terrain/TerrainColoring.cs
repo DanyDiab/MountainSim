@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -98,11 +99,12 @@ public class TerrainColoring : MonoBehaviour
         currMat.SetFloatArray("_Bounds", bounds);
         currMat.SetInt("_numBounds", bounds.Length);
         currMat.SetFloat("_TilingFactor",parameters.UVScale);
+        currMat.SetFloat("_maxGrad",max);
         Texture2DArray texArray = new Texture2DArray(
             1024, 1024, bounds.Length, TextureFormat.ARGB32, true
         );
         copyTexsToGPU(texArray);
-        currMat.SetTexture("_Textures", texArray);  
+        currMat.SetTexture("_Textures", texArray);
     }
     (float[], Color[]) findCloseBounds(float y){
         if(y >= bounds[bounds.Length - 1]){
@@ -142,18 +144,11 @@ public class TerrainColoring : MonoBehaviour
     }
 
     public (float, float) calculateGradients(Mesh mesh) {
-        float min = float.MaxValue;
-        float max = float.MinValue;
-        Vector3[] normals = mesh.normals;
-        foreach(Vector3 normal in normals){
-            float normalY = normal.y;
-            if(normalY < min){
-                min = normalY;
-            }
-            else if(normalY > max){
-                max = normalY;
-            }
-        }
+        List<Vector3> normals = new List<Vector3>(mesh.normals);
+        normals.Sort((a, b) => (1 - a.y).CompareTo(1 - b.y));
+        float min = 1 - normals[0].y;
+        float max = 1 - normals[normals.Count - 1].y;
+
         return (min,max);
  
     }

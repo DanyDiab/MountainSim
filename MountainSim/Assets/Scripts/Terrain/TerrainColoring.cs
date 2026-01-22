@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class TerrainColoring : MonoBehaviour
 {
@@ -65,7 +66,6 @@ public class TerrainColoring : MonoBehaviour
     }
 
     void copyTexsToGPU(Texture2DArray texArray){
-
         for (int i = 0; i < parameters.Layers; i++) {
             Texture2D normalTexture = tn.normalizeTexture(parameters.CurrTextures[i]);
             for (int m = 0; m < normalTexture.mipmapCount; m++)
@@ -90,11 +90,11 @@ public class TerrainColoring : MonoBehaviour
         currMat.SetTexture("_Textures", texArray);   
     }
 
-    public void updateGradTex(){
+    public void updateGradTex(float min, float max){
         currMat = gradMat;
         mr.material = currMat;
         mesh = meshFilter.mesh;
-        (float min, float max) = calculateGradients(mesh);
+        Debug.Break();
         float[] bounds = determineBounds(parameters.Layers,min,max);
         currMat.SetFloatArray("_Bounds", bounds);
         currMat.SetInt("_numBounds", bounds.Length);
@@ -141,15 +141,5 @@ public class TerrainColoring : MonoBehaviour
             currPos += stepSize;
         }
         return bounds;
-    }
-
-    public (float, float) calculateGradients(Mesh mesh) {
-        List<Vector3> normals = new List<Vector3>(mesh.normals);
-        normals.Sort((a, b) => (1 - a.y).CompareTo(1 - b.y));
-        float min = 1 - normals[0].y;
-        float max = 1 - normals[normals.Count - 1].y;
-
-        return (min,max);
- 
     }
 }

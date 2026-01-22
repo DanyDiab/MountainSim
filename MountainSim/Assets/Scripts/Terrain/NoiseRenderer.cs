@@ -4,6 +4,7 @@ using Unity.Jobs;
 using UnityEngine;
 using Unity.Mathematics;
 using System.Collections;
+using UnityEngine.Profiling;
 
 public enum NoiseAlgorithms{
     Ridge,
@@ -29,6 +30,8 @@ public class NoiseRenderer : MonoBehaviour{
     TerrainColoring terrainColoring;
     bool inMenu;
     bool computingMesh;
+    float minGrad;
+    float maxGrad;
 
     void Start(){
         terrainColoring = GetComponent<TerrainColoring>();
@@ -80,7 +83,7 @@ public class NoiseRenderer : MonoBehaviour{
                 terrainColoring.updatePixelColors();
                 break;
             case TerrainColoringAlgorithms.TextureGrad:
-                terrainColoring.updateGradTex();
+                terrainColoring.updateGradTex(minGrad,maxGrad);
                 break;
         }
     }
@@ -128,6 +131,7 @@ public class NoiseRenderer : MonoBehaviour{
     }
 
     IEnumerator GenerateMeshRoutine(Color[] pixels) {
+
         int size = parameters.GridSize * parameters.CellSize;
         computingMesh = true;
         
@@ -137,10 +141,12 @@ public class NoiseRenderer : MonoBehaviour{
         int numIndices = numQuads * 6;
 
         NativeArray<float3> verticesNative = new NativeArray<float3>(numVerts, Allocator.TempJob);
+        NativeArray<float3> normalsNative = new NativeArray<float3>(numVerts, Allocator.TempJob);
+        NativeArray<float> steepnessNative = new NativeArray<float>(numVerts, Allocator.TempJob);
         NativeArray<float2> uvsNative = new NativeArray<float2>(numVerts, Allocator.TempJob);
         NativeArray<int> trianglesNative = new NativeArray<int>(numIndices, Allocator.TempJob);
         NativeArray<Color> pixelColorsNative = new NativeArray<Color>(pixels, Allocator.TempJob);
-
+        NativeArray<float> minMaxResult = new NativeArray<float>(2, Allocator.TempJob);
 
         meshJob meshJob = new meshJob {
             triangles = trianglesNative,
@@ -155,16 +161,30 @@ public class NoiseRenderer : MonoBehaviour{
             size = size
         };
 
+        CalculateNormalsJob normalsJob = new CalculateNormalsJob {
+            vertices = verticesNative,
+            normals = normalsNative,
+            steepnessOut = steepnessNative,
+            size = size
+        };
+
+        MinMaxJob mmJob = new MinMaxJob {
+            inputData = steepnessNative,
+            result = minMaxResult
+        };
 
 
         JobHandle meshjobHandle = meshJob.Schedule(numQuads, 32);
         
         JobHandle vertexJobHandle = vertexJob.Schedule(numVerts,32, meshjobHandle);
+        JobHandle normalsJobHandle = normalsJob.Schedule(numVerts, 32, vertexJobHandle);
+        JobHandle finalHandle = mmJob.Schedule(normalsJobHandle);
 
-        while (!vertexJobHandle.IsCompleted) {
+        while (!finalHandle.IsCompleted) {
             yield return null; 
         }
-        vertexJobHandle.Complete();
+
+        finalHandle.Complete();
 
         MeshFilter meshFilter = targetRenderer.GetComponent<MeshFilter>();
 
@@ -172,22 +192,27 @@ public class NoiseRenderer : MonoBehaviour{
         Mesh mesh = new Mesh();
 
         if (numVerts > 65535) mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
-        
         mesh.SetVertices(verticesNative.Reinterpret<Vector3>());
+        mesh.SetNormals(normalsNative.Reinterpret<Vector3>());
         mesh.triangles = trianglesNative.ToArray();
         mesh.SetUVs(0,uvsNative.Reinterpret<Vector2>());
-        mesh.RecalculateNormals();
         mesh.RecalculateBounds();
-        
+
         meshFilter.mesh = mesh;
         computingMesh = false;
-
+        minGrad = minMaxResult[0];
+        maxGrad = minMaxResult[1];
+        minMaxResult.Dispose();
         verticesNative.Dispose();
+        normalsNative.Dispose();
+        steepnessNative.Dispose();
         uvsNative.Dispose();
         trianglesNative.Dispose();
         pixelColorsNative.Dispose();
 
         displayNoise();
+
+
     }
     void updateInMenu(bool inMenu)
     {
@@ -247,6 +272,65 @@ struct vertexJob : IJobParallelFor {
         pos.y = vertHeight;
         vertices[index] = pos;
         uvs[index] = new float2((float)x / (width - 1), (float)y / (height - 1));
+    }
+}
+
+[BurstCompile]
+public struct CalculateNormalsJob : IJobParallelFor
+{
+    [ReadOnly] public NativeArray<float3> vertices;
+    [WriteOnly] public NativeArray<float3> normals;
+    [WriteOnly] public NativeArray<float> steepnessOut;
+    [ReadOnly] public int size;
+
+
+    public void Execute(int index)
+    {
+        int x = index % size;
+        int y = index / size;
+
+        if (x == 0 || x == size - 1 || y == 0 || y == size - 1) {
+            normals[index] = new float3(0, 1, 0);
+            steepnessOut[index] = 0;
+            return;
+        }
+
+        float3 left = vertices[index - 1];
+        float3 right = vertices[index + 1];
+        float3 down = vertices[index - size];
+        float3 up = vertices[index + size];
+
+        float3 tangent = right - left;
+        float3 bitangent = up - down;
+
+        float3 normal = math.normalize(math.cross(bitangent, tangent));
+        normals[index] = normal;
+
+        float steepness = 1.0f - normal.y;
+        steepnessOut[index] = steepness;
+    }
+}
+
+[BurstCompile]
+public struct MinMaxJob : IJob
+{
+    [ReadOnly] public NativeArray<float> inputData;
+    [WriteOnly] public NativeArray<float> result;
+
+    public void Execute()
+    {
+        float min = float.MaxValue;
+        float max = float.MinValue;
+
+        for (int i = 0; i < inputData.Length; i++)
+        {
+            float val = inputData[i];
+            if (val < min) min = val;
+            if (val > max) max = val;
+        }
+
+        result[0] = min;
+        result[1] = max;
     }
 }
 

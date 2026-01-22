@@ -22,7 +22,6 @@ public class LoadingSymbol : MonoBehaviour
         foreach(RectTransform child in tintRT){
             child.sizeDelta = screenSize;
         }
-        // layoutGroupGameObject.sizeDelta  = screenSize;
     }
 
     void OnDisable()
@@ -43,10 +42,8 @@ public class LoadingSymbol : MonoBehaviour
 
     public void ToggleSpinner(bool active)
     {
-        if (LoadingGameObject != null)
-        {
+        if (LoadingGameObject != null){
             LoadingGameObject.SetActive(active);
-            Debug.Break();
         }
     }
 }

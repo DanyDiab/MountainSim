@@ -10,7 +10,10 @@ public class CameraTP : MonoBehaviour
 
     public Vector3 tpToMesh(){
         Vector3 currPos = transform.position;
-        currPos.y = mf.mesh.bounds.max.y;
+        Bounds bounds = mf.mesh.bounds;
+        currPos.y = bounds.max.y;
+        currPos.x = bounds.center.x;
+        currPos.z = bounds.center.z;
         return currPos;
     }
 }

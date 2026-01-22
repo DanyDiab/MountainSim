@@ -201,15 +201,8 @@ public class NoiseRenderer : MonoBehaviour{
         
         mesh.SetIndices(trianglesNative, MeshTopology.Triangles, 0, false);
         
-        Bounds bounds = new Bounds();
-        float centerX = (size - 1) * 0.5f;
-        float centerZ = (size - 1) * 0.5f;
-        float centerY = (minGrad + maxGrad) * 0.5f;
-        float height = maxGrad - minGrad;
-        bounds.center = new Vector3(centerX, centerY, centerZ);
-        bounds.size = new Vector3(size - 1, height, size - 1);
-        mesh.bounds = bounds;
 
+        mesh.RecalculateBounds();
         meshFilter.mesh = mesh;
         computingMesh = false;
         

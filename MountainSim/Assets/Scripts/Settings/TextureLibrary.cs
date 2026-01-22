@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -8,6 +9,8 @@ using UnityEditor;
 public class TextureLibrary : ScriptableObject
 {
     [SerializeField] Texture2D[] allTextures;
+    
+    private Dictionary<Texture2D, Texture2D> normalizedTextures = new Dictionary<Texture2D, Texture2D>();
 
     public Texture2D[] AllTextures
     {
@@ -15,4 +18,7 @@ public class TextureLibrary : ScriptableObject
         set => allTextures = value;
     }
 
+    public Dictionary<Texture2D, Texture2D> NormalizedTextures {
+        get => normalizedTextures;
+    }
 }

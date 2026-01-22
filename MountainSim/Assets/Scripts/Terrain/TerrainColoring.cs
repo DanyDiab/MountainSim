@@ -21,6 +21,9 @@ public class TerrainColoring : MonoBehaviour
     MeshRenderer mr;
     float[] bounds;
 
+    Texture2DArray cachedTextureArray;
+    Texture2D[] lastProcessedTextures;
+
 
     void Start(){
     
@@ -28,7 +31,14 @@ public class TerrainColoring : MonoBehaviour
         tn.setResolution(1024);
         tn.setFormatting(RenderTextureFormat.ARGB32);
         mr = meshFilter.GetComponent<MeshRenderer>();
-
+        
+        if (parameters.textureLibrary != null && parameters.textureLibrary.AllTextures != null) {
+            foreach (var tex in parameters.textureLibrary.AllTextures) {
+                if (tex != null && !parameters.textureLibrary.NormalizedTextures.ContainsKey(tex)) {
+                     parameters.textureLibrary.NormalizedTextures[tex] = tn.normalizeTexture(tex);
+                }
+            }
+        }
     }    
     public void updatePixelColors(){
         currMat = colorMat;
@@ -67,10 +77,26 @@ public class TerrainColoring : MonoBehaviour
 
     void copyTexsToGPU(Texture2DArray texArray){
         for (int i = 0; i < parameters.Layers; i++) {
-            Texture2D normalTexture = tn.normalizeTexture(parameters.CurrTextures[i]);
-            for (int m = 0; m < normalTexture.mipmapCount; m++)
-            {
-                Graphics.CopyTexture(normalTexture, 0, m, texArray, i, m);
+            Texture2D sourceTex = parameters.CurrTextures[i];
+            Texture2D normalTexture = null;
+
+            if (sourceTex != null) {
+                if (parameters.textureLibrary.NormalizedTextures.TryGetValue(sourceTex, out Texture2D cached)) {
+                    Debug.Log("cached");
+                    normalTexture = cached;
+                } else {
+                    Debug.Log("Fallback");
+                    // Fallback if not pre-cached
+                    normalTexture = tn.normalizeTexture(sourceTex);
+                    parameters.textureLibrary.NormalizedTextures[sourceTex] = normalTexture;
+                }
+            }
+            
+            if (normalTexture != null) {
+                for (int m = 0; m < normalTexture.mipmapCount; m++)
+                {
+                    Graphics.CopyTexture(normalTexture, 0, m, texArray, i, m);
+                }
             }
         }
     }
@@ -91,21 +117,61 @@ public class TerrainColoring : MonoBehaviour
     }
 
     public void updateGradTex(float min, float max){
+        Profiler.BeginSample("GRAD");
         currMat = gradMat;
         mr.material = currMat;
         mesh = meshFilter.mesh;
-        Debug.Break();
         float[] bounds = determineBounds(parameters.Layers,min,max);
         currMat.SetFloatArray("_Bounds", bounds);
         currMat.SetInt("_numBounds", bounds.Length);
         currMat.SetFloat("_TilingFactor",parameters.UVScale);
         currMat.SetFloat("_maxGrad",max);
-        Texture2DArray texArray = new Texture2DArray(
-            1024, 1024, bounds.Length, TextureFormat.ARGB32, true
-        );
-        copyTexsToGPU(texArray);
-        currMat.SetTexture("_Textures", texArray);
+
+        if (ShouldRegenerateTextureArray()) {
+             if (cachedTextureArray == null || 
+                cachedTextureArray.depth != bounds.Length || 
+                cachedTextureArray.width != 1024 || 
+                cachedTextureArray.height != 1024) 
+            {
+                cachedTextureArray = new Texture2DArray(
+                    1024, 1024, bounds.Length, TextureFormat.ARGB32, true
+                );
+            }
+
+            copyTexsToGPU(cachedTextureArray);
+            
+            // Update cache record
+            if (parameters.CurrTextures != null) {
+                lastProcessedTextures = (Texture2D[])parameters.CurrTextures.Clone();
+            } else {
+                lastProcessedTextures = null;
+            }
+        }
+
+        currMat.SetTexture("_Textures", cachedTextureArray);
+        Profiler.EndSample();
+        Debug.Break();
+
     }
+
+    private bool ShouldRegenerateTextureArray() {
+        if (cachedTextureArray == null || lastProcessedTextures == null || parameters.CurrTextures == null) {
+            return true;
+        }
+
+        if (lastProcessedTextures.Length != parameters.CurrTextures.Length) {
+            return true;
+        }
+
+        for (int i = 0; i < parameters.CurrTextures.Length; i++) {
+            if (lastProcessedTextures[i] != parameters.CurrTextures[i]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     (float[], Color[]) findCloseBounds(float y){
         if(y >= bounds[bounds.Length - 1]){
             int index = bounds.Length - 1;

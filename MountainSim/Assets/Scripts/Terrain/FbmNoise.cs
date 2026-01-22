@@ -22,6 +22,9 @@ public class FbmNoise : MonoBehaviour
 
     public delegate void NoiseGeneratedEvent(Color[] pixelBrightness);
     public static event NoiseGeneratedEvent OnGenerated;
+
+    public delegate void NoiseStartedEvent();
+    public static event NoiseStartedEvent OnNoiseStarted;
     
     void Start(){
         noiseRenderer = GetComponent<NoiseRenderer>();
@@ -76,6 +79,7 @@ public class FbmNoise : MonoBehaviour
     }
 
     IEnumerator GenerateNoiseRoutine(int gridSize, int cellSize, bool ridge) {
+        OnNoiseStarted?.Invoke();
         computing = true;
 
         float randX = UnityEngine.Random.value;

@@ -33,6 +33,9 @@ public class NoiseRenderer : MonoBehaviour{
     float minGrad;
     float maxGrad;
 
+    public delegate void MeshGeneratedEvent();
+    public static event MeshGeneratedEvent OnMeshGenerated;
+
     void Start(){
         terrainColoring = GetComponent<TerrainColoring>();
         perlin = GetComponent<PerlinNoise>();
@@ -136,9 +139,8 @@ public class NoiseRenderer : MonoBehaviour{
         computingMesh = true;
         
         int numVerts = size * size;
-        int numTris = size * size * 6;
+        int numIndices = (size - 1) * (size - 1) * 6;
         int numQuads = (size - 1) * (size - 1);
-        int numIndices = numQuads * 6;
 
         NativeArray<float3> verticesNative = new NativeArray<float3>(numVerts, Allocator.TempJob);
         NativeArray<float3> normalsNative = new NativeArray<float3>(numVerts, Allocator.TempJob);
@@ -176,7 +178,7 @@ public class NoiseRenderer : MonoBehaviour{
 
         JobHandle meshjobHandle = meshJob.Schedule(numQuads, 32);
         
-        JobHandle vertexJobHandle = vertexJob.Schedule(numVerts,32, meshjobHandle);
+        JobHandle vertexJobHandle = vertexJob.Schedule(numVerts, 32, meshjobHandle);
         JobHandle normalsJobHandle = normalsJob.Schedule(numVerts, 32, vertexJobHandle);
         JobHandle finalHandle = mmJob.Schedule(normalsJobHandle);
 
@@ -186,22 +188,31 @@ public class NoiseRenderer : MonoBehaviour{
 
         finalHandle.Complete();
 
+        minGrad = minMaxResult[0];
+        maxGrad = minMaxResult[1];
+
         MeshFilter meshFilter = targetRenderer.GetComponent<MeshFilter>();
-
-
         Mesh mesh = new Mesh();
 
         if (numVerts > 65535) mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
         mesh.SetVertices(verticesNative.Reinterpret<Vector3>());
         mesh.SetNormals(normalsNative.Reinterpret<Vector3>());
-        mesh.triangles = trianglesNative.ToArray();
-        mesh.SetUVs(0,uvsNative.Reinterpret<Vector2>());
-        mesh.RecalculateBounds();
+        mesh.SetUVs(0, uvsNative.Reinterpret<Vector2>());
+        
+        mesh.SetIndices(trianglesNative, MeshTopology.Triangles, 0, false);
+        
+        Bounds bounds = new Bounds();
+        float centerX = (size - 1) * 0.5f;
+        float centerZ = (size - 1) * 0.5f;
+        float centerY = (minGrad + maxGrad) * 0.5f;
+        float height = maxGrad - minGrad;
+        bounds.center = new Vector3(centerX, centerY, centerZ);
+        bounds.size = new Vector3(size - 1, height, size - 1);
+        mesh.bounds = bounds;
 
         meshFilter.mesh = mesh;
         computingMesh = false;
-        minGrad = minMaxResult[0];
-        maxGrad = minMaxResult[1];
+        
         minMaxResult.Dispose();
         verticesNative.Dispose();
         normalsNative.Dispose();
@@ -212,7 +223,7 @@ public class NoiseRenderer : MonoBehaviour{
 
         displayNoise();
 
-
+        OnMeshGenerated?.Invoke();
     }
     void updateInMenu(bool inMenu)
     {
@@ -227,8 +238,6 @@ struct meshJob : IJobParallelFor {
     public int size; 
 
     public void Execute(int index) {
-        // Get the four vertices of current quad
-        
         int x = index % (size - 1);
         int y = index / (size - 1);
 
@@ -260,9 +269,6 @@ struct vertexJob : IJobParallelFor {
     public int size;
 
     public void Execute(int index) {
-        int width = size;
-        int height = size;
-
         int x = index % size;
         int y = index / size;
 
@@ -271,7 +277,7 @@ struct vertexJob : IJobParallelFor {
         float vertHeight = math.clamp(vertColor.r * HeightExageration, -100000, 100000);
         pos.y = vertHeight;
         vertices[index] = pos;
-        uvs[index] = new float2((float)x / (width - 1), (float)y / (height - 1));
+        uvs[index] = new float2((float)x / (size - 1), (float)y / (size - 1));
     }
 }
 
@@ -333,4 +339,3 @@ public struct MinMaxJob : IJob
         result[1] = max;
     }
 }
-

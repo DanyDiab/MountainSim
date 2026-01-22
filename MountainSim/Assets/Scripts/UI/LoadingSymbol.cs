@@ -7,14 +7,14 @@ public class LoadingSymbol : MonoBehaviour
 {
     [SerializeField] private GameObject spinner;
     [SerializeField] private float speed = 1.0f;
+    [Header("Animation Settings")]
 
     private Transform spinnerTransform;
     private float progress = 0f;
 
     void Start()
     {
-        if (spinner != null)
-        {
+        if (spinner != null){
             spinnerTransform = spinner.transform;
         }
         else
@@ -24,19 +24,38 @@ public class LoadingSymbol : MonoBehaviour
         ToggleSpinner(false);
     }
 
+    void OnEnable()
+    {
+        FbmNoise.OnNoiseStarted += ShowSpinner;
+        NoiseRenderer.OnMeshGenerated += HideSpinner;
+    }
+
+    void OnDisable()
+    {
+        FbmNoise.OnNoiseStarted -= ShowSpinner;
+        NoiseRenderer.OnMeshGenerated -= HideSpinner;
+    }
+
+    private void ShowSpinner()
+    {
+        ToggleSpinner(true);
+    }
+
+    private void HideSpinner()
+    {
+        ToggleSpinner(false);
+    }
+
     void Update()
     {
         if (spinner != null && spinner.activeSelf){
             progress += Time.unscaledDeltaTime * speed;
 
             if (progress > 1.0f){
-                progress = 0;
+                progress -= 1.0f;
             }
-
             float easedValue = Ease(progress);
-
             float zAngle = easedValue * 360f;
-
             if (spinnerTransform != null){
                 spinnerTransform.localEulerAngles = new Vector3(0f, 0f, -zAngle);
             }

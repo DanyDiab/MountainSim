@@ -117,7 +117,6 @@ public class TerrainColoring : MonoBehaviour
     }
 
     public void updateGradTex(float min, float max){
-        Profiler.BeginSample("GRAD");
         currMat = gradMat;
         mr.material = currMat;
         mesh = meshFilter.mesh;
@@ -149,8 +148,6 @@ public class TerrainColoring : MonoBehaviour
         }
 
         currMat.SetTexture("_Textures", cachedTextureArray);
-        Profiler.EndSample();
-        Debug.Break();
 
     }
 
